@@ -7,7 +7,7 @@
   "devCommand": "npm install && npm run dev",
   "devPort": 3000,
   "demoUrl": "https://lms.cloudweb.dev/",
-  "thumbnail": "https://raw.githubusercontent.com/dev-appworld/cloudgate-app-templates/main/lms/banner.png",
+  "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/lms/banner.png",
   "tags": [
     "lms",
     "education",

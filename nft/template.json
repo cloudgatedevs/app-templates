@@ -7,7 +7,7 @@
   "devCommand": "npm install && npm run start",
   "devPort": 3000,
   "demoUrl": "https://nft-demo.cloudweb.dev/",
-  "thumbnail": "https://raw.githubusercontent.com/dev-appworld/cloudgate-app-templates/main/nft/banner.png",
+  "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/nft/banner.png",
   "tags": ["angular", "nft", "tailwind", "capacitor"],
   "workflowTemplate": ".template/workflow-template.json",
   "workflowImport": {

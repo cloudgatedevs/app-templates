@@ -161,7 +161,7 @@ src/assets/
 
 ## Web Coder integration
 
-This folder is part of the [cloudgate-app-templates](https://github.com/dev-appworld/cloudgate-app-templates) repo. To publish it in the Web Coder Quick Start gallery:
+This folder is part of the [cloudgate-app-templates](https://github.com/cloudgatedevs/app-templates) repo. To publish it in the Web Coder Quick Start gallery:
 
 1. Add a `template.json` in this folder (same shape as `angular/template.json`).
 2. Register the template in the root `templates.json` manifest.
