@@ -1,0 +1,24 @@
+<div class="flex-col rounded-2xl bg-white shadow-lg dark:bg-gray-800" (click)="navigate('home/doctor')">
+  <div class="flex w-full justify-center p-5">
+    <img
+      class="h-24 w-24 rounded-full border-2 border-solid border-primary object-cover shadow-lg"
+      [src]="image"
+      alt="image description" />
+  </div>
+  <hr />
+  <div class="w-40 flex-col p-2">
+    <p class="truncate text-sm font-semibold text-gray-700 dark:text-gray-300">{{ name }}</p>
+    <p class="mb-1 truncate text-xs text-gray-500 dark:text-gray-300">{{ type }}</p>
+    <div class="flex items-center text-xs">
+      <div class="flex flex-1 items-center">
+        <svg-icon src="assets/icons/heroicons/solid/star.svg" [svgClass]="'h-4 w-4 text-primary'"> </svg-icon>
+        <span class="mr-1 text-primary">{{ stars }}</span>
+        <span class="text-xs text-gray-700 dark:text-gray-400">({{ ratings }})</span>
+      </div>
+      <div class="flex items-center">
+        <svg-icon src="assets/icons/heroicons/outline/map-pin.svg" [svgClass]="'h-4 w-4 text-gray-700'"> </svg-icon>
+        <span class="text-foreground">{{ distance }} km</span>
+      </div>
+    </div>
+  </div>
+</div>

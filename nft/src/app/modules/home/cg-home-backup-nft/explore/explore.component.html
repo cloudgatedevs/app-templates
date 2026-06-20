@@ -1,0 +1,80 @@
+<form class="mb-5 flex max-w-sm">
+  <div class="relative mr-2 flex-1">
+    <div class="start-0 ps-3.5 pointer-events-none absolute inset-y-0 flex items-center">
+      <svg-icon src="assets/icons/heroicons/solid/search.svg" [svgClass]="'h-4 w-4 text-gray-700 dark:text-white'">
+      </svg-icon>
+    </div>
+    <input
+      type="text"
+      id="email-address-icon"
+      class="ps-10 block w-full rounded-lg border border-gray-700 p-2.5 text-sm text-gray-900 focus:border-primary focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+      placeholder="Search collections" />
+  </div>
+  <button type="button" class="rounded-full bg-gray-900 p-2.5 text-sm font-medium text-white">
+    <svg-icon src="assets/icons/heroicons/solid/toggle.svg" [svgClass]="'h-5 w-5'"> </svg-icon>
+  </button>
+</form>
+
+<div class="mb-2">
+  <div class="mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Top Collection 🏆</h1>
+    <button type="button" class="text-center text-sm font-medium text-gray-700">
+      <p class="text-lg text-gray-500 dark:text-gray-400" (click)="navigate('/home/gallery')">more ↗️</p>
+    </button>
+  </div>
+</div>
+
+<div class="overflow-x-auto" style="scrollbar-width: none">
+  <div class="carousel">
+    <div class="carousel-item mr-3">
+      <app-nft-explore-item
+        image="./assets/images/image-10.jpg"
+        title="Darkness"
+        subTitle="24 pieces"
+        amount="0.192 ETH"></app-nft-explore-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-explore-item
+        image="./assets/images/image-11.jpg"
+        title="Heavens"
+        subTitle="18 pieces"
+        amount="1.721 ETH"></app-nft-explore-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-explore-item
+        image="./assets/images/image-12.jpg"
+        title="Warrior"
+        subTitle="12 pieces"
+        amount="0.551 ETH"></app-nft-explore-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-explore-item
+        image="./assets/images/image-09.jpg"
+        title="Epic Crowd"
+        subTitle="19 pieces"
+        amount="3.158 ETH"></app-nft-explore-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-explore-item
+        image="./assets/images/image-07.jpg"
+        title="Artistic"
+        subTitle="31 pieces"
+        amount="0.765 ETH"></app-nft-explore-item>
+    </div>
+  </div>
+</div>
+
+<div class="mb-2">
+  <div class="mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Top Artists 🐐</h1>
+    <button type="button" class="text-center text-sm font-medium text-gray-700">
+      <p class="text-lg text-gray-500 dark:text-gray-400" (click)="navigate('/home/gallery')">more ↗️</p>
+    </button>
+  </div>
+</div>
+
+<app-nft-user-item image="./assets/images/avatar-03.jpg" handle="@cyber_funk_789" followers="8250"></app-nft-user-item>
+<app-nft-user-item image="./assets/images/avatar-01.jpg" handle="@sweet_lips_za" followers="2360"></app-nft-user-item>
+<app-nft-user-item image="./assets/images/avatar-05.jpg" handle="@fresh_looks_49" followers="987"></app-nft-user-item>
+<app-nft-user-item image="./assets/images/avatar-02.jpg" handle="@sleeping_winds" followers="14521"></app-nft-user-item>
+<app-nft-user-item image="./assets/images/avatar-04.jpg" handle="@mr_problematic" followers="9845"></app-nft-user-item>

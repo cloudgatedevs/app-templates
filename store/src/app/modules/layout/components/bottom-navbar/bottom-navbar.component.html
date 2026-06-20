@@ -1,0 +1,58 @@
+<div class="h-25 fixed bottom-0 left-0 right-0 z-20 w-full p-2 pb-4 shadow-2xl lg:hidden">
+  <div class="font-small mx-auto grid h-full max-w-lg grid-cols-5 rounded-full bg-gray-900 px-5 pb-4 shadow-lg">
+    <button
+      (click)="navigate('home')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <span class="h-1 w-8 rounded-lg" [ngClass]="router.url === '/home' ? 'bg-primary' : 'hidden'"></span>
+      <svg-icon
+        src="assets/icons/heroicons/solid/home.svg"
+        [svgClass]="'mt-3 h-6 w-6'"
+        [ngClass]="router.url === '/home' ? 'text-primary' : 'text-gray-400 dark:text-white'">
+      </svg-icon>
+    </button>
+    <button
+      (click)="navigate('explore')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <span class="h-1 w-8 rounded-lg" [ngClass]="router.url === '/explore' ? 'bg-primary' : 'hidden'"></span>
+      <svg-icon
+        src="assets/icons/heroicons/solid/compass.svg"
+        [svgClass]="'mt-3 h-6 w-6'"
+        [ngClass]="router.url === '/explore' ? 'text-primary' : 'text-gray-400 dark:text-white'">
+      </svg-icon>
+    </button>
+    <div class="relative flex items-center justify-center">
+      <div class="absolute top-0 rounded-full bg-gray-700 p-3 shadow-lg">
+        <button
+          (click)="action()"
+          class="group inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary font-medium shadow-md focus:outline-none focus:ring-4 focus:ring-gray-300 hover:bg-primary dark:focus:ring-gray-800">
+          <svg-icon src="assets/icons/heroicons/outline/qr-code.svg" [svgClass]="'h-5 w-5 text-white'"> </svg-icon>
+          <span class="sr-only">New item</span>
+        </button>
+      </div>
+    </div>
+    <button
+      (click)="navigate('favourites')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <span class="h-1 w-8 rounded-lg" [ngClass]="router.url === '/favourites' ? 'bg-primary' : 'hidden'"></span>
+      <svg-icon
+        src="assets/icons/heroicons/solid/heart.svg"
+        [svgClass]="'mt-3 h-6 w-6'"
+        [ngClass]="router.url === '/favourites' ? 'text-primary' : 'text-gray-400 dark:text-white'">
+      </svg-icon>
+    </button>
+    <button
+      (click)="navigate('profile')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <span class="h-1 w-8 rounded-lg" [ngClass]="router.url === '/profile' ? 'bg-primary' : 'hidden'"></span>
+      <svg-icon
+        src="assets/icons/heroicons/solid/user.svg"
+        [svgClass]="'mt-3 h-6 w-6'"
+        [ngClass]="router.url === '/profile' ? 'text-primary' : 'text-gray-400 dark:text-white'">
+      </svg-icon>
+    </button>
+  </div>
+</div>

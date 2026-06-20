@@ -1,0 +1,279 @@
+<div
+  [style.background]="'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)), url(' + heroImage + ')'"
+  style="
+    background-position: center;
+    background-size: contain;
+  "
+  class="absolute left-0 right-0 top-0 z-0 flex h-[400px] w-full items-center justify-center rounded-b-3xl">
+  <button
+    type="button"
+    (click)="goBack()"
+    [ngClass]="isIOS ? 'mt-14' : 'mt-8'"
+    class="absolute left-0 top-0 z-10 ml-5 rounded-full bg-white p-2 text-center text-sm font-medium text-gray-600 dark:bg-gray-900"
+    aria-label="Back">
+    <svg
+      class="h-5 w-5 text-gray-800 dark:text-white"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true">
+      <path
+        d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+    </svg>
+  </button>
+  <button
+    [ngClass]="isIOS ? 'mt-14' : 'mt-8'"
+    class="absolute right-0 top-0 z-10 mr-5 rounded-full bg-white p-2 pb-1 text-center text-sm font-medium text-gray-600 dark:bg-gray-900">
+    <div class="inline-flex">
+      <svg-icon src="assets/icons/heroicons/solid/star.svg" [svgClass]="'h-5 w-5 text-yellow-300'"> </svg-icon>
+      <p class="mr-1 text-sm font-semibold text-gray-800 dark:text-white">{{ displayRating }}</p>
+    </div>
+  </button>
+  <div class="absolute bottom-0 w-full flex-col px-5">
+    <p class="flex-1 truncate text-ellipsis text-2xl font-semibold text-white">{{ displayTitle }}</p>
+    <div class="mt-1 mb-2 flex items-center">
+      <svg-icon src="assets/icons/heroicons/outline/pin.svg" [svgClass]="'h-5 w-5 mr-1 text-primary'"> </svg-icon>
+      <p class="truncate text-ellipsis text-xs text-white">{{ displayLocation }}</p>
+    </div>
+    <div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+      <div class="carousel">
+        <div class="carousel-item mr-3">
+          <app-gallery-grid-item *ngFor="let roomImage of roomImages" [image]="roomImage"></app-gallery-grid-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="mt-[320px]">
+  <div class="mb-2 overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div class="carousel-item mr-3">
+        <div class="mr-2 flex rounded-lg bg-slate-200 p-3 dark:bg-slate-900">
+          <svg-icon
+            src="assets/icons/heroicons/outline/wifi.svg"
+            [svgClass]="'h-5 w-5 mr-1 text-gray-900 dark:text-white'">
+          </svg-icon>
+          <p class="flex-1 truncate text-ellipsis text-sm text-gray-900 dark:text-white">Free Wifi</p>
+        </div>
+        <div class="mr-2 flex rounded-lg bg-slate-200 p-3 dark:bg-slate-900">
+          <svg-icon src="assets/icons/other/breakfast.svg" [svgClass]="'h-5 w-5 mr-1 text-gray-900 dark:text-white'">
+          </svg-icon>
+          <p class="flex-1 truncate text-ellipsis text-sm text-gray-900 dark:text-white">Breakfast</p>
+        </div>
+        <div class="mr-2 flex rounded-lg bg-slate-200 p-3 dark:bg-slate-900">
+          <svg-icon src="assets/icons/other/water.svg" [svgClass]="'h-5 w-5 mr-1 text-gray-900 dark:text-white'">
+          </svg-icon>
+          <p class="flex-1 truncate text-ellipsis text-sm text-gray-900 dark:text-white">Swimming Pool</p>
+        </div>
+        <div class="mr-2 flex rounded-lg bg-slate-200 p-3 dark:bg-slate-900">
+          <svg-icon src="assets/icons/other/gym.svg" [svgClass]="'h-5 w-5 mr-1 text-gray-900 dark:text-white'">
+          </svg-icon>
+          <p class="flex-1 truncate text-ellipsis text-sm text-gray-900 dark:text-white">Gym</p>
+        </div>
+        <div class="mr-2 flex rounded-lg bg-slate-200 p-3 dark:bg-slate-900">
+          <svg-icon src="assets/icons/other/dinner.svg" [svgClass]="'h-5 w-5 mr-1 text-gray-900 dark:text-white'">
+          </svg-icon>
+          <p class="flex-1 truncate text-ellipsis text-sm text-gray-900 dark:text-white">Dinner</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+  <ul
+    class="-mb-px flex flex-wrap text-center text-sm font-medium"
+    id="default-tab"
+    data-tabs-toggle="#default-tab-content"
+    role="tablist">
+    <li class="me-2" role="presentation">
+      <button
+        class="inline-block rounded-t-lg border-b-2 p-4"
+        id="profile-tab"
+        data-tabs-target="#profile"
+        type="button"
+        role="tab"
+        aria-controls="profile"
+        aria-selected="false">
+        Description
+      </button>
+    </li>
+    <li class="me-2" role="presentation">
+      <button
+        class="inline-block rounded-t-lg border-b-2 p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+        id="dashboard-tab"
+        data-tabs-target="#dashboard"
+        type="button"
+        role="tab"
+        aria-controls="dashboard"
+        aria-selected="false">
+        Reviews
+      </button>
+    </li>
+  </ul>
+</div>
+<div id="default-tab-content">
+  <div
+    class="hidden rounded-lg bg-gray-50 p-4 dark:bg-gray-800"
+    id="profile"
+    role="tabpanel"
+    aria-labelledby="profile-tab">
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      Welcome to <strong class="font-medium text-gray-800 dark:text-white">Starlit Haven Suites</strong>, a Premier
+      Luxury Hotel Experience
+    </p>
+    <br />
+    <p class="text-sm text-gray-500 dark:text-gray-400">
+      Nestled in the heart of a vibrant city, The Opulent Haven stands as a beacon of sophistication and comfort,
+      epitomizing the pinnacle of luxury hospitality. As you step through the grand entrance, you are immediately
+      enveloped in an atmosphere of elegance and grandeur, where every detail is meticulously curated to provide an
+      unparalleled experience.
+    </p>
+  </div>
+  <div class="hidden" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+    <div class="flex flex-col gap-3 text-foreground">
+      <div class="flex flex-col gap-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
+        <div class="justify flex justify-between">
+          <div class="flex gap-2">
+            <div class="h-6 w-6 rounded-full bg-black text-center text-white">J</div>
+            <span>Johnny Walkens</span>
+          </div>
+          <div class="flex items-center">
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-gray-300 dark:text-gray-500"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="text-sm">Amazing place to find a responsive design!</div>
+
+        <div class="flex items-center justify-between text-xs">
+          <span>Feb 13, 2021</span>
+          <button
+            class="rounded-lg bg-primary px-5 py-2.5 text-xs font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-blue-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700">
+            Helpful
+          </button>
+        </div>
+      </div>
+      <div class="flex flex-col gap-4 rounded-lg bg-gray-50 p-4 dark:bg-gray-800">
+        <div class="justify flex justify-between">
+          <div class="flex gap-2">
+            <div class="h-6 w-6 rounded-full bg-black text-center text-white">K</div>
+            <span>Kelly Peterson</span>
+          </div>
+          <div class="flex items-center">
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+            <svg
+              class="ms-1 h-4 w-4 text-yellow-300"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="currentColor"
+              viewBox="0 0 22 20">
+              <path
+                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="text-sm">You have to try it out atleast once in your life.</div>
+
+        <div class="flex items-center justify-between text-xs">
+          <span>Dec 19, 2020</span>
+          <button
+            class="rounded-lg bg-primary px-5 py-2.5 text-xs font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-blue-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700">
+            Helpful
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="absolute bottom-0 left-0 flex w-full bg-white dark:bg-gray-900">
+  <div class="m-6 flex w-full justify-between">
+    <button
+      class="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-lg font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-100 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-700 dark:hover:border-gray-600 dark:hover:bg-gray-700">
+      Live View
+    </button>
+    <button
+      class="rounded-lg bg-primary px-5 py-2.5 text-lg font-medium text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-blue-800 dark:bg-blue-600 dark:focus:ring-blue-800 dark:hover:bg-blue-700">
+      Book Now
+    </button>
+  </div>
+</div>

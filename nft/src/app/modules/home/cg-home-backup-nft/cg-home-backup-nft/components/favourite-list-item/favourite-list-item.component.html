@@ -1,0 +1,26 @@
+<div class="mb-4 mr-2 flex items-center" (click)="navigate('/home/bid')">
+  <img class="mr-3 h-16 w-24 rounded-box object-cover shadow-xl" [src]="image" alt="image description" />
+  <div class="flex-1">
+    <div class="w-[200px]">
+      <p class="-mb-1 flex-1 truncate text-ellipsis text-sm font-semibold text-gray-800 dark:text-white">
+        {{ title }}
+      </p>
+      <p class="truncate text-ellipsis text-sm text-blue-500 dark:text-gray-400">{{ handle }}</p>
+      <div class="flex items-center">
+        <p class="mr-2 rounded-lg rounded-br-lg bg-primary px-1 text-sm font-semibold text-black opacity-75">
+          {{ amount }}
+        </p>
+        <p class="truncate text-ellipsis text-xs text-gray-500 dark:text-gray-400">
+          {{ followers }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <button
+    (click)="navigate('/home/play')"
+    type="button"
+    class="rounded-full bg-gray-900 p-2.5 text-sm font-medium text-white dark:bg-gray-700">
+    <svg-icon src="assets/icons/heroicons/solid/heart.svg" [svgClass]="'h-5 w-5 text-red-500'"> </svg-icon>
+    <span class="sr-only">Icon description</span>
+  </button>
+</div>

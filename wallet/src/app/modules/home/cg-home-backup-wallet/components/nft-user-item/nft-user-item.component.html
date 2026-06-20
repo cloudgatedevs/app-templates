@@ -1,0 +1,25 @@
+<div class="flex items-center justify-between">
+  <div class="flex items-center">
+    <div class="relative mr-2 h-16 w-16">
+      <span
+        class="absolute right-0 bottom-0 inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary text-sm font-semibold dark:bg-gray-700">
+        <svg-icon src="assets/icons/heroicons/solid/check-badge.svg" [svgClass]="'h-6 w-6 text-black'"> </svg-icon>
+      </span>
+      <img
+        class="h-16 w-16 rounded-full border-4 border-white object-cover dark:border-gray-800"
+        [src]="image"
+        alt="" />
+    </div>
+    <div>
+      <p class="font-md font-semibold text-blue-500">{{ handle }}</p>
+      <p>{{ followers }} Followers</p>
+    </div>
+  </div>
+
+  <button
+    class="rounded-full bg-gray-100 p-2.5 text-center text-sm font-medium text-gray-600 shadow-md dark:bg-gray-700 dark:text-white">
+    <span class="flex text-sm font-semibold"
+      >Follow <svg-icon src="assets/icons/heroicons/solid/plus.svg" [svgClass]="'h-5 w-5 ml-1'"> </svg-icon
+    ></span>
+  </button>
+</div>

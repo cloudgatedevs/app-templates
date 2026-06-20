@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" width="800" height="340" role="img" aria-label="UI/UX design cover">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="800" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#fb7185"/><stop offset="1" stop-color="#be123c"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="340" fill="url(#g)"/>
+  <g fill="#ffffff" opacity="0.10"><circle cx="110" cy="80" r="120"/><circle cx="700" cy="300" r="90"/></g>
+  <rect x="300" y="80" width="200" height="186" rx="16" fill="#ffffff" opacity="0.95"/>
+  <circle cx="332" cy="122" r="15" fill="#fb7185"/>
+  <rect x="358" y="110" width="112" height="11" rx="5.5" fill="#e7e5e4"/>
+  <rect x="358" y="129" width="78" height="11" rx="5.5" fill="#e7e5e4"/>
+  <rect x="320" y="160" width="78" height="52" rx="10" fill="#fecdd3"/>
+  <rect x="406" y="160" width="74" height="52" rx="10" fill="#fda4af"/>
+  <rect x="320" y="226" width="98" height="22" rx="11" fill="#fb7185"/>
+  <path d="M444 206 L444 250 L455 240 L463 256 L471 252 L463 236 L476 236 Z" fill="#ffffff" stroke="#be123c" stroke-width="3" stroke-linejoin="round"/>
+</svg>

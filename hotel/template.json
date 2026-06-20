@@ -1,0 +1,27 @@
+{
+  "id": "hotel",
+  "name": "Cloudgate Hotel Demo",
+  "description": "Angular hotel discovery demo with favourites, explore, and workflow-backed catalog — ready for Cloudgate dev preview.",
+  "folder": "hotel",
+  "framework": "Angular",
+  "devCommand": "npm install && npm run start",
+  "devPort": 3000,
+  "demoUrl": "https://hotel-demo.cloudweb.dev/",
+  "thumbnail": "https://raw.githubusercontent.com/dev-appworld/cloudgate-app-templates/main/hotel/banner.png",
+  "tags": ["angular", "hotel", "booking", "tailwind", "capacitor"],
+  "workflowTemplate": ".template/workflow-template.json",
+  "workflowImport": {
+    "description": "Creates the GET /hotels API the app calls at runtime.",
+    "file": ".template/workflow-template.json",
+    "projectPath": "api",
+    "route": "hotels",
+    "publishHint": "Publish the Hotel Catalog endpoint to sandbox, then test GET /sbx/api/hotels on your apps gateway."
+  },
+  "configSetup": {
+    "kind": "angular-appconfig",
+    "targets": [
+      "src/assets/appconfig.json",
+      "src/assets/appconfig.production.json"
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+<div class="relative" (click)="openDoctorDetail(placeId)">
+  <button
+    class="absolute right-0 mr-3 mt-3 rounded-full bg-white p-2.5 text-center text-sm font-medium text-gray-600 opacity-80">
+    <svg-icon src="assets/icons/heroicons/solid/heart.svg" [svgClass]="'h-5 w-5'"> </svg-icon>
+  </button>
+  <div class="absolute h-60">
+    <div class="absolute bottom-0 m-3 inline-flex h-7 rounded-full bg-primary px-1 text-xl text-white shadow-lg">
+      {{ amount }}
+    </div>
+  </div>
+  <div class="mb-5 flex-col items-center rounded-box bg-white shadow-lg dark:bg-gray-900">
+    <img
+      class="h-60 w-full rounded-t-box rounded-br-box object-cover shadow-xl"
+      [src]="image"
+      alt="image description" />
+    <div class="w-full p-4">
+      <div class="flex">
+        <p class="flex-1 truncate text-ellipsis text-sm font-semibold text-gray-800 dark:text-white">
+          {{ title }}
+        </p>
+        <div class="inline-flex">
+          <svg-icon src="assets/icons/heroicons/solid/star.svg" [svgClass]="'h-5 w-5 text-yellow-300'"> </svg-icon>
+          <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ rating }}</p>
+        </div>
+      </div>
+      <p class="truncate text-ellipsis text-xs text-gray-500 dark:text-gray-400">{{ subtitle }}</p>
+      <div class="mt-1 flex items-center">
+        <svg-icon src="assets/icons/heroicons/outline/pin.svg" [svgClass]="'h-5 w-5 mr-1 text-primary'"> </svg-icon>
+        <p class="truncate text-ellipsis text-xs text-gray-500 dark:text-gray-400">
+          {{ location }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

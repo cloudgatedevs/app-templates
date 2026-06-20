@@ -1,0 +1,24 @@
+{
+  "id": "wallet",
+  "name": "Cloudgate Wallet Demo",
+  "description": "Angular wallet demo with workflow-backed catalog — import .template/workflow-template.json for GET /transactions.",
+  "folder": "wallet",
+  "framework": "Angular",
+  "devCommand": "npm install && npm run start",
+  "devPort": 3000,
+  "demoUrl": "https://wallet-demo.cloudweb.dev/",
+  "thumbnail": "https://raw.githubusercontent.com/dev-appworld/cloudgate-app-templates/main/wallet/banner.png",
+  "tags": ["angular", "wallet", "tailwind", "capacitor"],
+  "workflowTemplate": ".template/workflow-template.json",
+  "workflowImport": {
+    "description": "Creates the GET /transactions API the app calls at runtime.",
+    "file": ".template/workflow-template.json",
+    "projectPath": "api",
+    "route": "transactions",
+    "publishHint": "Publish the catalog endpoint to sandbox, then test GET /sbx/api/transactions on your apps gateway."
+  },
+  "configSetup": {
+    "kind": "angular-appconfig",
+    "targets": ["src/assets/appconfig.json", "src/assets/appconfig.production.json"]
+  }
+}

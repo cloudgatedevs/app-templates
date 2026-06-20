@@ -1,0 +1,11 @@
+{
+  "/workflow-gateway": {
+    "target": "http://apps.localhost:44301",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/workflow-gateway": ""
+    },
+    "logLevel": "warn"
+  }
+}

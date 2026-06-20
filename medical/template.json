@@ -1,0 +1,27 @@
+{
+  "id": "medical",
+  "name": "Cloudgate Medical Demo",
+  "description": "Angular medical discovery demo with doctor booking, favourites, explore, and workflow-backed catalog — ready for Cloudgate dev preview.",
+  "folder": "medical",
+  "framework": "Angular",
+  "devCommand": "npm install && npm run start",
+  "devPort": 3000,
+  "demoUrl": "https://medical-demo.cloudweb.dev/",
+  "thumbnail": "https://raw.githubusercontent.com/dev-appworld/cloudgate-app-templates/main/medical/banner.png",
+  "tags": ["angular", "medical", "healthcare", "tailwind", "capacitor"],
+  "workflowTemplate": ".template/workflow-template.json",
+  "workflowImport": {
+    "description": "Creates the GET /doctors API the app calls at runtime.",
+    "file": ".template/workflow-template.json",
+    "projectPath": "api",
+    "route": "doctors",
+    "publishHint": "Publish the Doctor Catalog endpoint to sandbox, then test GET /sbx/api/doctors on your apps gateway."
+  },
+  "configSetup": {
+    "kind": "angular-appconfig",
+    "targets": [
+      "src/assets/appconfig.json",
+      "src/assets/appconfig.production.json"
+    ]
+  }
+}

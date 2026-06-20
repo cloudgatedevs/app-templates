@@ -1,0 +1,91 @@
+<div class="relative mt-24 h-48 items-center">
+  <div class="absolute w-full">
+    <div class="mx-6 rounded-t-box bg-primary px-6 pt-6 pb-4">
+      <div class="flex items-center">
+        <div class="flex-1">
+          <p class="text-sm text-gray-100">My Available Balance</p>
+          <p class="text-[30px] font-bold text-white">$12,253.70</p>
+        </div>
+        <div>
+          <svg-icon src="assets/icons/other/wallet.svg" [svgClass]="'h-10 w-10 text-white'"> </svg-icon>
+        </div>
+      </div>
+    </div>
+    <div class="mx-6 mb-4 rounded-b-box bg-gray-900 p-4">
+      <div class="flex items-center">
+        <div class="font-small grid h-full w-full grid-cols-4">
+          <button type="button" class="group inline-flex flex-col items-center justify-center pr-5">
+            <div class="mb-1 h-11 w-11 rounded-full border-2 border-dashed border-gray-600 p-2">
+              <svg-icon src="assets/icons/other/pay.svg" [svgClass]="'h-6 w-6 mx-auto text-primary'"> </svg-icon>
+            </div>
+            <p class="text-xs">Pay</p>
+          </button>
+          <button type="button" class="group inline-flex flex-col items-center justify-center px-5">
+            <div class="mb-1 h-11 w-11 rounded-full border-2 border-dashed border-gray-600 p-2">
+              <svg-icon src="assets/icons/other/deposit.svg" [svgClass]="'h-6 w-6 mx-auto text-primary'"> </svg-icon>
+            </div>
+            <p class="text-xs">Pay</p>
+          </button>
+          <button type="button" class="group inline-flex flex-col items-center justify-center px-5">
+            <div class="mb-1 h-11 w-11 rounded-full border-2 border-dashed border-gray-600 p-2">
+              <svg-icon src="assets/icons/other/transfer.svg" [svgClass]="'h-6 w-6 mx-auto text-primary'"> </svg-icon>
+            </div>
+            <p class="text-xs">Pay</p>
+          </button>
+          <button type="button" class="group inline-flex flex-col items-center justify-center pl-5">
+            <div class="mb-1 h-11 w-11 rounded-full border-2 border-dashed border-gray-600 p-2">
+              <svg-icon src="assets/icons/other/request.svg" [svgClass]="'h-6 w-6 mx-auto text-primary'"> </svg-icon>
+            </div>
+            <p class="text-xs">Pay</p>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="h-20 flex-col">
+    <div class="h-full w-full"></div>
+    <div class="h-32 w-full overflow-clip text-center">
+      <div class="h-32 w-[120%] rounded-t-full bg-background" style="margin: 0 -10%"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mb-2">
+  <div class="mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Financial Plan</h1>
+  </div>
+</div>
+
+<div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+  <div class="carousel">
+    <div class="carousel-item gap-4">
+      <div>
+        <div
+          class="flex h-16 w-16 flex-col items-center justify-center rounded-full border-2 border-dashed border-gray-500 py-4 text-gray-900 dark:bg-slate-800">
+          <svg-icon src="./assets/icons/other/plus.svg" [svgClass]="'h-8 w-8'"> </svg-icon>
+        </div>
+        <p class="mt-1 truncate text-ellipsis text-center text-xs text-foreground">Add</p>
+      </div>
+      <app-category-grid-item
+        icon="./assets/icons/other/house.svg"
+        name="Home"
+        customCss="bg-purple-200"></app-category-grid-item>
+      <app-category-grid-item
+        icon="./assets/icons/other/book.svg"
+        name="Education"
+        customCss="bg-orange-200"></app-category-grid-item>
+      <app-category-grid-item
+        icon="./assets/icons/other/health.svg"
+        name="Health"
+        customCss="bg-blue-200"></app-category-grid-item>
+      <app-category-grid-item
+        icon="./assets/icons/other/holiday.svg"
+        name="Holiday"
+        customCss="bg-green-200"></app-category-grid-item>
+      <app-category-grid-item
+        icon="./assets/icons/other/investment.svg"
+        name="Investments"
+        customCss="bg-red-200"></app-category-grid-item>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+<div class="mb-4 mr-2 flex items-center" (click)="openTransferDetail(placeId)">
+  <img class="mr-3 h-16 w-24 rounded-box object-cover shadow-xl" [src]="image" alt="image description" />
+  <div class="flex-1">
+    <div class="w-[200px]">
+      <div class="flex">
+        <p class="flex-1 truncate text-ellipsis text-sm font-semibold text-gray-800 dark:text-white">
+          {{ title }}
+        </p>
+        <div class="inline-flex">
+          <svg-icon src="assets/icons/heroicons/solid/star.svg" [svgClass]="'h-5 w-5 text-yellow-300'"> </svg-icon>
+          <p class="text-sm font-semibold text-gray-800 dark:text-white">{{ rating }}</p>
+        </div>
+      </div>
+      <p class="truncate text-ellipsis text-xs text-gray-900 dark:text-gray-400">{{ subtitle }}</p>
+      <div class="mt-1 flex items-center">
+        <p class="mr-1 text-xs font-bold text-gray-500 dark:text-gray-400">
+          {{ amount }}
+        </p>
+        <svg-icon src="assets/icons/heroicons/outline/pin.svg" [svgClass]="'h-5 w-5 mr-1 text-primary'"> </svg-icon>
+        <p class="truncate text-ellipsis text-xs text-gray-500 dark:text-gray-400">
+          {{ location }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <button
+    (click)="navigate('/home/play')"
+    type="button"
+    class="rounded-full bg-gray-900 p-2.5 text-sm font-medium text-white dark:bg-gray-700">
+    <svg-icon src="assets/icons/heroicons/solid/heart.svg" [svgClass]="'h-5 w-5 text-red-500'"> </svg-icon>
+    <span class="sr-only">Icon description</span>
+  </button>
+</div>
+

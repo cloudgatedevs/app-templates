@@ -1,0 +1,25 @@
+<div class="relative" (click)="navigate('home/product')">
+  <button
+    class="absolute right-0 mr-3 mt-3 rounded-full bg-white p-2.5 text-center text-sm font-medium text-gray-600 opacity-80">
+    <svg-icon src="assets/icons/heroicons/solid/heart.svg" [svgClass]="'h-4 w-4'"> </svg-icon>
+  </button>
+  <div class="mb-5 flex-col items-center">
+    <img class="h-32 w-full rounded-box object-cover shadow-xl" [src]="image" alt="image description" />
+    <div class="w-full flex-col">
+      <p class="truncate text-gray-700 dark:text-gray-300">{{ title }}</p>
+      <div class="flex items-center text-xs">
+        <div class="flex flex-1 items-center">
+          <svg-icon src="assets/icons/heroicons/solid/star.svg" [svgClass]="'h-4 w-4 text-yellow-300'"> </svg-icon>
+          <span class="mr-1 text-yellow-300">{{ stars }}</span>
+          <span class="text-xs text-gray-700 dark:text-gray-400">({{ ratings }})</span>
+        </div>
+        <div class="flex items-center">
+          <span class="mr-1 font-semibold text-gray-700 dark:text-gray-100">${{ amount }}</span>
+          <span *ngIf="oldAmount" class="text-red-600"
+            ><s>${{ oldAmount }}</s></span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

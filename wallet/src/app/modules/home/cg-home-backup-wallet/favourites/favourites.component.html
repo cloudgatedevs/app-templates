@@ -1,0 +1,58 @@
+<div class="mt-20 bg-background p-6 pb-8 sm:px-8">
+  <div class="mb-6 w-full">
+    <div class="mx-auto my-2 grid grid-cols-2 gap-1 rounded-lg bg-gray-100 p-1 dark:bg-gray-600" role="group">
+      <button
+        type="button"
+        (click)="setTab('physical')"
+        [ngClass]="
+          tabMenu == 'physical'
+            ? 'bg-gray-900 text-white dark:bg-gray-900 dark:text-white'
+            : 'text-gray-900 dark:bg-gray-500'
+        "
+        class="rounded-lg px-5 py-1.5 text-xs font-medium dark:bg-gray-300 dark:text-gray-900">
+        Physical Cards
+      </button>
+      <button
+        type="button"
+        (click)="setTab('virtual')"
+        [ngClass]="
+          tabMenu == 'virtual'
+            ? 'bg-gray-900 text-white dark:bg-gray-900 dark:text-white'
+            : 'text-gray-900 dark:bg-gray-500'
+        "
+        class="rounded-lg px-5 py-1.5 text-xs font-medium dark:bg-gray-300 dark:text-gray-900">
+        Virtual Cards
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="tabMenu == 'physical'">
+    <app-card-item
+      backgroundImage="assets/images/card-5.jpg"
+      cardNumber="1234 6789 9874 4123"
+      cardName="John Doe"
+      cardDate="02/27"></app-card-item>
+    <app-card-item
+      backgroundImage="assets/images/card-6.jpg"
+      cardNumber="7845 1237 9884 4512"
+      cardName="John Doe"
+      cardDate="05/25"></app-card-item>
+  </div>
+  <div *ngIf="tabMenu == 'virtual'">
+    <app-card-item
+      backgroundImage=""
+      cardNumber="8798 1243 9875 5463"
+      cardName="John Doe"
+      cardDate="06/28"></app-card-item>
+    <app-card-item
+      backgroundImage=""
+      cardNumber="4567 2137 2314 1246"
+      cardName="John Doe"
+      cardDate="07/28"></app-card-item>
+    <app-card-item
+      backgroundImage=""
+      cardNumber="4587 8888 5461 7852"
+      cardName="John Doe"
+      cardDate="08/28"></app-card-item>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="relative" (click)="navigate('home/bid')">
+  <div class="absolute top-0 mt-56 w-72 px-3 text-white">
+    <div class="flex items-center justify-between">
+      <div class="mr-2 flex-1 rounded-lg bg-gray-400/90 p-2">
+        <span class="-mb-1 block text-xs">Auction ending in</span>
+        <span class="font-semibold">{{ days }}D | {{ hours }}H | {{ minutes }}M</span>
+      </div>
+      <div class="rounded-lg bg-gray-900/90 p-2">
+        <span class="-mb-1 block text-xs">Current BID</span>
+        <span class="font-semibold">{{ amount }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="mr-5 mb-5 flex-col items-center rounded-box bg-white shadow-lg dark:bg-gray-900">
+    <img class="h-72 w-72 rounded-t-box object-cover shadow-xl" [src]="image" alt="image description" />
+    <div class="w-72 p-4">
+      <div class="flex">
+        <div class="flex-1">
+          <p class="truncate text-ellipsis text-lg font-semibold text-gray-800 dark:text-white">
+            {{ title }}
+          </p>
+          <div class="flex items-center">
+            <p class="mr-2 truncate text-ellipsis text-xs text-blue-500">{{ handle }}</p>
+            <p class="truncate text-ellipsis text-xs text-gray-500 dark:text-gray-400">{{ followers }} Followers</p>
+          </div>
+        </div>
+        <button
+          class="rounded-full bg-gray-100 p-2.5 text-center text-sm font-medium text-gray-600 shadow-md dark:bg-gray-700 dark:text-white">
+          <svg-icon src="assets/icons/heroicons/solid/heart.svg" [svgClass]="'h-5 w-5'"> </svg-icon>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

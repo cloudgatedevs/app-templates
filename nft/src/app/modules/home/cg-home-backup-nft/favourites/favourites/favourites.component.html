@@ -1,0 +1,16 @@
+<div *ngIf="loading" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Loading favourites...</div>
+<div *ngIf="loadError && !loading" class="px-5 py-8 text-center text-sm text-red-400">
+  Could not load favourites from the workflow.
+</div>
+
+<div *ngIf="catalog && !loading" class="h-full">
+  <app-favourite-list-item
+    *ngFor="let place of catalog.favourites; trackBy: trackById"
+    [placeId]="place.id"
+    [image]="place.imageUrl"
+    [title]="place.title"
+    [subtitle]="place.subtitle"
+    [amount]="place.amount"
+    [rating]="place.rating"
+    [location]="place.location"></app-favourite-list-item>
+</div>

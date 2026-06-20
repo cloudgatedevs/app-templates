@@ -1,0 +1,12 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.mobile-app-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  background-color: hsl(var(--background));
+}

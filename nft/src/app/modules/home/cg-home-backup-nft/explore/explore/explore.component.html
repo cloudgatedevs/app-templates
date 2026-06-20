@@ -1,0 +1,58 @@
+<div *ngIf="loading" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Loading explore...</div>
+<div *ngIf="loadError && !loading" class="px-5 py-8 text-center text-sm text-red-400">
+  Could not load explore listings from the workflow.
+</div>
+
+<ng-container *ngIf="catalog && !loading">
+  <div class="mb-4 mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Recent Viewed Listings</h1>
+    <button type="button" class="mr-2 text-center text-sm font-medium text-gray-700">
+      <p class="text-xs text-gray-500 dark:text-gray-400">All</p>
+    </button>
+  </div>
+
+  <div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div class="carousel-item mr-3">
+        <app-place-grid-item
+          *ngFor="let place of catalog.exploreRecent; trackBy: trackById"
+          [placeId]="place.id"
+          [image]="place.imageUrl"
+          [title]="place.title"
+          [subtitle]="place.subtitle"></app-place-grid-item>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4 mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Explore</h1>
+    <button type="button" class="text-center text-sm font-medium text-gray-700 dark:text-white">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <title></title>
+          <g id="Complete">
+            <g id="F-More">
+              <path
+                d="M8,12a2,2,0,1,1-2-2A2,2,0,0,1,8,12Zm10-2a2,2,0,1,0,2,2A2,2,0,0,0,18,10Zm-6,0a2,2,0,1,0,2,2A2,2,0,0,0,12,10Z"
+                id="Horizontal"></path>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <app-place-explore-item
+      *ngFor="let place of catalog.explore; trackBy: trackById"
+      [placeId]="place.id"
+      [image]="place.imageUrl"
+      [title]="place.title"
+      [subtitle]="place.subtitle"
+      [amount]="place.amount"
+      [rating]="place.rating"
+      [location]="place.location"></app-place-explore-item>
+  </div>
+</ng-container>

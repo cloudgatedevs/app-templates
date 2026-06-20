@@ -1,0 +1,21 @@
+node_modules/
+dist/
+.angular/
+*.log
+
+# Editor/preview artifacts not used at runtime
+**/src/assets/preview/
+
+# Duplicate/unused image webps (apps use .jpg in assets/images)
+**/src/assets/images/*.webp
+
+# README screenshots — hosted at https://cloudgate.dev/assets/app-templates/
+**/docs/screenshots/
+
+# Capacitor native shells — regenerate with `npx cap add android|ios`
+**/android/
+**/ios/
+
+# Per-workspace Cloudgate editor artifacts (see each folder's .cloudgate/.gitignore)
+**/.cloudgate/*
+!**/.cloudgate/.gitignore

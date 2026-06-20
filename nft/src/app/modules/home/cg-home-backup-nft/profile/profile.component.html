@@ -1,0 +1,88 @@
+<div class="mb-6 rounded-box bg-white pb-6 text-gray-900 shadow-xl dark:bg-gray-900">
+  <div class="h-32 overflow-hidden rounded-t-box">
+    <img class="w-full object-cover object-top" src="./assets/images/profile.jpg" alt="Sky" />
+  </div>
+  <div class="relative mx-auto -mt-16 h-32 w-32 overflow-hidden rounded-full border-4 border-white">
+    <img class="h-32 object-cover object-center" [src]="appSession.profilePicture" alt="Profile Picture" />
+  </div>
+  <div class="mt-2 text-center">
+    <h2 class="font-semibold text-primary">{{ appSession.user?.name }} {{ appSession.user?.surname }}</h2>
+    <p class="mx-2 truncate text-gray-500 dark:text-white">
+      {{ appSession.user?.emailAddress }}
+    </p>
+  </div>
+  <div class="mt-4 text-center">
+    <button
+      (click)="sendEmail()"
+      type="button"
+      class="me-2 mb-2 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 px-5 py-2.5 text-center text-sm font-medium text-white shadow-lg focus:outline-none focus:ring-4 focus:ring-pink-200 hover:bg-gradient-to-bl dark:focus:ring-pink-800">
+      Get in touch
+    </button>
+  </div>
+</div>
+<div class="flex flex-col">
+  <div class="flex-grow">
+    <ul>
+      <li class="border-b py-2">
+        <button
+          (click)="navigate('profile/edit')"
+          class="inline-flex w-full items-center px-4 py-2 text-left text-gray-600 hover:text-gray-700 dark:text-white">
+          <div class="w-10">
+            <svg-icon src="./assets/icons/heroicons/outline/user-circle.svg" [svgClass]="'h-5 w-5'"> </svg-icon>
+          </div>
+          <span class="block text-lg font-medium">Account</span>
+        </button>
+      </li>
+      <li class="border-b py-2">
+        <button
+          (click)="navigate('profile/community')"
+          class="inline-flex w-full items-center px-4 py-2 text-left text-gray-600 hover:text-gray-700 dark:text-white">
+          <div class="w-10">
+            <svg-icon src="./assets/icons/other/community.svg" [svgClass]="'h-5 w-5'"> </svg-icon>
+          </div>
+          <span class="block text-lg font-medium">Community</span>
+        </button>
+      </li>
+      <li class="border-b py-2">
+        <button
+          (click)="privacy()"
+          class="inline-flex w-full items-center px-4 py-2 text-left text-gray-600 hover:text-gray-700 dark:text-white">
+          <div class="w-10">
+            <svg-icon src="./assets/icons/heroicons/outline/lock-closed.svg" [svgClass]="'h-6 w-6'"> </svg-icon>
+          </div>
+          <span class="block text-lg font-medium">Privacy</span>
+        </button>
+      </li>
+      <li class="border-b py-2">
+        <button
+          (click)="terms()"
+          class="inline-flex w-full items-center px-4 py-2 text-left text-gray-600 hover:text-gray-700 dark:text-white">
+          <div class="w-10">
+            <svg-icon src="./assets/icons/heroicons/outline/terms.svg" [svgClass]="'h-6 w-6'"> </svg-icon>
+          </div>
+          <span class="block text-lg font-medium">Terms</span>
+        </button>
+      </li>
+      <li class="border-b py-2">
+        <button
+          (click)="website()"
+          class="inline-flex w-full items-center px-4 py-2 text-left text-gray-600 hover:text-gray-700 dark:text-white">
+          <div class="w-10">
+            <svg-icon src="./assets/icons/heroicons/outline/globe.svg" [svgClass]="'h-6 w-6'"> </svg-icon>
+          </div>
+          <span class="block text-lg font-medium">Website</span>
+        </button>
+      </li>
+      <li class="border-b py-2">
+        <button
+          (click)="navigate('/logout')"
+          class="inline-flex w-full items-center px-4 py-2 text-left text-gray-600 hover:text-gray-700 dark:text-white">
+          <div class="w-10">
+            <svg-icon src="./assets/icons/heroicons/outline/logout.svg" [svgClass]="'h-4 w-4'"> </svg-icon>
+          </div>
+          <span class="block text-lg font-medium">Log out</span>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

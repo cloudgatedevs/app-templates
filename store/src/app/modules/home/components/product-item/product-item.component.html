@@ -1,0 +1,21 @@
+<div class="relative flex-col items-center" (click)="navigate('home/product')">
+  <div class="mb-1 h-40 w-40">
+    <img class="h-40 w-40 rounded-box object-cover shadow-lg" [src]="image" alt="image description" />
+  </div>
+  <div class="w-40 flex-col">
+    <p class="truncate text-gray-700 dark:text-gray-300">{{ title }}</p>
+    <div class="flex items-center text-xs">
+      <div class="flex flex-1 items-center">
+        <svg-icon src="assets/icons/heroicons/solid/star.svg" [svgClass]="'h-4 w-4 text-yellow-300'"> </svg-icon>
+        <span class="mr-1 text-yellow-300">{{ stars }}</span>
+        <span class="text-xs text-gray-700 dark:text-gray-400">({{ ratings }})</span>
+      </div>
+      <div class="flex items-center">
+        <span class="mr-1 font-semibold text-gray-700 dark:text-gray-100">${{ amount }}</span>
+        <span *ngIf="oldAmount" class="text-red-600"
+          ><s>${{ oldAmount }}</s></span
+        >
+      </div>
+    </div>
+  </div>
+</div>

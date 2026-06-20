@@ -1,0 +1,20 @@
+<div class="flex h-screen w-full overflow-hidden">
+  <div class="flex w-full grow flex-col content-start overflow-hidden bg-background">
+    <!-- Header -->
+    <app-navbar></app-navbar>
+    <!-- main content -->
+    <div
+      id="main-content"
+      class="scrollbar-thumb-rounded scrollbar-track-rounded grow overflow-auto overscroll-none pb-20 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted">
+      <div class="mx-auto mb-8 p-4 sm:px-8 lg:container"><router-outlet></router-outlet></div>
+    </div>
+
+    <!-- footer -->
+    <!-- <app-footer></app-footer> -->
+
+    <!-- Bottom bar -->
+    <app-bottom-navbar [class.hidden]="hideBottomNavbar"></app-bottom-navbar>
+  </div>
+</div>
+
+<alertModal #alertModal></alertModal>

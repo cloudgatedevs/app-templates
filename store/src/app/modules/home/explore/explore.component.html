@@ -1,0 +1,318 @@
+<div class="mt-24">
+  <form class="mb-5 flex max-w-sm">
+    <div class="relative mr-2 flex-1">
+      <div class="start-0 ps-3.5 pointer-events-none absolute inset-y-0 flex items-center">
+        <svg-icon src="assets/icons/heroicons/solid/search.svg" [svgClass]="'h-4 w-4 text-gray-700 dark:text-white'">
+        </svg-icon>
+      </div>
+      <input
+        type="text"
+        id="email-address-icon"
+        class="ps-10 block w-full rounded-lg border border-gray-700 p-2.5 text-sm text-gray-900 focus:border-primary focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        placeholder="Search collections" />
+    </div>
+    <button class="rounded-full bg-primary p-2.5 text-sm font-medium text-white">
+      <svg-icon src="assets/icons/heroicons/solid/toggle.svg" [svgClass]="'h-5 w-5'"> </svg-icon>
+    </button>
+  </form>
+
+  <div class="mb-2">
+    <div class="mr-2 flex">
+      <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Today's Choice 🎀</h1>
+      <button type="button" class="text-center text-sm font-medium text-gray-700">
+        <p class="text-lg text-gray-500 dark:text-gray-300" (click)="navigate('/home/gallery')">See all</p>
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div class="carousel-item mr-3">
+        <app-product-grid-item
+          image="./assets/images/image-13.jpg"
+          title="Extreme womens two piece active wear"
+          stars="4.9"
+          ratings="1322"
+          amount="129"
+          oldAmount="159"></app-product-grid-item>
+      </div>
+      <div class="carousel-item mr-3">
+        <app-product-grid-item
+          image="./assets/images/image-18.jpg"
+          title="Queen size sleep master pro"
+          stars="4.2"
+          ratings="528"
+          amount="1159"
+          oldAmount="1199"></app-product-grid-item>
+      </div>
+      <div class="carousel-item mr-3">
+        <app-product-grid-item
+          image="./assets/images/image-12.jpg"
+          title="Womens sport shoes pro make"
+          stars="4.2"
+          ratings="851"
+          amount="79"
+          oldAmount="89"></app-product-grid-item>
+      </div>
+      <div class="carousel-item mr-3">
+        <app-product-grid-item
+          image="./assets/images/image-05.jpg"
+          title="Striking Fit Lean two piece"
+          stars="4.9"
+          ratings="359"
+          amount="29"
+          oldAmount="69"></app-product-grid-item>
+      </div>
+      <div class="carousel-item mr-3">
+        <app-product-grid-item
+          image="./assets/images/image-09.jpg"
+          title="Elegant watch pro smart detector"
+          stars="4.2"
+          ratings="28"
+          amount="399"
+          oldAmount=""></app-product-grid-item>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-2 mt-3">
+    <div class="mr-2 flex">
+      <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Top Products by Category 🏅</h1>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div class="carousel-item mr-3">
+        <div class="mb-4">
+          <ul
+            class="flex flex-wrap text-center text-sm font-medium"
+            id="explore-tab"
+            data-tabs-toggle="#explore-tab-content"
+            data-tabs-active-classes="bg-gray-900 dark:bg-gray-500 rounded-box text-white hover:text-white dark:text-white dark:hover:text-white border-white dark:border-white"
+            data-tabs-inactive-classes="bg-gray-100 dark:bg-gray-900 rounded-full dark:border-transparent text-gray-600 dark:text-white dark:border-gray-700 dark:hover:text-gray-300"
+            role="tablist">
+            <li class="me-2" role="presentation">
+              <button
+                class="flex px-4 py-2"
+                id="all-explore-tab"
+                data-tabs-target="#all-explore"
+                type="button"
+                role="tab"
+                aria-controls="all-explore"
+                aria-selected="false">
+                <svg-icon src="assets/icons/other/layers.svg" [svgClass]="'h-5 w-5 mr-1'"> </svg-icon>
+                All Products
+              </button>
+            </li>
+            <li class="me-2" role="presentation">
+              <button
+                class="flex px-4 py-2"
+                id="electronics-explore-tab"
+                data-tabs-target="#electronics-explore"
+                type="button"
+                role="tab"
+                aria-controls="electronics-explore"
+                aria-selected="false">
+                <svg-icon src="assets/icons/other/phone.svg" [svgClass]="'h-5 w-5 mr-1'"> </svg-icon>
+                Electronics
+              </button>
+            </li>
+            <li role="presentation">
+              <button
+                class="flex px-4 py-2"
+                id="furniture-explore-tab"
+                id="contacts-explore-tab"
+                data-tabs-target="#furniture-explore"
+                type="button"
+                role="tab"
+                aria-controls="furniture-explore"
+                aria-selected="false">
+                <svg-icon src="assets/icons/other/chair.svg" [svgClass]="'h-5 w-5 mr-1'"> </svg-icon>
+                Furniture
+              </button>
+            </li>
+            <li class="me-2" role="presentation">
+              <button
+                class="flex px-4 py-2"
+                id="swag-explore-tab"
+                data-tabs-target="#swag-explore"
+                type="button"
+                role="tab"
+                aria-controls="swag-explore"
+                aria-selected="false">
+                <svg-icon src="assets/icons/other/shirt.svg" [svgClass]="'h-5 w-5 mr-1'"> </svg-icon>
+                Swag
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="explore-tab-content">
+    <div class="hidden" id="all-explore" role="tabpanel" aria-labelledby="all-explore-tab">
+      <div class="grid grid-cols-2 gap-4">
+        <app-product-list-item
+          image="./assets/images/image-08.jpg"
+          title="Skull Sweety Headphones Ultra"
+          stars="3.9"
+          ratings="528"
+          amount="89"
+          oldAmount=""></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-10.jpg"
+          title="VR headset for case for smart phone"
+          stars="3.7"
+          ratings="128"
+          amount="19"
+          oldAmount="29"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-11.jpg"
+          title="Sweat pant pro athlete extreme"
+          stars="4.8"
+          ratings="572"
+          amount="29"
+          oldAmount="32"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-05.jpg"
+          title="Striking Fit Lean two piece"
+          stars="4.9"
+          ratings="359"
+          amount="29"
+          oldAmount="69"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-04.jpg"
+          title="Prinston couch set six piece"
+          stars="4.4"
+          ratings="328"
+          amount="2999"
+          oldAmount="3299"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-14.jpg"
+          title="Men active wear strong fir t-shirt"
+          stars="4.5"
+          ratings="558"
+          amount="39"
+          oldAmount="45"></app-product-list-item>
+      </div>
+    </div>
+    <div class="hidden" id="electronics-explore" role="tabpanel" aria-labelledby="electronics-explore-tab">
+      <div class="grid grid-cols-2 gap-4">
+        <app-product-list-item
+          image="./assets/images/image-06.jpg"
+          title="Samsong Galaxy Smart Phone"
+          stars="4.9"
+          ratings="1928"
+          amount="999"
+          oldAmount="1199"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-07.jpg"
+          title="Levnoso Omen Pro 8k"
+          stars="4.6"
+          ratings="677"
+          amount="1499"
+          oldAmount="1899"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-08.jpg"
+          title="Skull Sweety Headphones Ultra"
+          stars="3.9"
+          ratings="528"
+          amount="89"
+          oldAmount=""></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-09.jpg"
+          title="Elegant watch pro smart detector"
+          stars="4.2"
+          ratings="28"
+          amount="399"
+          oldAmount=""></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-10.jpg"
+          title="VR headset for case for smart phone"
+          stars="3.7"
+          ratings="128"
+          amount="19"
+          oldAmount="29"></app-product-list-item>
+      </div>
+    </div>
+    <div class="hidden" id="swag-explore" role="tabpanel" aria-labelledby="swag-explore-tab">
+      <div class="grid grid-cols-2 gap-4">
+        <app-product-list-item
+          image="./assets/images/image-11.jpg"
+          title="Sweat pant pro athlete extreme"
+          stars="4.8"
+          ratings="572"
+          amount="29"
+          oldAmount="32"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-12.jpg"
+          title="Womens sport shoes pro make"
+          stars="4.2"
+          ratings="851"
+          amount="79"
+          oldAmount="89"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-13.jpg"
+          title="Extreme womens two piece active wear"
+          stars="4.9"
+          ratings="1322"
+          amount="129"
+          oldAmount="159"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-14.jpg"
+          title="Men active wear strong fir t-shirt"
+          stars="4.5"
+          ratings="558"
+          amount="39"
+          oldAmount="45"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-15.jpg"
+          title="Mens running shoes active wear pro"
+          stars="4.3"
+          ratings="98"
+          amount="99"
+          oldAmount="119"></app-product-list-item>
+      </div>
+    </div>
+    <div class="hidden" id="furniture-explore" role="tabpanel" aria-labelledby="furniture-explore-tab">
+      <div class="grid grid-cols-2 gap-4">
+        <app-product-list-item
+          image="./assets/images/image-16.jpg"
+          title="Outdoor lounge set four piece"
+          stars="4.0"
+          ratings="601"
+          amount="999"
+          oldAmount="1199"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-17.jpg"
+          title="Consulting chairs with matching table set"
+          stars="2.9"
+          ratings="28"
+          amount="1599"
+          oldAmount=""></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-18.jpg"
+          title="Queen size sleep master pro"
+          stars="4.2"
+          ratings="528"
+          amount="1159"
+          oldAmount="1199"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-19.jpg"
+          title="Elite coffe table smooth design"
+          stars="4.1"
+          ratings="1120"
+          amount="79"
+          oldAmount="99"></app-product-list-item>
+        <app-product-list-item
+          image="./assets/images/image-20.jpg"
+          title="Standing office desk dark wood"
+          stars="4.8"
+          ratings="124"
+          amount="129"
+          oldAmount="149"></app-product-list-item>
+      </div>
+    </div>
+  </div>
+</div>

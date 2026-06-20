@@ -1,0 +1,24 @@
+{
+  "id": "nft",
+  "name": "Cloudgate NFT Demo",
+  "description": "Angular nft demo with workflow-backed catalog — import .template/workflow-template.json for GET /nfts.",
+  "folder": "nft",
+  "framework": "Angular",
+  "devCommand": "npm install && npm run start",
+  "devPort": 3000,
+  "demoUrl": "https://nft-demo.cloudweb.dev/",
+  "thumbnail": "https://raw.githubusercontent.com/dev-appworld/cloudgate-app-templates/main/nft/banner.png",
+  "tags": ["angular", "nft", "tailwind", "capacitor"],
+  "workflowTemplate": ".template/workflow-template.json",
+  "workflowImport": {
+    "description": "Creates the GET /nfts API the app calls at runtime.",
+    "file": ".template/workflow-template.json",
+    "projectPath": "api",
+    "route": "nfts",
+    "publishHint": "Publish the catalog endpoint to sandbox, then test GET /sbx/api/nfts on your apps gateway."
+  },
+  "configSetup": {
+    "kind": "angular-appconfig",
+    "targets": ["src/assets/appconfig.json", "src/assets/appconfig.production.json"]
+  }
+}

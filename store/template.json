@@ -1,0 +1,24 @@
+{
+  "id": "store",
+  "name": "Cloudgate Store Demo",
+  "description": "Angular store demo with workflow-backed catalog — import .template/workflow-template.json for GET /products.",
+  "folder": "store",
+  "framework": "Angular",
+  "devCommand": "npm install && npm run start",
+  "devPort": 3000,
+  "demoUrl": "https://store-demo.cloudweb.dev/",
+  "thumbnail": "https://raw.githubusercontent.com/dev-appworld/cloudgate-app-templates/main/store/banner.png",
+  "tags": ["angular", "store", "tailwind", "capacitor"],
+  "workflowTemplate": ".template/workflow-template.json",
+  "workflowImport": {
+    "description": "Creates the GET /products API the app calls at runtime.",
+    "file": ".template/workflow-template.json",
+    "projectPath": "api",
+    "route": "products",
+    "publishHint": "Publish the catalog endpoint to sandbox, then test GET /sbx/api/products on your apps gateway."
+  },
+  "configSetup": {
+    "kind": "angular-appconfig",
+    "targets": ["src/assets/appconfig.json", "src/assets/appconfig.production.json"]
+  }
+}

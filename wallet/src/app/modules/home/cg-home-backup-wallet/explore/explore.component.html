@@ -1,0 +1,44 @@
+<div class="mt-20 bg-background p-6 pb-8 sm:px-8">
+  <app-charts-widget1></app-charts-widget1>
+  <div class="mb-2">
+    <div class="mr-2 flex">
+      <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Recent Transactions</h1>
+      <button type="button" class="text-center text-sm font-medium text-gray-700">
+        <p class="text-lg text-primary">See all</p>
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <app-transaction-list-item
+      image="./assets/icons/other/house.svg"
+      name="Home Loan"
+      amount="-$5,927.24"
+      date="21 Mar 2024 | 19:05"
+      imageCss="text-green-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/book.svg"
+      name="School Fees"
+      amount="-$1,599.98"
+      date="19 Mar 2024 | 11:13"
+      imageCss="text-blue-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/book.svg"
+      name="School Books"
+      amount="-$129.00"
+      date="18 Mar 2024 | 20:25"
+      imageCss="text-blue-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/health.svg"
+      name="Gym Membership"
+      amount="-$18.90"
+      date="16 Mar 2024 | 14:05"
+      imageCss="text-red-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/investment.svg"
+      name="Crypto Investment"
+      amount="-$599.00"
+      date="16 Mar 2024 | 04:38"
+      imageCss="text-purple-500"></app-transaction-list-item>
+  </div>
+</div>

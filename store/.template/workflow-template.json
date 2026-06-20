@@ -1,0 +1,120 @@
+{
+    "Projects": [
+        {
+            "Name": "Default",
+            "Path": "api",
+            "IsPrivate": false,
+            "Template": {
+                "Endpoints": [
+                    {
+                        "Name": "Store Catalog",
+                        "Route": "products",
+                        "UseBasicAuthentication": false,
+                        "Username": null,
+                        "Password": null,
+                        "EndpointType": 0,
+                        "RequestType": 1,
+                        "RunOnSchedule": false,
+                        "ScheduleCron": null,
+                        "ScheduledSandbox": false,
+                        "ScheduledProduction": false,
+                        "EnableRequestLimit": false,
+                        "Daily": null,
+                        "Weekly": null,
+                        "Monthly": null,
+                        "X": null,
+                        "Y": null,
+                        "AllowAnonymous": true,
+                        "EnableLogging": true,
+                        "IsAsync": false,
+                        "EnableCache": false,
+                        "CacheInMinutes": null,
+                        "IsActive": true,
+                        "IsPrivate": false,
+                        "MaskData": false,
+                        "NodeId": "h1a2b3c4-d5e6-7890-abcd-ef1234567890",
+                        "Id": "h2b3c4d5-f6a7-8901-bcde-f12345678901"
+                    }
+                ],
+                "Nodes": [
+                    {
+                        "Name": "StoreCatalogCatalogFunction",
+                        "MainScript": "return '{\"forYou\":[{\"id\":\"starlit-haven-suites\",\"title\":\"Starlit Haven Suites\",\"subtitle\":\"Relax in the cozy bedrooms with plush bedding, ensuring a restful night\\'s sleep.\",\"imageUrl\":\"./assets/images/image-01.jpg\",\"amount\":\"$225.00\",\"rating\":\"4.7\",\"location\":\"Witzands Aquifer Nature Reserve, 1, Dassenberg Drive\"},{\"id\":\"riverside-bliss-villa\",\"title\":\"Riverside Bliss Villa\",\"subtitle\":\"Take a leisurely stroll through the beautiful gardens or unwind in the outdoor hot tub, perfect for star-gazing on clear nights.\",\"imageUrl\":\"./assets/images/image-07.jpg\",\"amount\":\"$180.00\",\"rating\":\"4.6\",\"location\":\"24, Kingfisher Walk, Pinelands, Cape Town\"},{\"id\":\"royal-orchid-hotel\",\"title\":\"Royal Orchid Hotel\",\"subtitle\":\"Whether you\\'re here for a weekend escape or an extended vacation, this accommodation is designed to offer you a memorable and relaxing experience.\",\"imageUrl\":\"./assets/images/image-06.jpg\",\"amount\":\"$195.00\",\"rating\":\"4.8\",\"location\":\"8, Braambos Lane, Western Cape\"},{\"id\":\"crystal-waters-hotel\",\"title\":\"Crystal Waters Hotel\",\"subtitle\":\"The spacious living area is adorned with modern furnishings and large windows that let in an abundance of natural light, providing a warm and inviting atmosphere.\",\"imageUrl\":\"./assets/images/image-08.jpg\",\"amount\":\"$230.00\",\"rating\":\"4.3\",\"location\":\"54, Walmer Road, Woodstock, Cape Town\"}],\"favourites\":[{\"id\":\"starlit-haven-suites\",\"title\":\"Starlit Haven Suites\",\"subtitle\":\"Relax in the cozy bedrooms with plush bedding, ensuring a restful night\\'s sleep.\",\"imageUrl\":\"./assets/images/image-01.jpg\",\"amount\":\"$225.00\",\"rating\":\"4.7\",\"location\":\"Witzands Aquifer Nature Reserve, 1, Dassenberg Drive\"},{\"id\":\"sunny-haven-lodge\",\"title\":\"Sunny Haven Lodge\",\"subtitle\":\"Located in the heart of an exclusive urban enclave, The Golden Crest redefines luxury with its harmonious blend of opulent design and unparalleled comfort.\",\"imageUrl\":\"./assets/images/image-02.jpg\",\"amount\":\"$215.00\",\"rating\":\"4.6\",\"location\":\"Witzands Aquifer Nature Reserve, 1, Dassenberg Drive\"},{\"id\":\"radiant-meadows-villa\",\"title\":\"Radiant Meadows Villa\",\"subtitle\":\"This prestigious hotel offers a serene retreat amidst the bustle of the city, inviting guests to experience a world where every moment is crafted to perfection.\",\"imageUrl\":\"./assets/images/image-03.jpg\",\"amount\":\"$201.00\",\"rating\":\"3.9\",\"location\":\"Witzands Aquifer Nature Reserve, 1, Dassenberg Drive\"},{\"id\":\"enchanted-alcove\",\"title\":\"The Enchanted Alcove\",\"subtitle\":\"Each of our rooms and suites at The Golden Crest is a masterpiece of design and comfort.\",\"imageUrl\":\"./assets/images/image-04.jpg\",\"amount\":\"$198.00\",\"rating\":\"4.1\",\"location\":\"Witzands Aquifer Nature Reserve, 1, Dassenberg Drive\"},{\"id\":\"velvet-hideaway\",\"title\":\"The Velvet Hideaway\",\"subtitle\":\"Draped in luxurious fabrics and adorned with custom furnishings, every space is tailored to provide a sanctuary of sophistication.\",\"imageUrl\":\"./assets/images/image-05.jpg\",\"amount\":\"$166.00\",\"rating\":\"4.6\",\"location\":\"Witzands Aquifer Nature Reserve, 1, Dassenberg Drive\"},{\"id\":\"royal-orchid-hotel\",\"title\":\"Royal Orchid Hotel\",\"subtitle\":\"Whether you\\'re here for a weekend escape or an extended vacation, this accommodation is designed to offer you a memorable and relaxing experience.\",\"imageUrl\":\"./assets/images/image-06.jpg\",\"amount\":\"$195.00\",\"rating\":\"4.8\",\"location\":\"8, Braambos Lane, Western Cape\"},{\"id\":\"riverside-bliss-villa\",\"title\":\"Riverside Bliss Villa\",\"subtitle\":\"Take a leisurely stroll through the beautiful gardens or unwind in the outdoor hot tub, perfect for star-gazing on clear nights.\",\"imageUrl\":\"./assets/images/image-07.jpg\",\"amount\":\"$180.00\",\"rating\":\"4.6\",\"location\":\"24, Kingfisher Walk, Pinelands, Cape Town\"},{\"id\":\"crystal-waters-hotel\",\"title\":\"Crystal Waters Hotel\",\"subtitle\":\"The spacious living area is adorned with modern furnishings and large windows that let in an abundance of natural light, providing a warm and inviting atmosphere.\",\"imageUrl\":\"./assets/images/image-08.jpg\",\"amount\":\"$240.00\",\"rating\":\"4.3\",\"location\":\"54, Walmer Road, Woodstock, Cape Town\"},{\"id\":\"tranquil-horizons-hotel\",\"title\":\"Tranquil Horizons Hotel\",\"subtitle\":\"Our suites feature expansive living areas, marble-clad bathrooms, and private terraces that offer sweeping views of the city skyline.\",\"imageUrl\":\"./assets/images/image-09.jpg\",\"amount\":\"$150.00\",\"rating\":\"4.0\",\"location\":\"54, Walmer Road, Woodstock, Cape Town\"},{\"id\":\"grand-willow-hotel\",\"title\":\"The Grand Willow Hotel\",\"subtitle\":\"The spacious living area is adorned with modern furnishings and large windows that let in an abundance of natural light, providing a warm and inviting atmosphere.\",\"imageUrl\":\"./assets/images/image-10.jpg\",\"amount\":\"$130.00\",\"rating\":\"4.6\",\"location\":\"54, Walmer Road, Woodstock, Cape Town\"},{\"id\":\"mystic-ridge-retreat\",\"title\":\"Mystic Ridge Retreat\",\"subtitle\":\"The attention to detail, from the hand-picked art pieces to the bespoke amenities, ensures a stay that is both exclusive and memorable.\",\"imageUrl\":\"./assets/images/image-11.jpg\",\"amount\":\"$110.00\",\"rating\":\"4.5\",\"location\":\"54, Walmer Road, Woodstock, Cape Town\"},{\"id\":\"crystal-brook-bungalow\",\"title\":\"Crystal Brook Bungalow\",\"subtitle\":\"Indulge in a culinary journey at our signature restaurants, where world-renowned chefs create masterpieces that delight the senses.\",\"imageUrl\":\"./assets/images/image-12.jpg\",\"amount\":\"$121.00\",\"rating\":\"4.9\",\"location\":\"54, Walmer Road, Woodstock, Cape Town\"}],\"exploreRecent\":[{\"id\":\"grand-willow-hotel\",\"title\":\"The Grand Willow Hotel\",\"subtitle\":\"The spacious living area is adorned with modern furnishings and large windows that let in an abundance of natural light, providing a warm and inviting atmosphere.\",\"imageUrl\":\"./assets/images/image-10.jpg\"},{\"id\":\"mystic-ridge-retreat\",\"title\":\"Mystic Ridge Retreat\",\"subtitle\":\"The attention to detail, from the hand-picked art pieces to the bespoke amenities, ensures a stay that is both exclusive and memorable.\",\"imageUrl\":\"./assets/images/image-11.jpg\"},{\"id\":\"crystal-brook-bungalow\",\"title\":\"Crystal Brook Bungalow\",\"subtitle\":\"Indulge in a culinary journey at our signature restaurants, where world-renowned chefs create masterpieces that delight the senses.\",\"imageUrl\":\"./assets/images/image-12.jpg\"},{\"id\":\"tranquil-horizons-hotel\",\"title\":\"Tranquil Horizons Hotel\",\"subtitle\":\"Our suites feature expansive living areas, marble-clad bathrooms, and private terraces that offer sweeping views of the city skyline.\",\"imageUrl\":\"./assets/images/image-09.jpg\"},{\"id\":\"riverside-bliss-villa\",\"title\":\"Riverside Bliss Villa\",\"subtitle\":\"Take a leisurely stroll through the beautiful gardens or unwind in the outdoor hot tub, perfect for star-gazing on clear nights.\",\"imageUrl\":\"./assets/images/image-07.jpg\"}],\"explore\":[{\"id\":\"starlit-haven-suites\",\"title\":\"Starlit Haven Suites\",\"subtitle\":\"Relax in the cozy bedrooms with plush bedding, ensuring a restful night\\'s sleep.\",\"imageUrl\":\"./assets/images/image-01.jpg\",\"amount\":\"$225.00\",\"rating\":\"4.7\",\"location\":\"Witzands Aquifer Nature Reserve, 1, Dassenberg Drive\"},{\"id\":\"riverside-bliss-villa\",\"title\":\"Riverside Bliss Villa\",\"subtitle\":\"Take a leisurely stroll through the beautiful gardens or unwind in the outdoor hot tub, perfect for star-gazing on clear nights.\",\"imageUrl\":\"./assets/images/image-07.jpg\",\"amount\":\"$180.00\",\"rating\":\"4.6\",\"location\":\"24, Kingfisher Walk, Pinelands, Cape Town\"},{\"id\":\"royal-orchid-hotel\",\"title\":\"Royal Orchid Hotel\",\"subtitle\":\"Whether you\\'re here for a weekend escape or an extended vacation, this accommodation is designed to offer you a memorable and relaxing experience.\",\"imageUrl\":\"./assets/images/image-06.jpg\",\"amount\":\"$195.00\",\"rating\":\"4.8\",\"location\":\"8, Braambos Lane, Western Cape\"},{\"id\":\"crystal-waters-hotel\",\"title\":\"Crystal Waters Hotel\",\"subtitle\":\"The spacious living area is adorned with modern furnishings and large windows that let in an abundance of natural light, providing a warm and inviting atmosphere.\",\"imageUrl\":\"./assets/images/image-08.jpg\",\"amount\":\"$230.00\",\"rating\":\"4.3\",\"location\":\"54, Walmer Road, Woodstock, Cape Town\"}]}'",
+                        "Url": null,
+                        "HttpMethod": null,
+                        "Body": null,
+                        "Headers": [],
+                        "Queries": [],
+                        "Forms": [],
+                        "ForwardRequestHeaders": false,
+                        "ForwardFormData": false,
+                        "ForwardParams": false,
+                        "RichText": null,
+                        "Decisions": [],
+                        "PositiveNodeId": null,
+                        "NegativeNodeId": null,
+                        "Link": null,
+                        "ImageId": null,
+                        "NodeType": 1,
+                        "NodeMarketId": "c81329ef-5713-49ef-a634-80bf728472ad",
+                        "NodeId": null,
+                        "ThreadEntryNodeId": null,
+                        "EndpointId": "h2b3c4d5-f6a7-8901-bcde-f12345678901",
+                        "Width": null,
+                        "Height": null,
+                        "X": null,
+                        "Y": null,
+                        "Text": null,
+                        "Border": null,
+                        "ParentId": null,
+                        "FileId": null,
+                        "FileProdId": null,
+                        "ScheduleEndpointId": null,
+                        "ScheduleCron": null,
+                        "ScheduleState": null,
+                        "ExpireInMinutes": null,
+                        "StartOfDay": null,
+                        "DayOfWeek": null,
+                        "DayOfMonth": null,
+                        "StopOnError": false,
+                        "SelectorName": null,
+                        "SelectorIsGlobal": null,
+                        "SelectorType": null,
+                        "WebSocketId": null,
+                        "WebSocketName": null,
+                        "IdpOuputType": null,
+                        "IdpAuthorizeAllowAnonymous": false,
+                        "IdpUsersSkip": null,
+                        "IdpUsersTake": null,
+                        "IdpUsersFilter": null,
+                        "Id": "h1a2b3c4-d5e6-7890-abcd-ef1234567890"
+                    }
+                ],
+                "Keys": [],
+                "Databases": [],
+                "TestRequests": [
+                    {
+                        "Name": "Get Data",
+                        "Url": null,
+                        "HttpMethod": 0,
+                        "Body": null,
+                        "Headers": [
+                            {
+                                "Key": "Content-Type",
+                                "Value": "application/json",
+                                "Enabled": true
+                            }
+                        ],
+                        "Queries": [],
+                        "Forms": [],
+                        "EndpointId": "h2b3c4d5-f6a7-8901-bcde-f12345678901",
+                        "Id": "h3c4d5e6-f6a7-9012-cdef-123456789012"
+                    }
+                ],
+                "WebSockets": [],
+                "Snippets": []
+            }
+        }
+    ]
+}
+

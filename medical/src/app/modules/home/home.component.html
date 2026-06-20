@@ -1,0 +1,221 @@
+<div>
+  <div class="mb-2">
+    <div class="mr-2 flex">
+      <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">
+        Find your desired health professional closest to you
+      </h1>
+    </div>
+  </div>
+
+  <form class="mb-4 w-full">
+    <div class="relative">
+      <div class="start-0 ps-3.5 pointer-events-none absolute inset-y-0 flex items-center">
+        <svg-icon src="assets/icons/heroicons/solid/search.svg" [svgClass]="'h-4 w-4 text-gray-700 dark:text-white'">
+        </svg-icon>
+      </div>
+      <input
+        type="text"
+        id="email-address-icon"
+        class="ps-10 block w-full rounded-full border border-gray-400 p-2.5 text-sm text-gray-900 focus:border-primary focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        placeholder="Search practice" />
+    </div>
+  </form>
+
+  <div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div class="carousel-item gap-2">
+        <app-category-grid-item icon="./assets/icons/other/doctor.svg" name="Doctor"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/pharmacy.svg" name="Pharmacy"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/hospital.svg" name="Hospital"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/ambulance.svg" name="Ambulance"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/dentist.svg" name="Dentist"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/optometrist.svg" name="Optometrist"></app-category-grid-item>
+        <app-category-grid-item
+          icon="./assets/icons/other/cardiologist.svg"
+          name="Cardiologist"></app-category-grid-item>
+        <app-category-grid-item
+          icon="./assets/icons/other/psychologist.svg"
+          name="Psychologist"></app-category-grid-item>
+      </div>
+    </div>
+  </div>
+
+  <div id="default-carousel" class="relative z-0 mb-5 w-full" data-carousel="slide">
+    <!-- Carousel wrapper -->
+    <div class="relative h-44 overflow-hidden rounded-box">
+      <!-- Item 1 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+        <div
+          class="absolute top-1/2 left-1/2 z-0 block h-48 w-full -translate-x-1/2 -translate-y-1/2"
+          style="
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
+              url('./assets/images/promo-01.jpg');
+            background-position: center;
+            background-size: cover;
+          "></div>
+        <p class="absolute w-2/3 p-5 text-lg text-white">
+          Get comparative insurance prices
+          <button
+            class="mt-2 block rounded-full border-2 border-solid border-white p-2.5 text-center text-sm text-white dark:bg-gray-700 dark:text-white">
+            Learn More
+          </button>
+        </p>
+      </div>
+      <!-- Item 2 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+        <div
+          class="absolute top-1/2 left-1/2 z-0 block h-48 w-full -translate-x-1/2 -translate-y-1/2"
+          style="
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
+              url('./assets/images/promo-02.jpg');
+            background-position: center;
+            background-size: cover;
+          "></div>
+        <p class="absolute w-2/3 p-5 text-lg text-white">
+          Dental care at an affordable price near you
+          <button
+            class="mt-2 block rounded-full border-2 border-solid border-white p-2.5 text-center text-sm text-white dark:bg-gray-700 dark:text-white">
+            Learn More
+          </button>
+        </p>
+      </div>
+      <!-- Item 3 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+        <div
+          class="absolute top-1/2 left-1/2 z-0 block h-48 w-full -translate-x-1/2 -translate-y-1/2"
+          style="
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
+              url('./assets/images/promo-03.jpg');
+            background-position: center;
+            background-size: cover;
+          "></div>
+        <p class="absolute w-2/3 p-5 text-lg text-white">
+          Expert advise from the comford of your home
+          <button
+            class="mt-2 block rounded-full border-2 border-solid border-white p-2.5 text-center text-sm text-white dark:bg-gray-700 dark:text-white">
+            Show Detail
+          </button>
+        </p>
+      </div>
+      <!-- Item 4 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+        <div
+          class="absolute top-1/2 left-1/2 z-0 block h-48 w-full -translate-x-1/2 -translate-y-1/2"
+          style="
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
+              url('./assets/images/promo-04.jpg');
+            background-position: center;
+            background-size: cover;
+          "></div>
+        <p class="absolute w-2/3 p-5 text-lg text-white">
+          Medical Aid that cares about you more
+          <button
+            class="mt-2 block rounded-full border-2 border-solid border-white p-2.5 text-center text-sm text-white dark:bg-gray-700 dark:text-white">
+            About Us
+          </button>
+        </p>
+      </div>
+      <!-- Item 5 -->
+      <div class="hidden duration-700 ease-in-out" data-carousel-item>
+        <div
+          class="absolute top-1/2 left-1/2 z-0 block h-48 w-full -translate-x-1/2 -translate-y-1/2"
+          style="
+            background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.3)),
+              url('./assets/images/promo-05.jpg');
+            background-position: center;
+            background-size: cover;
+          "></div>
+        <p class="absolute w-2/3 p-5 text-lg text-white">
+          Cancer awareness and how to live longer
+          <button
+            class="mt-2 block rounded-full border-2 border-solid border-white p-2.5 text-center text-sm text-white dark:bg-gray-700 dark:text-white">
+            Learn More
+          </button>
+        </p>
+      </div>
+    </div>
+    <!-- Slider indicators -->
+    <div class="absolute bottom-5 left-1/2 z-30 flex -translate-x-1/2 space-x-3 rtl:space-x-reverse">
+      <button
+        type="button"
+        class="h-3 w-3 rounded-full"
+        aria-current="true"
+        aria-label="Slide 1"
+        data-carousel-slide-to="0"></button>
+      <button
+        type="button"
+        class="h-3 w-3 rounded-full"
+        aria-current="false"
+        aria-label="Slide 2"
+        data-carousel-slide-to="1"></button>
+      <button
+        type="button"
+        class="h-3 w-3 rounded-full"
+        aria-current="false"
+        aria-label="Slide 3"
+        data-carousel-slide-to="2"></button>
+      <button
+        type="button"
+        class="h-3 w-3 rounded-full"
+        aria-current="false"
+        aria-label="Slide 4"
+        data-carousel-slide-to="3"></button>
+      <button
+        type="button"
+        class="h-3 w-3 rounded-full"
+        aria-current="false"
+        aria-label="Slide 5"
+        data-carousel-slide-to="4"></button>
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <div class="mr-2 flex">
+      <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Top Doctors</h1>
+      <button type="button" class="text-center text-sm font-medium text-gray-700">
+        <p class="text-lg text-gray-500 dark:text-gray-300" (click)="navigate('/home/gallery')">See all</p>
+      </button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel gap-4 pb-4">
+      <div class="carousel-item">
+        <app-doctor-item
+          image="./assets/images/image-01.jpg"
+          name="Dr. M.H. Sweedish"
+          type="General Practictioner"
+          stars="4.4"
+          ratings="328"
+          distance="56"></app-doctor-item>
+      </div>
+      <div class="carousel-item">
+        <app-doctor-item
+          image="./assets/images/image-06.jpg"
+          name="Dr. A. Obama"
+          type="General Practictioner"
+          stars="4.9"
+          ratings="1898"
+          distance="67"></app-doctor-item>
+      </div>
+      <div class="carousel-item">
+        <app-doctor-item
+          image="./assets/images/image-05.jpg"
+          name="Dr. J.K. van Vuuren"
+          type="General Practictioner"
+          stars="4.6"
+          ratings="418"
+          distance="19"></app-doctor-item>
+      </div>
+      <div class="carousel-item">
+        <app-doctor-item
+          image="./assets/images/image-02.jpg"
+          name="Dr. P. Maseke"
+          type="General Practictioner"
+          stars="4.3"
+          ratings="298"
+          distance="26"></app-doctor-item>
+      </div>
+    </div>
+  </div>
+</div>

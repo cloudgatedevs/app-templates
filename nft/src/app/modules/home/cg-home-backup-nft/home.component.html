@@ -1,0 +1,355 @@
+<div class="mb-2">
+  <div class="mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Live auctions 🔥</h1>
+    <button type="button" class="text-center text-sm font-medium text-gray-700">
+      <p class="text-lg text-gray-500 dark:text-gray-400" (click)="navigate('/home/gallery')">more ↗️</p>
+    </button>
+  </div>
+</div>
+
+<div class="overflow-x-auto" style="scrollbar-width: none">
+  <div class="carousel">
+    <div class="carousel-item mr-3">
+      <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+        <ul
+          class="-mb-px flex flex-wrap text-center text-sm font-medium"
+          id="default-tab"
+          data-tabs-toggle="#default-tab-content"
+          role="tablist">
+          <li class="me-2" role="presentation">
+            <button
+              class="inline-block rounded-t-lg border-b-2 p-4"
+              id="new-tab"
+              data-tabs-target="#new"
+              type="button"
+              role="tab"
+              aria-controls="new"
+              aria-selected="false">
+              New
+            </button>
+          </li>
+          <li class="me-2" role="presentation">
+            <button
+              class="inline-block rounded-t-lg border-b-2 p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+              id="art-tab"
+              data-tabs-target="#art"
+              type="button"
+              role="tab"
+              aria-controls="art"
+              aria-selected="false">
+              Art
+            </button>
+          </li>
+          <li class="me-2" role="presentation">
+            <button
+              class="inline-block rounded-t-lg border-b-2 p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+              id="games-tab"
+              data-tabs-target="#games"
+              type="button"
+              role="tab"
+              aria-controls="games"
+              aria-selected="false">
+              Games
+            </button>
+          </li>
+          <li class="me-2" role="presentation">
+            <button
+              class="inline-block rounded-t-lg border-b-2 p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+              id="music-tab"
+              data-tabs-target="#music"
+              type="button"
+              role="tab"
+              aria-controls="music"
+              aria-selected="false">
+              Music
+            </button>
+          </li>
+          <li class="me-2" role="presentation">
+            <button
+              class="inline-block rounded-t-lg border-b-2 p-4 hover:border-gray-300 hover:text-gray-600 dark:hover:text-gray-300"
+              id="collectables-tab"
+              data-tabs-target="#collectables"
+              type="button"
+              role="tab"
+              aria-controls="collectables"
+              aria-selected="false">
+              Collectables
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="default-tab-content">
+  <div class="hidden" id="new" role="tabpanel" aria-labelledby="new-tab">
+    <div class="overflow-x-auto" style="scrollbar-width: none">
+      <div class="carousel">
+        <div class="carousel-item mr-3">
+          <app-nft-feature-item
+            image="./assets/images/image-01.jpg"
+            title="G'WAGONz"
+            handle="@sleeping_panda"
+            followers="5850"
+            amount="5.320 ETH"
+            days="1"
+            hours="7"
+            minutes="24"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-02.jpg"
+            title="K9s"
+            handle="@labra_fifi"
+            followers="7250"
+            amount="3.123 ETH"
+            days="2"
+            hours="4"
+            minutes="16"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-03.jpg"
+            title="Chimp Champ"
+            handle="@xyz_flame"
+            followers="11250"
+            amount="2.940 ETH"
+            days="2"
+            hours="9"
+            minutes="41"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-04.jpg"
+            title="Dragon Tale"
+            handle="@fairy_blade"
+            followers="3750"
+            amount="1.120 ETH"
+            days="5"
+            hours="4"
+            minutes="11"></app-nft-feature-item>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden" id="art" role="tabpanel" aria-labelledby="art-tab">
+    <div class="overflow-x-auto" style="scrollbar-width: none">
+      <div class="carousel">
+        <div class="carousel-item mr-3">
+          <app-nft-feature-item
+            image="./assets/images/image-07.jpg"
+            title="ChupaCubra"
+            handle="@lili_fields"
+            followers="8746"
+            amount="4.794 ETH"
+            days="1"
+            hours="9"
+            minutes="18"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-08.jpg"
+            title="Slypher"
+            handle="@dark_magician"
+            followers="19452"
+            amount="8.140 ETH"
+            days="2"
+            hours="2"
+            minutes="16"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-06.jpg"
+            title="BUBblEz"
+            handle="@tokoyo_crowd"
+            followers="2599"
+            amount="3.720 ETH"
+            days="2"
+            hours="9"
+            minutes="34"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-09.jpg"
+            title="Dave"
+            handle="@pigeon_wings"
+            followers="7842"
+            amount="0.820 ETH"
+            days="4"
+            hours="8"
+            minutes="39"></app-nft-feature-item>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden" id="games" role="tabpanel" aria-labelledby="games-tab">
+    <div class="overflow-x-auto" style="scrollbar-width: none">
+      <div class="carousel">
+        <div class="carousel-item mr-3">
+          <app-nft-feature-item
+            image="./assets/images/image-10.jpg"
+            title="Darkness"
+            handle="@final_destiny"
+            followers="22451"
+            amount="6.694 ETH"
+            days="1"
+            hours="2"
+            minutes="12"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-11.jpg"
+            title="MYsTiC"
+            handle="@light_angel"
+            followers="16452"
+            amount="3.190 ETH"
+            days="2"
+            hours="6"
+            minutes="18"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-12.jpg"
+            title="Sumarai"
+            handle="@ninja_warrior"
+            followers="32451"
+            amount="2.220 ETH"
+            days="3"
+            hours="1"
+            minutes="24"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-13.jpg"
+            title="L*Ve Me"
+            handle="@dark_woods"
+            followers="55124"
+            amount="8.880 ETH"
+            days="4"
+            hours="16"
+            minutes="52"></app-nft-feature-item>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden" id="music" role="tabpanel" aria-labelledby="music-tab">
+    <div class="overflow-x-auto" style="scrollbar-width: none">
+      <div class="carousel">
+        <div class="carousel-item mr-3">
+          <app-nft-feature-item
+            image="./assets/images/image-14.jpg"
+            title="FutuRe Soundz"
+            handle="@music_mix"
+            followers="9864"
+            amount="1.620 ETH"
+            days="1"
+            hours="2"
+            minutes="14"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-15.jpg"
+            title="Good ViBeZ"
+            handle="@smokey_grill"
+            followers="11245"
+            amount="4.823 ETH"
+            days="2"
+            hours="9"
+            minutes="56"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-16.jpg"
+            title="BlissZ"
+            handle="@happy_tunez"
+            followers="14874"
+            amount="6.140 ETH"
+            days="2"
+            hours="1"
+            minutes="47"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-17.jpg"
+            title="Wolfen"
+            handle="@night_tales"
+            followers="9750"
+            amount="1.820 ETH"
+            days="3"
+            hours="2"
+            minutes="16"></app-nft-feature-item>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hidden" id="collectables" role="tabpanel" aria-labelledby="collectables-tab">
+    <div class="overflow-x-auto" style="scrollbar-width: none">
+      <div class="carousel">
+        <div class="carousel-item mr-3">
+          <app-nft-feature-item
+            image="./assets/images/image-18.jpg"
+            title="DJ Skull"
+            handle="@skull_keep"
+            followers="9240"
+            amount="0.912 ETH"
+            days="1"
+            hours="3"
+            minutes="10"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-19.jpg"
+            title="Lazer Breath"
+            handle="@lilo_cakes"
+            followers="7884"
+            amount="4.199 ETH"
+            days="2"
+            hours="6"
+            minutes="26"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-20.jpg"
+            title="Damage Soul"
+            handle="@deep_desire"
+            followers="18250"
+            amount="7.140 ETH"
+            days="2"
+            hours="6"
+            minutes="12"></app-nft-feature-item>
+          <app-nft-feature-item
+            image="./assets/images/image-21.jpg"
+            title="Scary CaZ"
+            handle="@night_owl"
+            followers="1174"
+            amount="1.620 ETH"
+            days="3"
+            hours="9"
+            minutes="13"></app-nft-feature-item>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mb-4">
+  <div class="mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Top sellers 🌈</h1>
+    <button type="button" class="text-center text-sm font-medium text-gray-700">
+      <p class="text-lg text-gray-500 dark:text-gray-400" (click)="navigate('/home/gallery')">more ↗️</p>
+    </button>
+  </div>
+</div>
+
+<div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+  <div class="carousel">
+    <div class="carousel-item mr-3">
+      <app-nft-grid-item
+        image="./assets/images/image-13.jpg"
+        title="L*Ve Me"
+        handle="@dark_woods"
+        amount="8.880 ETH"></app-nft-grid-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-grid-item
+        image="./assets/images/image-09.jpg"
+        title="Dave"
+        handle="@pigeon_wings"
+        amount="0.820 ETH"></app-nft-grid-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-grid-item
+        image="./assets/images/image-18.jpg"
+        title="DJ Skull"
+        handle="@skull_keep"
+        amount="0.912 ETH"></app-nft-grid-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-grid-item
+        image="./assets/images/image-12.jpg"
+        title="Sumarai"
+        handle="@ninja_warrior"
+        amount="2.220 ETH"></app-nft-grid-item>
+    </div>
+    <div class="carousel-item mr-3">
+      <app-nft-grid-item
+        image="./assets/images/image-05.jpg"
+        title="Crazy Banana"
+        handle="@monkey_buzz"
+        amount="1.160 ETH"></app-nft-grid-item>
+    </div>
+  </div>
+</div>

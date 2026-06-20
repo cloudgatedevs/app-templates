@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" width="800" height="340" role="img" aria-label="Digital marketing cover">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="800" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14b8a6"/><stop offset="1" stop-color="#0d9488"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="340" fill="url(#g)"/>
+  <g fill="#ffffff" opacity="0.10"><circle cx="120" cy="80" r="120"/><circle cx="700" cy="300" r="90"/></g>
+  <g fill="#ffffff" opacity="0.95">
+    <rect x="250" y="150" width="26" height="40" rx="7"/>
+    <path d="M276 146 L430 104 L430 236 L276 194 Z"/>
+  </g>
+  <path d="M388 200 L398 252 L372 254 L362 206 Z" fill="#ffffff" opacity="0.95"/>
+  <g fill="none" stroke="#ffffff" stroke-width="10" stroke-linecap="round" opacity="0.9">
+    <path d="M455 128 q40 42 0 84"/>
+    <path d="M482 110 q60 60 0 120"/>
+  </g>
+  <path d="M509 92 q80 78 0 156" fill="none" stroke="#fb7185" stroke-width="11" stroke-linecap="round"/>
+</svg>

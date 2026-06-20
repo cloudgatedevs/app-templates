@@ -1,0 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  /* Soft near-white base. Matches the static background so there is no flash. */
+  background-color: #f5fbfb;
+}
+
+body {
+  background-color: #f5fbfb;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  color: #334155;
+}
+
+/* `font-display` headings — bold sans for a friendly, rounded feel. */
+.font-display {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Teal text selection. */
+::selection {
+  background-color: rgba(13, 148, 136, 0.18);
+}
+
+/* ---- Chart animation helpers (kept; subtle and useful) ---- */
+@keyframes chartDraw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes chartFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chart-line {
+  stroke-dasharray: 1;
+  animation: chartDraw 1.1s ease forwards;
+}
+
+.chart-area {
+  opacity: 0;
+  animation: chartFade 1.3s ease forwards;
+}
+
+/* Clean surface helper — redefined so existing `.glass` classNames render as
+   solid white premium cards (hairline border + soft shadow), no frosted blur. */
+.glass {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.06);
+}
+
+/* Slim, modern scrollbars inside panels */
+.glass-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.4) transparent;
+}
+.glass-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.glass-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.35);
+  border-radius: 9999px;
+}
+.glass-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---- UI motion: page transitions, modal + overlay ---- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes overlayFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Replayed on each route change (keyed by pathname in Layout) */
+.animate-page {
+  animation: fadeInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-modal {
+  animation: modalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-overlay {
+  animation: overlayFade 0.18s ease-out both;
+}
+
+/* Subtle staggered rise for lists/cards — add .stagger to a parent */
+.stagger > * {
+  animation: fadeInUp 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.10s; }
+.stagger > *:nth-child(4) { animation-delay: 0.14s; }
+.stagger > *:nth-child(5) { animation-delay: 0.18s; }
+.stagger > *:nth-child(6) { animation-delay: 0.22s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .chart-line,
+  .chart-area,
+  .animate-page,
+  .animate-modal,
+  .animate-overlay,
+  .stagger > * {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+    stroke-dasharray: none;
+  }
+}

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" width="800" height="340" role="img" aria-label="Cloud and DevOps cover">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="800" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#c2740c"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="340" fill="url(#g)"/>
+  <g fill="#ffffff" opacity="0.10"><circle cx="700" cy="70" r="125"/><circle cx="120" cy="300" r="90"/></g>
+  <g fill="#ffffff" opacity="0.92">
+    <circle cx="350" cy="150" r="48"/><circle cx="415" cy="128" r="60"/><circle cx="478" cy="152" r="46"/>
+    <rect x="345" y="150" width="135" height="50" rx="25"/>
+  </g>
+  <g stroke="#fb7185" stroke-width="9" fill="none" stroke-linecap="round">
+    <path d="M300 245 H500"/>
+  </g>
+  <g fill="#fb7185"><circle cx="300" cy="245" r="13"/><circle cx="400" cy="245" r="13"/><circle cx="500" cy="245" r="13"/></g>
+</svg>

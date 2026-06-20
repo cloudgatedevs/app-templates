@@ -1,0 +1,8 @@
+<div class="flex-col items-center" (click)="openProductDetail(placeId)">
+  <img class="mb-2 h-24 w-24 rounded-box object-cover shadow-xl" [src]="image" alt="image description" />
+  <div class="w-24 flex-1">
+    <p class="truncate text-ellipsis text-sm font-semibold text-gray-800 dark:text-white">{{ title }}</p>
+    <p class="truncate text-ellipsis text-xs text-gray-500 dark:text-gray-400">{{ subtitle }}</p>
+  </div>
+</div>
+

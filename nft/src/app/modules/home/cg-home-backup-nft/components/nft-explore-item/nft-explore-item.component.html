@@ -1,0 +1,15 @@
+<div class="relative flex-col items-center" (click)="navigate('/home/gallery')">
+  <div class="absolute bottom-0 w-full text-white">
+    <div class="items-center rounded-b-2xl bg-gray-400/80 px-2">
+      <span class="-mb-2 block font-semibold">{{ title }}</span>
+      <span class="text-xs">{{ subTitle }}</span>
+    </div>
+  </div>
+  <div class="mb-4 h-40 w-40">
+    <p class="text-md absolute rounded-tl-2xl rounded-br-2xl bg-primary px-2 font-semibold text-black opacity-75">
+      {{ amount }}
+    </p>
+
+    <img class="mb-2 h-40 w-40 rounded-box object-cover shadow-lg" [src]="image" alt="image description" />
+  </div>
+</div>

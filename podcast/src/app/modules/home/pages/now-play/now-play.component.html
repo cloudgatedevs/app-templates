@@ -1,0 +1,145 @@
+<div *ngIf="loading" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Loading episode...</div>
+<div *ngIf="loadError && !loading" class="px-5 py-8 text-center text-sm text-red-400">
+  Could not load podcast details from the workflow.
+</div>
+
+<ng-container *ngIf="item && !loading">
+  <img [src]="item.imageUrl" class="mb-5 w-full rounded-3xl shadow-2xl" [alt]="item.title" />
+  <div class="mb-8 text-center">
+    <p class="mb-1 text-lg font-bold text-gray-900 dark:text-white">{{ item.title }}</p>
+    <p class="text-xs text-gray-500 dark:text-gray-400">{{ item.subtitle }}</p>
+  </div>
+  <div class="relative mb-5">
+    <div class="mt-6 h-2 rounded-full bg-gray-200">
+      <div class="h-2 rounded-full bg-primary" [style.width.%]="progressPercent"></div>
+    </div>
+    <div class="mt-3 flex justify-between text-sm text-gray-400">
+      <span>{{ formatTime(item.progressSeconds) }}</span>
+      <span>{{ formatTime(item.durationSeconds) }}</span>
+    </div>
+  </div>
+  <div class="mx-5 mb-5 flex justify-around">
+    <button
+      (click)="router.navigate(['/home/play', item.id])"
+      class="rounded-full p-2.5 text-sm font-medium text-gray-400 dark:bg-gray-700">
+      <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M16.5 8.5H13.8604C13.6452 8.5 13.4541 8.63772 13.386 8.84189L12.7194 10.8419C12.6114 11.1657 12.8524 11.5 13.1937 11.5H14.5C15.6046 11.5 16.5 12.3954 16.5 13.5C16.5 14.6046 15.6046 15.5 14.5 15.5H12.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"></path>
+          <path
+            d="M7.5 10.5L10 8.5V15.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M14 4.5L12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C8.7288 22 5.82446 20.4293 4 18.001M8 2.83209C6.87754 3.32251 5.86251 4.01303 5 4.85857C3.14864 6.67349 2 9.20261 2 12C2 12.6849 2.06886 13.3538 2.20004 14"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </g>
+      </svg>
+      <span class="sr-only">Icon description</span>
+    </button>
+    <button
+      (click)="router.navigate(['/home/play', item.id])"
+      class="rounded-full bg-primary p-4 text-sm font-medium text-white dark:bg-gray-700">
+      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M21.4086 9.35258C23.5305 10.5065 23.5305 13.4935 21.4086 14.6474L8.59662 21.6145C6.53435 22.736 4 21.2763 4 18.9671L4 5.0329C4 2.72368 6.53435 1.26402 8.59661 2.38548L21.4086 9.35258Z"
+            fill="currentColor"></path>
+        </g>
+      </svg>
+      <span class="sr-only">Icon description</span>
+    </button>
+    <button
+      (click)="router.navigate(['/home/play', item.id])"
+      class="rounded-full p-2.5 text-sm font-medium text-gray-400 dark:bg-gray-700">
+      <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M16.5 8.5H13.8604C13.6452 8.5 13.4541 8.63772 13.386 8.84189L12.7194 10.8419C12.6114 11.1657 12.8524 11.5 13.1937 11.5H14.5C15.6046 11.5 16.5 12.3954 16.5 13.5C16.5 14.6046 15.6046 15.5 14.5 15.5H12.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"></path>
+          <path
+            d="M7.5 10.5L10 8.5V15.5"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+          <path
+            d="M10 4.5L12 2C6.47715 2 2 6.47715 2 12C2 12.6849 2.06886 13.3538 2.20004 14M16 2.83209C19.5318 4.3752 22 7.89936 22 12C22 17.5228 17.5228 22 12 22C8.72852 22 5.82443 20.4287 4 18"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </g>
+      </svg>
+      <span class="sr-only">Icon description</span>
+    </button>
+  </div>
+
+  <div class="text-center">
+    <button
+      class="mb-2 inline-flex items-center gap-1 text-sm font-medium text-primary"
+      type="button"
+      (click)="toggleCaptionsDrawer()"
+      [attr.aria-expanded]="captionsExpanded"
+      aria-controls="drawer-swipe">
+      {{ captionsExpanded ? 'Hide Captions' : 'Show Captions' }}
+      <svg
+        class="h-5 w-5 transition-transform duration-300"
+        [class.rotate-180]="captionsExpanded"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg">
+        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+          <path
+            d="M17 18L12 13L7 18M17 11L12 6L7 11"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"></path>
+        </g>
+      </svg>
+    </button>
+  </div>
+</ng-container>
+
+<ng-template #captionsDrawer>
+  <div
+    id="drawer-swipe"
+    class="fixed left-0 right-0 z-40 w-full overflow-y-auto rounded-t-box border-t border-gray-200 bg-white shadow-2xl dark:border-gray-700 dark:bg-gray-900"
+    tabindex="-1"
+    aria-labelledby="drawer-swipe-label">
+    <button
+      type="button"
+      class="flex w-full cursor-pointer justify-center p-4 hover:bg-white dark:hover:bg-gray-900"
+      (click)="toggleCaptionsDrawer()"
+      aria-label="Toggle captions">
+      <span class="h-1 w-8 rounded-lg bg-gray-300 dark:bg-gray-600"></span>
+    </button>
+    <div class="max-h-[45vh] overflow-y-auto px-5 pb-8">
+      <div class="rounded-box bg-gray-100 px-5 py-4 text-center dark:bg-gray-800">
+        <p *ngFor="let line of item?.captionLines" class="py-1 text-sm leading-relaxed text-gray-700 dark:text-gray-200">
+          {{ line }}
+        </p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+

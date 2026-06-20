@@ -1,0 +1,67 @@
+<div *ngIf="loading" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Loading hotels...</div>
+<div *ngIf="loadError && !loading" class="px-5 py-8 text-center text-sm text-red-400">
+  Could not load hotel catalog from the workflow.
+</div>
+
+<ng-container *ngIf="catalog && !loading">
+  <div class="mb-4 mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Find Your Desired Hotel</h1>
+  </div>
+
+  <form class="mb-5 flex max-w-sm">
+    <div class="relative mr-2 flex-1">
+      <div class="start-0 ps-3.5 pointer-events-none absolute inset-y-0 flex items-center">
+        <svg-icon src="assets/icons/heroicons/solid/search.svg" [svgClass]="'h-4 w-4 text-gray-700'"> </svg-icon>
+      </div>
+      <input
+        type="text"
+        id="email-address-icon"
+        class="ps-10 block w-full rounded-lg border border-gray-700 p-2.5 text-sm text-gray-900 focus:border-primary focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+        placeholder="Where do you want to go?" />
+    </div>
+    <button type="button" class="rounded-box bg-gray-900 p-2.5 text-sm font-medium text-white">
+      <svg-icon src="assets/icons/heroicons/solid/toggle.svg" [svgClass]="'h-5 w-5'"> </svg-icon>
+    </button>
+  </form>
+
+  <div class="mb-4 mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Categories</h1>
+  </div>
+
+  <div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div class="carousel-item mr-3">
+        <app-category-grid-item icon="./assets/icons/other/hotel.svg" name="Hotel's"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/bed.svg" name="B&B"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/home.svg" name="Home"></app-category-grid-item>
+        <app-category-grid-item icon="./assets/icons/other/camp.svg" name="Camping"></app-category-grid-item>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <div class="mr-2 flex">
+      <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">For You</h1>
+      <button type="button" class="mr-2 text-center text-sm font-medium text-gray-700">
+        <p class="text-xs text-gray-500 dark:text-gray-400">See All</p>
+      </button>
+    </div>
+    <p class="text-xs text-gray-500 dark:text-gray-400">Our Recommended Places to Stay</p>
+  </div>
+
+  <div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div class="carousel-item mr-3">
+        <app-place-feature-item
+          *ngFor="let place of catalog.forYou; trackBy: trackById"
+          [placeId]="place.id"
+          [image]="place.imageUrl"
+          [title]="place.title"
+          [subtitle]="place.subtitle"
+          [amount]="place.amount"
+          [rating]="place.rating"
+          [location]="place.location"></app-place-feature-item>
+      </div>
+    </div>
+  </div>
+</ng-container>

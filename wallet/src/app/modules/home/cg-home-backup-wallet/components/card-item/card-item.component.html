@@ -1,0 +1,25 @@
+<div
+  class="mb-4 h-48 w-full rounded-box border-2 border-solid bg-primary bg-cover bg-no-repeat p-4 shadow-lg dark:border-gray-800"
+  style="background-image: url('{{ backgroundImage }}')">
+  <div class="mb-5 flex h-16">
+    <div class="flex-1">
+      <div class="flex items-center">
+        <img class="mr-2 h-7 w-7" src="./assets/logo/favicon.png" alt="image description" />
+        <p class="font-semibold text-white">AppWorld Money</p>
+      </div>
+    </div>
+    <div class="flex">
+      <svg-icon src="assets/icons/other/nfc.svg" [svgClass]="'h-6 w-6 text-white'"> </svg-icon>
+    </div>
+  </div>
+  <div class="mb-4">
+    <p class="font-nunito text-xl font-semibold text-white">{{ cardNumber }}</p>
+  </div>
+  <div class="flex w-full">
+    <div class="flex flex-1">
+      <p class="mr-6 font-nunito text-sm text-gray-100">{{ cardName }}</p>
+      <p class="font-nunito text-sm text-gray-100">{{ cardDate }}</p>
+    </div>
+    <svg-icon src="assets/icons/other/visa.svg" [svgClass]="'h-14 w-14 text-white -mt-5'"> </svg-icon>
+  </div>
+</div>

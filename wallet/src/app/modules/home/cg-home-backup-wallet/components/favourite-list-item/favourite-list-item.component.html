@@ -1,0 +1,28 @@
+<div
+  class="mb-4 mr-2 flex items-center rounded-box border-[1px] border-solid border-primary bg-white p-2 shadow-md dark:bg-gray-800"
+  (click)="navigate('/home/doctor')">
+  <img class="mr-2 h-16 w-16 rounded-full object-cover shadow-xl" [src]="image" alt="image description" />
+  <div class="flex-1">
+    <div class="w-[200px] flex-col p-2">
+      <p class="truncate text-sm font-semibold text-gray-700 dark:text-gray-300">{{ name }}</p>
+      <p class="mb-1 truncate text-xs text-gray-500 dark:text-gray-300">{{ type }}</p>
+      <div class="flex items-center text-xs">
+        <svg-icon src="assets/icons/heroicons/solid/star.svg" [svgClass]="'h-4 w-4 text-primary'"> </svg-icon>
+        <span class="mr-1 text-primary">{{ stars }}</span>
+        <span class="text-xs text-gray-700 dark:text-gray-400">({{ ratings }})</span>
+
+        <div class="ml-3 flex items-center">
+          <svg-icon src="assets/icons/heroicons/outline/map-pin.svg" [svgClass]="'h-4 w-4 text-gray-700'"> </svg-icon>
+          <span class="text-foreground">{{ distance }} km</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    (click)="navigate('/home/play')"
+    type="button"
+    class="rounded-full bg-gray-900 p-2.5 text-sm font-medium text-white dark:bg-gray-700">
+    <svg-icon src="assets/icons/heroicons/solid/heart.svg" [svgClass]="'h-5 w-5 text-red-500'"> </svg-icon>
+    <span class="sr-only">Icon description</span>
+  </button>
+</div>

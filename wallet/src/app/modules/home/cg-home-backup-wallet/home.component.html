@@ -1,0 +1,129 @@
+<div class="mt-20 bg-background p-6 pb-8 sm:px-8">
+  <div class="mb-6" (click)="navigate('home/transfer')">
+    <div class="h-28 w-full rounded-t-xl rounded-br-xl bg-primary p-4">
+      <div class="flex">
+        <div class="flex-1">
+          <p class="text-[32px] font-bold text-white">$15,826.00</p>
+          <p class="text-sm text-gray-200">+2.50% from last month</p>
+        </div>
+        <svg-icon src="./assets/icons/other/nfc.svg" [svgClass]="'text-white h-8 w-8'"> </svg-icon>
+      </div>
+    </div>
+    <div class="-mt-1 flex">
+      <div class="relative h-14 flex-1 rounded-b-xl bg-primary">
+        <div
+          class="absolute -right-4 top-0 h-5 w-9 bg-primary"
+          style="
+            --mask: radial-gradient(16px at 100% 100%, #0000 98%, #000);
+            -webkit-mask: var(--mask);
+            mask: var(--mask);
+          "></div>
+        <div class="flex">
+          <div class="mr-5 flex-col px-4">
+            <p class="text-xs text-gray-100">Number</p>
+            <p class="text-sm font-semibold text-white">**** 8794</p>
+          </div>
+          <div class="flex-col px-4">
+            <p class="text-xs text-gray-100">Exp.</p>
+            <p class="text-sm font-semibold text-white">02/27</p>
+          </div>
+        </div>
+      </div>
+      <button
+        class="text-md ml-2 mt-3 h-11 w-32 items-center rounded-xl bg-gray-900 bg-primary px-5 py-2.5 font-medium text-white">
+        Add Money
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-6 flex items-center">
+    <div class="font-small grid h-full w-full grid-cols-4 gap-2">
+      <button
+        (click)="navigate('home/transfer')"
+        type="button"
+        class="group inline-flex flex-col items-center justify-center">
+        <div
+          class="mb-2 rounded-lg border-[1px] border-solid border-gray-200 bg-gray-100 p-4 dark:border-gray-900 dark:bg-gray-800">
+          <svg-icon src="assets/icons/other/pay.svg" [svgClass]="'h-6 w-6 mx-auto text-gray-900 dark:text-white'">
+          </svg-icon>
+        </div>
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-300">Send</p>
+      </button>
+      <button
+        (click)="navigate('home/transfer')"
+        type="button"
+        class="group inline-flex flex-col items-center justify-center">
+        <div
+          class="mb-2 rounded-lg border-[1px] border-solid border-gray-200 bg-gray-100 p-4 dark:border-gray-900 dark:bg-gray-800">
+          <svg-icon src="assets/icons/other/deposit.svg" [svgClass]="'h-6 w-6 mx-auto text-gray-900 dark:text-white'">
+          </svg-icon>
+        </div>
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-300">Receive</p>
+      </button>
+      <button
+        (click)="navigate('home/transfer')"
+        type="button"
+        class="group inline-flex flex-col items-center justify-center">
+        <div
+          class="mb-2 rounded-lg border-[1px] border-solid border-gray-200 bg-gray-100 p-4 dark:border-gray-900 dark:bg-gray-800">
+          <svg-icon src="assets/icons/other/transfer.svg" [svgClass]="'h-6 w-6 mx-auto text-gray-900 dark:text-white'">
+          </svg-icon>
+        </div>
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-300">Transfer</p>
+      </button>
+      <button
+        (click)="navigate('home/transfer')"
+        type="button"
+        class="group inline-flex flex-col items-center justify-center">
+        <div
+          class="mb-2 rounded-lg border-[1px] border-solid border-gray-200 bg-gray-100 p-4 dark:border-gray-900 dark:bg-gray-800">
+          <svg-icon src="assets/icons/other/request.svg" [svgClass]="'h-6 w-6 mx-auto text-gray-900 dark:text-white'">
+          </svg-icon>
+        </div>
+        <p class="text-sm font-semibold text-gray-900 dark:text-gray-300">Request</p>
+      </button>
+    </div>
+  </div>
+
+  <div class="mb-2">
+    <div class="mr-2 flex">
+      <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Transactions</h1>
+      <button type="button" class="text-center text-sm font-medium text-gray-700">
+        <p class="text-lg text-primary">See all</p>
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <app-transaction-list-item
+      image="./assets/icons/other/house.svg"
+      name="Home Loan"
+      amount="-$5,927.24"
+      date="21 Mar 2024 | 19:05"
+      imageCss="text-green-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/book.svg"
+      name="School Fees"
+      amount="-$1,599.98"
+      date="19 Mar 2024 | 11:13"
+      imageCss="text-blue-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/book.svg"
+      name="School Books"
+      amount="-$129.00"
+      date="18 Mar 2024 | 20:25"
+      imageCss="text-blue-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/health.svg"
+      name="Gym Membership"
+      amount="-$18.90"
+      date="16 Mar 2024 | 14:05"
+      imageCss="text-red-500"></app-transaction-list-item>
+    <app-transaction-list-item
+      image="./assets/icons/other/investment.svg"
+      name="Crypto Investment"
+      amount="-$599.00"
+      date="16 Mar 2024 | 04:38"
+      imageCss="text-purple-500"></app-transaction-list-item>
+  </div>
+</div>

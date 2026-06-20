@@ -1,0 +1,12 @@
+<div class="h-full">
+  <div *ngIf="loading" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Loading playlists...</div>
+  <div *ngIf="loadError && !loading" class="px-5 py-8 text-center text-sm text-red-400">
+    Could not load podcast catalog from the workflow.
+  </div>
+  <app-podcast-list-item
+    *ngFor="let item of catalog?.playlists; trackBy: trackById"
+    [id]="item.id"
+    [image]="item.imageUrl"
+    [title]="item.title"
+    [subtitle]="item.subtitle"></app-podcast-list-item>
+</div>

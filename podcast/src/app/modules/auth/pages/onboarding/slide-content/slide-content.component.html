@@ -1,0 +1,14 @@
+<div class="mx-6 -mt-20 flex-col text-center">
+  <div class="">
+    <h2 [ngClass]="showLogo ? '' : 'mb-8'" class="text-3xl text-gray-900 dark:text-white">{{ heading }}</h2>
+    <div *ngIf="showLogo" class="mb-8 flex h-2/3 items-center justify-center">
+      <img [src]="companyLogo" class="w-[150px]" />
+    </div>
+
+    <div class="mb-6">
+      <svg-icon [src]="svgimage" [svgClass]="'h-2/3 w-2/3 mx-auto'"> </svg-icon>
+    </div>
+
+    <p class="text-gray-500 dark:text-gray-300">{{ description }}</p>
+  </div>
+</div>

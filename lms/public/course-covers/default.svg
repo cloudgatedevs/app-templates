@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" width="800" height="340" role="img" aria-label="Course cover">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="800" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0d9488"/><stop offset="1" stop-color="#0f766e"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="340" fill="url(#g)"/>
+  <g fill="#ffffff" opacity="0.10"><circle cx="690" cy="70" r="125"/><circle cx="120" cy="305" r="90"/></g>
+  <g opacity="0.95">
+    <path d="M400 110 L545 165 L400 220 L255 165 Z" fill="#ffffff"/>
+    <path d="M320 188 L320 240 Q400 282 480 240 L480 188" fill="none" stroke="#ffffff" stroke-width="13"/>
+    <line x1="545" y1="165" x2="545" y2="220" stroke="#ffffff" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="545" cy="228" r="11" fill="#fb7185"/>
+  </g>
+</svg>

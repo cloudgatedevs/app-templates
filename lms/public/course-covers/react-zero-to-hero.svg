@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 340" width="800" height="340" role="img" aria-label="React course cover">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="800" y2="340" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#0369a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="340" fill="url(#g)"/>
+  <g fill="#ffffff" opacity="0.10"><circle cx="120" cy="70" r="120"/><circle cx="700" cy="300" r="95"/></g>
+  <g transform="translate(400,170)" stroke="#ffffff" stroke-width="9" fill="none" opacity="0.9">
+    <ellipse rx="155" ry="60"/>
+    <ellipse rx="155" ry="60" transform="rotate(60)"/>
+    <ellipse rx="155" ry="60" transform="rotate(120)"/>
+  </g>
+  <circle cx="400" cy="170" r="24" fill="#ffffff"/>
+</svg>

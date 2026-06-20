@@ -1,0 +1,66 @@
+<div *ngIf="loading" class="px-5 py-8 text-center text-sm text-gray-500 dark:text-gray-400">Loading podcasts...</div>
+<div *ngIf="loadError && !loading" class="px-5 py-8 text-center text-sm text-red-400">
+  Could not load podcast catalog from the workflow.
+</div>
+
+<ng-container *ngIf="catalog && !loading">
+  <div class="mb-4 mr-2 flex">
+    <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Recent Podcast</h1>
+    <button type="button" class="mr-2 text-center text-sm font-medium text-gray-700">
+      <p class="text-xs text-gray-500 dark:text-gray-400">All</p>
+    </button>
+  </div>
+
+  <div class="mb-6 overflow-x-auto" style="scrollbar-width: none">
+    <div class="carousel">
+      <div *ngFor="let item of catalog.categories; trackBy: trackById" class="carousel-item mr-3">
+        <app-podcast-grid-item
+          [id]="item.id"
+          [image]="item.imageUrl"
+          [title]="item.title"
+          [subtitle]="item.subtitle"></app-podcast-grid-item>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<div class="mb-4 mr-2 flex">
+  <h1 class="flex-1 text-xl font-bold text-gray-900 dark:text-white">Categories</h1>
+  <button type="button" class="text-center text-sm font-medium text-gray-700 dark:text-white">
+    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+      <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+      <g id="SVGRepo_iconCarrier">
+        <title></title>
+        <g id="Complete">
+          <g id="F-More">
+            <path
+              d="M8,12a2,2,0,1,1-2-2A2,2,0,0,1,8,12Zm10-2a2,2,0,1,0,2,2A2,2,0,0,0,18,10Zm-6,0a2,2,0,1,0,2,2A2,2,0,0,0,12,10Z"
+              id="Horizontal"></path>
+          </g>
+        </g>
+      </g>
+    </svg>
+  </button>
+</div>
+
+<div class="grid grid-cols-2 gap-4 opacity-60 dark:opacity-80">
+  <div class="cursor-pointer rounded-box bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-6 shadow-lg">
+    <div class="text-center font-semibold text-white">Chillax</div>
+  </div>
+  <div class="cursor-pointer rounded-box bg-gradient-to-r from-sky-500 to-indigo-500 px-4 py-6 shadow-lg">
+    <div class="text-center font-semibold text-white">Mythological</div>
+  </div>
+  <div class="cursor-pointer rounded-box bg-gradient-to-r from-violet-500 to-fuchsia-500 px-4 py-6 shadow-lg">
+    <div class="text-center font-semibold text-white">Epic Swag</div>
+  </div>
+  <div class="cursor-pointer rounded-box bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-6 shadow-lg">
+    <div class="text-center font-semibold text-white">Firefly</div>
+  </div>
+  <div class="cursor-pointer rounded-box bg-gradient-to-r from-emerald-500 to-indigo-500 px-4 py-6 shadow-lg">
+    <div class="text-center font-semibold text-white">Sleepy Vibes</div>
+  </div>
+  <div class="cursor-pointer rounded-box bg-gradient-to-r from-emerald-500 to-green-500 px-4 py-6 shadow-lg">
+    <div class="text-center font-semibold text-white">Loki</div>
+  </div>
+</div>

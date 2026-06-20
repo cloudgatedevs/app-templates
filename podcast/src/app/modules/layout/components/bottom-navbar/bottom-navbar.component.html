@@ -1,0 +1,57 @@
+<div
+  class="h-25 fixed bottom-0 left-0 z-20 w-full rounded-t-box border-t border-gray-200 bg-white py-5 pb-10 shadow-2xl dark:border-gray-200 dark:bg-black lg:hidden">
+  <div class="font-small mx-auto grid h-full max-w-lg grid-cols-4">
+    <button
+      (click)="navigate('home')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <svg-icon
+        src="assets/icons/other/home.svg"
+        [svgClass]="'mb-2 h-6 w-6'"
+        [ngClass]="router.url === '/home' ? 'text-primary' : 'text-gray-900 dark:text-white'">
+      </svg-icon>
+      <span class="text-sm" [ngClass]="router.url === '/home' ? 'text-primary' : 'text-gray-900 dark:text-white'"
+        >Home</span
+      >
+    </button>
+    <button
+      (click)="navigate('categories')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <svg-icon
+        src="assets/icons/other/category.svg"
+        [svgClass]="'mb-2 h-6 w-6'"
+        [ngClass]="router.url === '/categories' ? 'text-primary' : 'text-gray-900 dark:text-white'">
+      </svg-icon>
+      <span class="text-sm" [ngClass]="router.url === '/categories' ? 'text-primary' : 'text-gray-900 dark:text-white'"
+        >Category</span
+      >
+    </button>
+    <button
+      (click)="navigate('playlists')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <svg-icon
+        src="assets/icons/other/playlist.svg"
+        [svgClass]="'mb-2 h-6 w-6'"
+        [ngClass]="router.url === '/playlists' ? 'text-primary' : 'text-gray-900 dark:text-white'">
+      </svg-icon>
+      <span class="text-sm" [ngClass]="router.url === '/playlists' ? 'text-primary' : 'text-gray-900 dark:text-white'"
+        >Playlists</span
+      >
+    </button>
+    <button
+      (click)="navigate('profile')"
+      type="button"
+      class="group inline-flex flex-col items-center justify-center px-5">
+      <svg-icon
+        src="assets/icons/other/profile.svg"
+        [svgClass]="'mb-2 h-6 w-6'"
+        [ngClass]="router.url === '/profile' ? 'text-primary' : 'text-gray-900 dark:text-white'">
+      </svg-icon>
+      <span class="text-sm" [ngClass]="router.url === '/profile' ? 'text-primary' : 'text-gray-900 dark:text-white'"
+        >Profile</span
+      >
+    </button>
+  </div>
+</div>
