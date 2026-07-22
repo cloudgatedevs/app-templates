@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { idpAuthConfig } from './idpAuthConfig';
+import { auth as cloudgateAuth, redirectToLogin } from '@/services/auth';
 import { useAuthContext } from './useAuthContext';
 import { ScreenLoader } from '@/components/ScreenLoader';
 
@@ -10,9 +10,9 @@ const RequireAuth = () => {
 
   useEffect(() => {
     if (loading) return;
-    if (!auth?.accessToken && idpAuthConfig.enabled && idpAuthConfig.loginUrl) {
+    if (!auth?.accessToken && cloudgateAuth.enabled) {
       setRedirecting(true);
-      window.location.href = idpAuthConfig.buildLoginUrl();
+      redirectToLogin();
     }
   }, [loading, auth?.accessToken]);
 

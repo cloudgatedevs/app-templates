@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
+import { cloudgateAuth } from '../cloudgate/cloudgate';
 import { idpAuthConfig } from './idp-auth.config';
 import { IdpProfile, IdpTokenResult } from './idp-profile.models';
 
@@ -8,30 +9,19 @@ import { IdpProfile, IdpTokenResult } from './idp-profile.models';
 export class IdpProfileService {
   constructor(private readonly http: HttpClient) {}
 
-  async refreshToken(refreshToken: string): Promise<IdpTokenResult | null> {
-    const base = idpAuthConfig.apiUrl;
-    const tenancyName = idpAuthConfig.tenancyName;
-    if (!base || !tenancyName || !refreshToken) return null;
-
-    const url = `${base}/api/idp/${encodeURIComponent(tenancyName)}/Refresh`;
-    try {
-      const raw = await firstValueFrom(
-        this.http.post<Record<string, unknown>>(url, { refreshToken, RefreshToken: refreshToken }),
-      );
-      const data = (raw?.['result'] as Record<string, unknown>) ?? raw;
-      const accessToken = (data['accessToken'] ?? data['AccessToken']) as string | undefined;
-      const newRefresh = (data['refreshToken'] ?? data['RefreshToken']) as string | undefined;
-      const expiresIn = (data['expiresIn'] ?? data['ExpiresIn'] ?? 0) as number;
-      if (!accessToken) return null;
-      return {
-        accessToken,
-        refreshToken: newRefresh || refreshToken,
-        expiresIn,
-        returnUrl: data['returnUrl'] as string | undefined,
-      };
-    } catch {
-      return null;
-    }
+  /**
+   * Exchange the stored refresh token for new tokens.
+   * Delegated to @cloudgatedevs/cloudgate-client, which also persists them.
+   */
+  async refreshToken(_refreshToken?: string): Promise<IdpTokenResult | null> {
+    const refreshed = await cloudgateAuth().refresh();
+    if (!refreshed) return null;
+    return {
+      accessToken: refreshed.accessToken,
+      refreshToken: refreshed.refreshToken ?? '',
+      expiresIn: refreshed.expiresIn ?? 0,
+      returnUrl: undefined,
+    };
   }
 
   async getProfile(accessToken: string, tenancyName: string): Promise<IdpProfile | null> {

@@ -8,14 +8,15 @@ base to build a new app on. It ships with the cross-cutting plumbing already in 
 - **Theming** — glassmorphism look, animated background, Poppins type, shared UI
   primitives (`Card`, `Badge`, `StatCard`, `Spinner`, …).
 - **Profile page** — view and update IdP profile details.
-- **Workflow API client** — a signed Cloudgate gateway client; the React client talks
-  ONLY to Cloudgate workflow endpoints.
+- **Workflow API client** — [`@cloudgatedevs/cloudgate-client`](https://github.com/cloudgatedevs/client)
+  handles signing, auth and envelope unwrapping; the React client talks ONLY to
+  Cloudgate workflow endpoints.
 
 ## Architecture
 
 The client never calls a backend or database directly. All data is fetched from
-**Cloudgate workflow endpoints**, with requests HMAC-signed in the browser and the IdP
-bearer token attached automatically.
+**Cloudgate workflow endpoints**, with requests HMAC-signed and the IdP bearer token
+attached automatically by [`@cloudgatedevs/cloudgate-client`](https://github.com/cloudgatedevs/client).
 
 ```
 Browser (React)  ──signed HTTP──>  Cloudgate /sbx/api/<project>/<route>
@@ -25,16 +26,13 @@ Browser (React)  ──signed HTTP──>  Cloudgate /sbx/api/<project>/<route>
 
 ```
 src/
-  auth/                 # Cloudgate IdP auth (login, refresh, profile, guards)
-    AuthProvider.jsx    #   session bootstrap, refresh, 401 retry
+  auth/                 # Cloudgate IdP auth (session state, profile, guards)
+    AuthProvider.jsx    #   session bootstrap + profile state (package-backed)
     RequireAuth.jsx     #   route guard -> redirects to the IdP login
-    idpAuthConfig.js    #   tenancy + login URL resolution
-    idpProfileApi.js    #   profile GET/PUT + token refresh
-    authHelpers.js      #   token storage + axios bearer injection
-    jwtUtils.js         #   JWT validation/expiry helpers
+    idpProfileApi.js    #   profile GET/PUT (outside the package's scope)
   services/
-    api.js              # signed Cloudgate workflow client (api.get/post/put/del)
-    apiClient.js        # HMAC request signing (Web Crypto)
+    auth.js             # createCloudgateAuth() — tokens, refresh, login redirects
+    api.js              # createCloudgateClient() — signed workflow client (api.get/post/put/del)
     config.js           # APP_NAME
   components/
     Layout.jsx          # header, nav, user menu, footer

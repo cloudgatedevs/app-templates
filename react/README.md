@@ -10,11 +10,12 @@ pieces from `Cloudweb Apps` (no ABP/admin login, signup, 2FA, reset-password, Go
    login page: `{VITE_IDP_BASE_URL}/idp/{tenancy}/login`.
 2. After authenticating, the IdP redirects back to the app with
    `?access_token=...&refresh_token=...&expires_in=...`.
-3. `AuthProvider` validates the token, stores it in `localStorage`, sets the axios `Authorization`
-   header, strips the params from the URL, and loads the profile from
-   `/api/idp/{tenancy}/profile`.
-4. The session is kept alive by a proactive refresh before expiry and a 401 interceptor, both
-   calling `/api/idp/{tenancy}/Refresh`. Sign-out clears storage and returns to the login page.
+3. [`@cloudgatedevs/cloudgate-client`](https://github.com/cloudgatedevs/client) validates the
+   token, stores it in `localStorage`, strips the params from the URL, and `AuthProvider` loads
+   the profile from `/api/idp/{tenancy}/profile`.
+4. The session is kept alive by a proactive refresh before expiry (the package's
+   `auth.refresh()`, calling `/api/idp/{tenancy}/Refresh`). Sign-out clears storage and returns
+   to the login page.
 
 ## Configuration
 
@@ -40,13 +41,12 @@ npm run preview  # preview the production build
 ```
 src/
   auth/
-    idpAuthConfig.js   # env + tenancy resolution, login URL
-    idpProfileApi.js   # profile get/update + token refresh
-    jwtUtils.js        # token validation / decode helpers
-    authHelpers.js     # token storage keys + axios request interceptor
-    AuthProvider.jsx   # bootstrap, refresh, logout, profile state
+    idpProfileApi.js   # profile get/update (outside the package's scope)
+    AuthProvider.jsx   # bootstrap, refresh, logout, profile state (package-backed)
     RequireAuth.jsx    # route guard -> redirects to IdP login
     useAuthContext.js
+  services/
+    auth.js            # createCloudgateAuth() — tokens, refresh, login redirects
   components/
     Layout.jsx         # header with user menu + sign out
     ScreenLoader.jsx
@@ -54,5 +54,5 @@ src/
     Home.jsx           # placeholder home
     Profile.jsx        # view/edit name, surname, email
   App.jsx              # router
-  main.jsx             # entry, axios setup
+  main.jsx             # entry
 ```

@@ -1,7 +1,7 @@
 /**
  * Parse error messages from IdP API responses.
  * @param {unknown} error
- * @param {import('axios').AxiosResponse | null} [response]
+ * @param {{ status?: number; data?: unknown } | null} [response]
  */
 export function parseIdpError(error, response) {
   const data = response?.data ?? error?.response?.data;

@@ -1,87 +1,60 @@
-import { clearIdpSession as clearIdpSessionStorage, getStoredAccessToken, getStoredRefreshToken, storeIdpTokens } from './auth-storage';
-import { isTokenValid } from './jwt.utils';
+// IdP session bootstrap — powered by @cloudgatedevs/cloudgate-client.
+//
+// The package consumes ?access_token=… redirect params from location.search.
+// With hash routing (#/route?access_token=…) the IdP may return tokens inside
+// the hash query, so we first promote them into the search string, then hand
+// the whole flow (consume, store, clean URL, silent refresh) to the package.
+
+import { cloudgateAuth } from '../cloudgate/cloudgate';
 import { TokenService } from '../core/token.service';
 
-function getIdpCallbackParams(): URLSearchParams {
-  const params = new URLSearchParams(window.location.search);
+const TOKEN_PARAMS = ['access_token', 'refresh_token', 'expires_in'];
+
+/** Move IdP token params from the hash query (#/route?access_token=…) into location.search. */
+function promoteHashTokensToSearch() {
   const hash = window.location.hash || '';
   const queryStart = hash.indexOf('?');
-  if (queryStart >= 0) {
-    const hashParams = new URLSearchParams(hash.slice(queryStart + 1));
-    hashParams.forEach((value, key) => {
-      if (!params.has(key)) {
-        params.set(key, value);
-      }
-    });
-  }
-  return params;
-}
+  if (queryStart < 0) return;
 
-function stripIdpCallbackParams() {
-  const params = getIdpCallbackParams();
-  const hadTokens =
-    params.has('access_token') || params.has('refresh_token') || params.has('expires_in');
-  if (!hadTokens) return;
+  const hashParams = new URLSearchParams(hash.slice(queryStart + 1));
+  if (!TOKEN_PARAMS.some((p) => hashParams.has(p))) return;
 
   const search = new URLSearchParams(window.location.search);
-  search.delete('access_token');
-  search.delete('refresh_token');
-  search.delete('expires_in');
-
-  let hash = window.location.hash || '';
-  const queryStart = hash.indexOf('?');
-  if (queryStart >= 0) {
-    const route = hash.slice(0, queryStart) || '#/';
-    hash = route;
+  for (const param of TOKEN_PARAMS) {
+    const value = hashParams.get(param);
+    if (value != null && !search.has(param)) search.set(param, value);
+    hashParams.delete(param);
   }
 
+  const route = hash.slice(0, queryStart) || '#/';
+  const rest = hashParams.toString();
   const searchString = search.toString();
   window.history.replaceState(
     {},
     '',
-    window.location.pathname + (searchString ? `?${searchString}` : '') + hash,
+    window.location.pathname +
+      (searchString ? `?${searchString}` : '') +
+      route +
+      (rest ? `?${rest}` : ''),
   );
 }
 
-const tokenStorage = new TokenService();
-
-function syncStoredTokens(accessToken: string, refreshToken?: string) {
-  tokenStorage.setToken(accessToken);
-  if (refreshToken) {
-    tokenStorage.setRefreshToken(refreshToken);
-  }
-}
-
-/** Handle IdP redirect callback and restore session from storage. Safe to call before Angular boot. */
+/**
+ * Handle the IdP redirect callback and restore the session from storage.
+ * Safe to call before Angular boot. Token consumption and URL cleanup run
+ * synchronously inside the package; an expired session is silently refreshed
+ * in the background (the auth interceptor also retries 401s via refresh).
+ */
 export function bootstrapIdpSessionFromUrl(): boolean {
-  const params = getIdpCallbackParams();
-  const tokenFromUrl = params.get('access_token');
-  const refreshFromUrl = params.get('refresh_token');
-  const expiresInFromUrl = params.get('expires_in');
-
-  if (tokenFromUrl && isTokenValid(tokenFromUrl)) {
-    const expiresIn = expiresInFromUrl != null ? Number(expiresInFromUrl) : undefined;
-    storeIdpTokens(
-      tokenFromUrl,
-      refreshFromUrl || undefined,
-      Number.isFinite(expiresIn) ? expiresIn : undefined,
-    );
-    syncStoredTokens(tokenFromUrl, refreshFromUrl || getStoredRefreshToken() || undefined);
-    stripIdpCallbackParams();
-    return true;
-  }
-
-  const stored = getStoredAccessToken();
-  if (isTokenValid(stored)) {
-    syncStoredTokens(stored!, getStoredRefreshToken() || undefined);
-    return true;
-  }
-
-  return false;
+  const auth = cloudgateAuth();
+  promoteHashTokensToSearch();
+  void auth.init();
+  return auth.isAuthenticated();
 }
 
 export function clearIdpSessionAndAbp() {
-  clearIdpSessionStorage();
+  cloudgateAuth().logout({ redirectToLogin: false });
+  const tokenStorage = new TokenService();
   tokenStorage.clearToken();
   tokenStorage.clearRefreshToken();
 }

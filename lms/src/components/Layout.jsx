@@ -1,7 +1,7 @@
 // App shell — sidebar navigation.
 import { useState } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
-import { idpAuthConfig, getProfileDisplayName, useAuthContext } from '@/auth';
+import { auth, loginUrl, getProfileDisplayName, useAuthContext } from '@/auth';
 import { AnimatedBackground } from '@/components/AnimatedBackground';
 import { APP_NAME } from '@/services/config';
 
@@ -80,7 +80,7 @@ function SidebarUser() {
   if (!auth) {
     return (
       <a
-        href={idpAuthConfig.enabled ? idpAuthConfig.buildLoginUrl() : '#'}
+        href={auth.enabled ? loginUrl() : '#'}
         className="flex items-center justify-center rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200/60"
       >
         Sign in

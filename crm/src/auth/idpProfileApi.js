@@ -1,42 +1,32 @@
 /**
- * IdP profile + refresh API.
+ * IdP profile API (get / update the signed-in user's profile).
+ *
+ * Token storage, refresh and login redirects live in
+ * @cloudgatedevs/cloudgate-client (see src/services/auth.js) — this file only
+ * covers the profile endpoints, which are outside the package's scope.
  */
-import axios from 'axios';
-import { idpAuthConfig } from './idpAuthConfig';
+import { auth } from '@/services/auth';
 
-/**
- * @typedef {{ accessToken: string; refreshToken: string; expiresIn: number; returnUrl?: string }} IdpTokenResult
- */
+const idpApiUrl = (
+  String(import.meta.env.VITE_IDP_API_URL ?? '').trim() ||
+  String(import.meta.env.VITE_IDP_BASE_URL ?? '').trim()
+).replace(/\/$/, '');
 
-/**
- * @param {string} refreshToken
- * @returns {Promise<IdpTokenResult | null>}
- */
-export async function idpRefreshToken(refreshToken) {
-  const base = idpAuthConfig.apiUrl?.replace(/\/$/, '');
-  const tenancyName = idpAuthConfig.tenancyName;
-  if (!base || !tenancyName || !refreshToken) return null;
-  const url = `${base}/api/idp/${encodeURIComponent(tenancyName)}/Refresh`;
-  try {
-    const body = { refreshToken, RefreshToken: refreshToken };
-    const { data: raw } = await axios.post(url, body, {
-      timeout: 10000,
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const data = raw?.result ?? raw;
-    const accessToken = data.accessToken ?? data.AccessToken;
-    const newRefresh = data.refreshToken ?? data.RefreshToken;
-    const expiresIn = data.expiresIn ?? data.ExpiresIn ?? 0;
-    if (!accessToken) return null;
-    return {
-      accessToken,
-      refreshToken: newRefresh || refreshToken,
-      expiresIn,
-      returnUrl: data.returnUrl,
-    };
-  } catch {
-    return null;
-  }
+function profileUrl(tenancyName) {
+  return `${idpApiUrl}/api/idp/${encodeURIComponent(tenancyName)}/profile`;
+}
+
+function normalizeProfile(raw) {
+  const r = raw?.result ?? raw;
+  if (!r || typeof r !== 'object') return null;
+  return {
+    id: r.id ?? r.Id,
+    email: r.email ?? r.Email ?? undefined,
+    name: r.name ?? r.Name ?? undefined,
+    surname: r.surname ?? r.Surname ?? undefined,
+    photoUrl: r.photoUrl ?? r.PhotoUrl ?? null,
+    role: r.role ?? r.Role ?? null,
+  };
 }
 
 /** @returns {string} */
@@ -53,26 +43,17 @@ export function getProfilePictureSrc(profile) {
 
 /**
  * @param {string} accessToken
- * @param {string} tenancyName
+ * @param {string} [tenancyName]
  */
-export async function getIdpProfile(accessToken, tenancyName) {
-  const base = idpAuthConfig.apiUrl?.replace(/\/$/, '');
-  if (!base || !tenancyName) return null;
-  const url = `${base}/api/idp/${encodeURIComponent(tenancyName)}/profile`;
+export async function getIdpProfile(accessToken, tenancyName = auth.tenancyName) {
+  if (!idpApiUrl || !tenancyName || !accessToken) return null;
   try {
-    const { data } = await axios.get(url, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+    const res = await fetch(profileUrl(tenancyName), {
+      headers: { Accept: 'application/json', Authorization: `Bearer ${accessToken}` },
     });
-    const r = data?.result ?? data;
-    if (!r || typeof r !== 'object' || r.id == null) return null;
-    return {
-      id: r.id,
-      email: r.email ?? r.Email ?? undefined,
-      name: r.name ?? r.Name ?? undefined,
-      surname: r.surname ?? r.Surname ?? undefined,
-      photoUrl: r.photoUrl ?? r.PhotoUrl ?? null,
-      role: r.role ?? r.Role ?? null,
-    };
+    if (!res.ok) return null;
+    const profile = normalizeProfile(await res.json());
+    return profile && profile.id != null ? profile : null;
   } catch {
     return null;
   }
@@ -84,25 +65,22 @@ export async function getIdpProfile(accessToken, tenancyName) {
  * @param {{ name?: string; surname?: string; email?: string }} input
  */
 export async function updateIdpProfile(accessToken, tenancyName, input) {
-  const base = idpAuthConfig.apiUrl?.replace(/\/$/, '');
-  if (!base || !tenancyName || !accessToken) return null;
-  const url = `${base}/api/idp/${encodeURIComponent(tenancyName)}/profile`;
+  if (!idpApiUrl || !tenancyName || !accessToken) return null;
   try {
-    const { data } = await axios.put(url, input, {
-      headers: { Authorization: `Bearer ${accessToken}` },
+    const res = await fetch(profileUrl(tenancyName), {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(input),
     });
-    const r = data?.result ?? data;
-    if (!r || typeof r !== 'object') return null;
-    const id = r.id ?? r.Id;
-    if (id == null && r.name == null && r.Name == null && r.email == null && r.Email == null) return null;
-    return {
-      id: id ?? 0,
-      email: r.email ?? r.Email ?? undefined,
-      name: r.name ?? r.Name ?? undefined,
-      surname: r.surname ?? r.Surname ?? undefined,
-      photoUrl: r.photoUrl ?? r.PhotoUrl ?? null,
-      role: r.role ?? r.Role ?? null,
-    };
+    if (!res.ok) return null;
+    const profile = normalizeProfile(await res.json());
+    if (!profile) return null;
+    if (profile.id == null && profile.name == null && profile.email == null) return null;
+    return { ...profile, id: profile.id ?? 0 };
   } catch {
     return null;
   }

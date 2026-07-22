@@ -15,8 +15,8 @@ Cloudgate IdP auth, with every byte of data served by Cloudgate workflow APIs.
 ## Architecture
 
 The client never calls a backend or database directly. All data is fetched from
-**Cloudgate workflow endpoints**, with requests HMAC-signed in the browser and the IdP
-bearer token attached automatically.
+**Cloudgate workflow endpoints**, with requests HMAC-signed and the IdP bearer token
+attached automatically by [`@cloudgatedevs/cloudgate-client`](https://github.com/cloudgatedevs/client).
 
 ```
 Browser (React)  ──signed HTTP──>  Cloudgate /sbx/lms/<route>
@@ -26,10 +26,10 @@ Browser (React)  ──signed HTTP──>  Cloudgate /sbx/lms/<route>
 
 ```
 src/
-  auth/                 # Cloudgate IdP auth (login, refresh, profile, guards)
+  auth/                 # Cloudgate IdP auth (session state, profile, guards)
   services/
-    api.js              # signed Cloudgate workflow client (api.get/post/put/del)
-    apiClient.js        # HMAC request signing (Web Crypto)
+    auth.js             # createCloudgateAuth() — tokens, refresh, login redirects
+    api.js              # createCloudgateClient() — signed workflow client (api.get/post/put/del)
     lms.js              # LMS API wrappers (courses, lessons, enrollments, …)
     covers.js           # resolves a placeholder cover image per course
     config.js           # APP_NAME
