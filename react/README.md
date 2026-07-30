@@ -1,8 +1,10 @@
-# Cloudgate React
+# React Starter
 
 A minimal Vite + React + Tailwind app that supports the **IdP user login flow** only, with a
 placeholder Home page and a Profile page after login. It is a stripped-down port of the IdP auth
 pieces from `Cloudweb Apps` (no ABP/admin login, signup, 2FA, reset-password, Google, or reCAPTCHA).
+
+Available in the Cloudgate hub under **Web Coder → Quick Start** as *React Starter*.
 
 ## Login flow
 
@@ -19,19 +21,24 @@ pieces from `Cloudweb Apps` (no ABP/admin login, signup, 2FA, reset-password, Go
 
 ## Configuration
 
-Copy `.env.example` to `.env` and fill in:
+Creating this template from Quick Start writes a ready-to-run `.env` for your tenant (IdP URLs,
+tenancy name, dev preview return URL, and a sandbox API key). Cloning the folder yourself? Copy
+`.env.example` to `.env` and fill in:
 
 | Variable                 | Description                                                                 |
 | ------------------------ | --------------------------------------------------------------------------- |
 | `VITE_IDP_BASE_URL`      | Base URL of the IdP (used to build the hosted login URL).                   |
 | `VITE_IDP_API_URL`       | Optional separate API base for profile/refresh. Falls back to base URL.     |
 | `VITE_IDP_TENANCY_NAME`  | Tenancy name. Override at runtime with `?idp_tenant=`; otherwise this value wins, falling back to the subdomain when unset. |
+| `VITE_IDP_RETURN_URL`    | Optional URL the IdP redirects back to after login. Defaults to this app's origin. |
+| `VITE_CLOUDGATE_API_URL` | Gateway base URL for workflow endpoints you add. Unused by the starter itself. |
+| `VITE_API_KEY` / `VITE_API_SECRET` | Gateway request-signing credentials for those endpoints.           |
 
 ## Scripts
 
 ```bash
 npm install
-npm run dev      # start the dev server (http://localhost:5173)
+npm run dev      # start the dev server (http://localhost:3000)
 npm run build    # production build
 npm run preview  # preview the production build
 ```
