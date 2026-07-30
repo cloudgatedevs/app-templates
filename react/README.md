@@ -31,8 +31,23 @@ tenancy name, dev preview return URL, and a sandbox API key). Cloning the folder
 | `VITE_IDP_API_URL`       | Optional separate API base for profile/refresh. Falls back to base URL.     |
 | `VITE_IDP_TENANCY_NAME`  | Tenancy name. Override at runtime with `?idp_tenant=`; otherwise this value wins, falling back to the subdomain when unset. |
 | `VITE_IDP_RETURN_URL`    | Optional URL the IdP redirects back to after login. Defaults to this app's origin. |
-| `VITE_CLOUDGATE_API_URL` | Gateway base URL for workflow endpoints you add. Unused by the starter itself. |
+| `VITE_CLOUDGATE_API_URL` | Gateway host for workflow endpoints. Host only — no environment or project segments. |
+| `VITE_CLOUDGATE_API_ENV`  | Publish slot the app calls: `sbx` (sandbox) or `prod` (production).         |
+| `VITE_CLOUDGATE_API_PROJECT` | Project path segment holding your published endpoints. Defaults to `api`. |
 | `VITE_API_KEY` / `VITE_API_SECRET` | Gateway request-signing credentials for those endpoints.           |
+
+### Switching between sandbox and production
+
+`src/services/api.js` composes every workflow request URL from the three keys above:
+
+```
+{VITE_CLOUDGATE_API_URL}/{VITE_CLOUDGATE_API_ENV}/{VITE_CLOUDGATE_API_PROJECT}/{route}
+```
+
+So `api.post('/leads', …)` against a gateway of `https://apps.example.com` with project `crm` hits
+`https://apps.example.com/sbx/crm/leads`. Flip `VITE_CLOUDGATE_API_ENV` to `prod` and the same call
+hits `…/prod/crm/leads` — no code or URL edits. Restart the dev server after changing `.env`, since
+Vite inlines these values at build time.
 
 ## Scripts
 
@@ -54,6 +69,7 @@ src/
     useAuthContext.js
   services/
     auth.js            # createCloudgateAuth() — tokens, refresh, login redirects
+    api.js             # workflow API client — URL built from gateway + env + project
   components/
     Layout.jsx         # header with user menu + sign out
     ScreenLoader.jsx
