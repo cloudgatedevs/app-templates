@@ -199,6 +199,27 @@
         "starter",
         "idp"
       ]
+    },
+    {
+      "id": "admin-light",
+      "name": "Admin Starter (Light)",
+      "description": "Light-theme React + Vite + Tailwind admin console with Cloudgate IdP login, a responsive sidebar shell, and sample paginated table pages (Users, Orders) backed by a bundled Cloudgate workflow API with demo data — import .template/workflow-template.json.",
+      "folder": "admin-light",
+      "framework": "React",
+      "devCommand": "npm install && npm run dev",
+      "devPort": 3000,
+      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/admin-light/banner.png",
+      "tags": [
+        "react",
+        "vite",
+        "tailwind",
+        "admin",
+        "dashboard",
+        "light",
+        "responsive",
+        "starter",
+        "idp"
+      ]
     }
   ]
 }

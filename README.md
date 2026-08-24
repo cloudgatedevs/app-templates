@@ -18,6 +18,7 @@ Browse templates in the hub at **Web Coder → Quick Start** (`/web-coder`). Eac
 | [Cloudgate LMS](./lms/) | [`lms/`](./lms/) | `POST /lms/*` (courses, lessons, quizzes, …) | — |
 | [React Starter](./react/) | [`react/`](./react/) | — | — |
 | [Admin Starter (Dark)](./admin/) | [`admin/`](./admin/) | `POST /admin/*` (users, orders, dashboard) | — |
+| [Admin Starter (Light)](./admin-light/) | [`admin-light/`](./admin-light/) | `POST /admin-light/*` (users, orders, dashboard) | — |
 
 Most gallery templates are **Angular 17** apps with Tailwind CSS, Capacitor-ready mobile shells, Cloudgate IdP login, and a bundled workflow import (`.template/workflow-template.json`) for the catalog API each app calls at runtime.
 
@@ -28,6 +29,8 @@ Most gallery templates are **Angular 17** apps with Tailwind CSS, Capacitor-read
 **React Starter** is the bare skeleton to build on: **React 18 + Vite + Tailwind** with Cloudgate IdP login, a route guard, and a profile page — no workflow import and no sample data. Its `configSetup` renders `.env` for your tenant when the template is created, so the login flow works on first `npm run dev`.
 
 **Admin Starter (Dark)** is a dark-theme **React 18 + Vite + Tailwind** admin console: Cloudgate IdP login, a responsive shell (desktop sidebar, mobile flyout with safe-area handling), a dashboard with stat cards, and sample server-paginated table pages (Users, Orders) with search — tables collapse to stacked cards on phones. Like the CRM, it ships a backend: its `.template/workflow-template.json` creates the `admin` controller (op-dispatch endpoints `/dashboard`, `/users`, `/orders`) and `.template/schema.sql` provisions the `admin_db` SQLite database with demo users and orders, so the tables come up populated. Includes an `npm run build:dev` script for unminified development-mode builds.
+
+**Admin Starter (Light)** is the light-theme twin of Admin Starter (Dark): the same pages, responsive shell, bundled workflow import (project path `admin-light`, database `admin_light_db`), and scripts. The Tailwind token names (`ink`/`mist`/`accent`) are identical across the pair — only the values differ — so components copy cleanly between the two.
 
 ### Production build before publish
 
@@ -56,6 +59,7 @@ Each demo folder has its own README with screenshots, local dev steps, and workf
 - [lms/README.md](./lms/README.md)
 - [react/README.md](./react/README.md)
 - [admin/README.md](./admin/README.md)
+- [admin-light/README.md](./admin-light/README.md)
 
 ## Repository layout
 
@@ -71,6 +75,7 @@ crm/                    # React CRM app + workflow import (leads, pipeline, emai
 lms/                    # React LMS app + workflow import (courses, lessons, quizzes, SQLite)
 react/                  # Bare React starter with IdP login (no workflow import)
 admin/                  # Dark-theme React admin console + workflow import (users, orders, SQLite)
+admin-light/            # Light-theme twin of admin/ + its own workflow import
 ```
 
 Each template folder contains a runnable project and a `template.json` with the same metadata as its manifest entry.
