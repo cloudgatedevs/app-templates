@@ -32,21 +32,30 @@ npm run build:dev  # development-mode build (unminified, easier to debug) -> dis
 npm run preview    # preview a build locally
 ```
 
-## Wire up the data
+## Backend: bundled workflow import
 
-The pages call workflow endpoints in the project named by `VITE_CLOUDGATE_API_PROJECT`
-(request base: `{VITE_CLOUDGATE_API_URL}/{VITE_CLOUDGATE_API_ENV}/{VITE_CLOUDGATE_API_PROJECT}/{route}`).
-Publish these routes and the app lights up — until then the tables show their empty states:
+The backend ships with the template: [`.template/workflow-template.json`](./.template/workflow-template.json)
+creates the **Admin** project (path `admin`) with an `admin_db` SQLite database and the
+endpoints below, and [`.template/schema.sql`](./.template/schema.sql) provisions the tables
+plus demo data (12 users, 20 orders). Quick Start imports and provisions this automatically;
+for manual setup see [`.template/README.md`](./.template/README.md). Publish the endpoints to
+**sandbox** and the app lights up with seeded data.
 
-| Route | Params | Returns (one row per record) |
+Every endpoint is called as `POST {base}/<route>` with a JSON body `{ "op": "...", ... }`
+(the same convention as the Cloudgate CRM template); the request base is
+`{VITE_CLOUDGATE_API_URL}/{VITE_CLOUDGATE_API_ENV}/{VITE_CLOUDGATE_API_PROJECT}/{route}`
+with `VITE_CLOUDGATE_API_PROJECT=admin`.
+
+| Route | Ops | `list` returns (one row per record) |
 | --- | --- | --- |
-| `GET /dashboard` | — | `{ Users, Orders, Revenue30d, PendingOrders }` |
-| `GET /users` | `search`, `skip`, `take` | `{ Id, Name, Surname, Email, Role, Status, CreatedAt, TotalCount }` |
-| `GET /orders` | `search`, `status`, `skip`, `take` | `{ Id, Reference, CustomerName, CustomerEmail, Items, Total, Status, CreatedAt, TotalCount }` |
+| `/dashboard` | `stats` (default), `recent` | `{ Users, Orders, Revenue30d, PendingOrders }` |
+| `/users` | `list`, `get`, `create`, `update`, `disable`, `enable`, `delete` | `{ Id, Name, Surname, Email, Role, Status, CreatedAt, TotalCount }` |
+| `/orders` | `list`, `get`, `create`, `update`, `status`, `delete` | `{ Id, Reference, CustomerName, CustomerEmail, Items, Total, Status, CreatedAt, TotalCount }` |
 
-Paging convention: the client sends `skip`/`take`; every returned row carries a `TotalCount`
+Paging convention: the client sends `skip`/`take`; every `list` row carries a `TotalCount`
 column with the full result-set size (`COUNT(*) OVER ()` in SQLite). See `src/services/admin.js`
-for the exact shapes and a sample query, and rename routes/columns there to fit your API.
+for the exact call shapes — the pages only use the `list`/`stats` ops today, the rest are
+there for the features you'll build next.
 
 To repurpose the template, edit `src/services/admin.js` (endpoints), `src/components/navConfig.jsx`
 (nav items + icons), and the pages in `src/pages/` — the shell and UI kit don't need to change.
@@ -85,4 +94,9 @@ src/
     Profile.jsx        # view/edit name, surname, email
   App.jsx              # router
   main.jsx             # entry
+.template/
+  workflow-template.json  # Cloudgate import: Admin project + endpoints + admin_db
+  schema.sql              # admin_db tables + demo data (safe to re-run)
+  env.example             # reference copy of the .env Quick Start writes
+  README.md               # import + verify steps
 ```

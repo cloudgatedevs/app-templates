@@ -1,23 +1,18 @@
-// Admin API — thin wrappers over the Cloudgate workflow endpoints this app
-// calls. Publish endpoints with these routes in your workflow project (the one
-// named by VITE_CLOUDGATE_API_PROJECT) and the pages light up.
+// Admin API — thin wrappers over the Cloudgate workflow endpoints bundled in
+// .template/workflow-template.json (imported by Quick Start into the project
+// named by VITE_CLOUDGATE_API_PROJECT, path `admin`, with its `admin_db`
+// SQLite database provisioned from .template/schema.sql).
 //
-// Paging convention (matches the shared <Pager />): the client sends
-// `skip`/`take` and each returned row carries a `TotalCount` column with the
-// full result-set size, e.g. in SQLite:
+// Convention (same as the Cloudgate CRM template): every endpoint is called as
+// POST {base}/<route> with a JSON body { "op": "...", ...params } — the
+// workflow's Function node dispatches on `op` and builds the SQL the Database
+// node runs. Paging: send `skip`/`take`; every row of a `list` result carries
+// a `TotalCount` column (COUNT(*) OVER ()) that feeds the shared <Pager />.
 //
-//   SELECT u.*, COUNT(*) OVER () AS TotalCount
-//   FROM Users u
-//   WHERE (@search = '' OR u.Name LIKE '%' || @search || '%'
-//                       OR u.Email LIKE '%' || @search || '%')
-//   ORDER BY u.CreatedAt DESC
-//   LIMIT @take OFFSET @skip;
-//
-// Expected row shapes (rename freely — the pages read these keys):
-//   /dashboard -> [{ Users, Orders, Revenue30d, PendingOrders }]
-//   /users     -> [{ Id, Name, Surname, Email, Role, Status, CreatedAt, TotalCount }]
-//   /orders    -> [{ Id, Reference, CustomerName, CustomerEmail, Items, Total,
-//                    Status, CreatedAt, TotalCount }]
+// Ops available server-side beyond what the pages use today:
+//   users:  list | get | create | update | disable | enable | delete
+//   orders: list | get | create | update | status | delete
+//   dashboard: stats | recent
 
 import { api } from './api';
 
@@ -31,15 +26,15 @@ const asRows = (r) => {
 
 export const admin = {
   // --- dashboard -----------------------------------------------------------
-  dashboard: () => api.get('/dashboard').then(asRows),
+  dashboard: () => api.post('/dashboard', { op: 'stats' }).then(asRows),
 
   // --- users (server-paged; each row carries TotalCount for the pager) -----
   users: ({ search, skip = 0, take = 50 } = {}) =>
-    api.get('/users', { skip, take, ...(search ? { search } : {}) }).then(asRows),
+    api.post('/users', { op: 'list', skip, take, ...(search ? { search } : {}) }).then(asRows),
 
   // --- orders (server-paged, with an optional status filter) ---------------
   orders: ({ search, status, skip = 0, take = 50 } = {}) =>
     api
-      .get('/orders', { skip, take, ...(search ? { search } : {}), ...(status ? { status } : {}) })
+      .post('/orders', { op: 'list', skip, take, ...(search ? { search } : {}), ...(status ? { status } : {}) })
       .then(asRows),
 };

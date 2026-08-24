@@ -182,7 +182,7 @@
     {
       "id": "admin",
       "name": "Admin Starter (Dark)",
-      "description": "Dark-theme React + Vite + Tailwind admin console with Cloudgate IdP login, a responsive sidebar shell, and sample paginated table pages (Users, Orders) backed by Cloudgate workflow endpoints.",
+      "description": "Dark-theme React + Vite + Tailwind admin console with Cloudgate IdP login, a responsive sidebar shell, and sample paginated table pages (Users, Orders) backed by a bundled Cloudgate workflow API with demo data — import .template/workflow-template.json.",
       "folder": "admin",
       "framework": "React",
       "devCommand": "npm install && npm run dev",
