@@ -17,6 +17,7 @@ Browse templates in the hub at **Web Coder → Quick Start** (`/web-coder`). Eac
 | [Cloudgate CRM](./crm/) | [`crm/`](./crm/) | `POST /crm/*` (leads, pipeline, email, …) | — |
 | [Cloudgate LMS](./lms/) | [`lms/`](./lms/) | `POST /lms/*` (courses, lessons, quizzes, …) | — |
 | [React Starter](./react/) | [`react/`](./react/) | — | — |
+| [Admin Starter (Dark)](./admin/) | [`admin/`](./admin/) | `GET /users`, `GET /orders`, `GET /dashboard` (bring your own) | — |
 
 Most gallery templates are **Angular 17** apps with Tailwind CSS, Capacitor-ready mobile shells, Cloudgate IdP login, and a bundled workflow import (`.template/workflow-template.json`) for the catalog API each app calls at runtime.
 
@@ -25,6 +26,8 @@ Most gallery templates are **Angular 17** apps with Tailwind CSS, Capacitor-read
 **Cloudgate LMS** is another full **React 18 + Vite + Tailwind** example: a Learning Management System backed by a complete Cloudgate workflow API — a SQLite database of courses, lessons, enrolments, lesson progress, quizzes and certificates, served by op-dispatch endpoints. It features a course catalog, a lesson player with progress tracking, auto-graded quizzes, completion certificates, and a unified activity feed. Its `.template/workflow-template.json` bundles every LMS endpoint and `.template/schema.sql` provisions the schema and demo data.
 
 **React Starter** is the bare skeleton to build on: **React 18 + Vite + Tailwind** with Cloudgate IdP login, a route guard, and a profile page — no workflow import and no sample data. Its `configSetup` renders `.env` for your tenant when the template is created, so the login flow works on first `npm run dev`.
+
+**Admin Starter (Dark)** is a dark-theme **React 18 + Vite + Tailwind** admin console: Cloudgate IdP login, a responsive shell (desktop sidebar, mobile flyout with safe-area handling), a dashboard with stat cards, and sample server-paginated table pages (Users, Orders) with search — tables collapse to stacked cards on phones. Pages call generic workflow endpoints (`/dashboard`, `/users`, `/orders`) documented in its README; there is no bundled workflow import, so publish your own endpoints (or repoint `src/services/admin.js`) to light the tables up. Includes an `npm run build:dev` script for unminified development-mode builds.
 
 ### Production build before publish
 
@@ -52,6 +55,7 @@ Each demo folder has its own README with screenshots, local dev steps, and workf
 - [crm/README.md](./crm/README.md)
 - [lms/README.md](./lms/README.md)
 - [react/README.md](./react/README.md)
+- [admin/README.md](./admin/README.md)
 
 ## Repository layout
 
@@ -66,6 +70,7 @@ wallet/                 # Angular wallet / transfer demo + workflow import
 crm/                    # React CRM app + workflow import (leads, pipeline, email, SQLite)
 lms/                    # React LMS app + workflow import (courses, lessons, quizzes, SQLite)
 react/                  # Bare React starter with IdP login (no workflow import)
+admin/                  # Dark-theme React admin console with paginated tables (no workflow import)
 ```
 
 Each template folder contains a runnable project and a `template.json` with the same metadata as its manifest entry.

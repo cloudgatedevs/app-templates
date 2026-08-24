@@ -1,0 +1,16 @@
+{
+  "id": "admin",
+  "name": "Admin Starter (Dark)",
+  "description": "Dark-theme React + Vite + Tailwind admin console with Cloudgate IdP login, a responsive sidebar shell, and sample paginated table pages (Users, Orders) backed by Cloudgate workflow endpoints.",
+  "folder": "admin",
+  "framework": "React",
+  "devCommand": "npm install && npm run dev",
+  "devPort": 3000,
+  "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/admin/banner.png",
+  "tags": ["react", "vite", "tailwind", "admin", "dashboard", "dark", "responsive", "starter", "idp"],
+  "configSetup": {
+    "kind": "vite-env",
+    "targets": [".env"],
+    "example": ".env.example"
+  }
+}
