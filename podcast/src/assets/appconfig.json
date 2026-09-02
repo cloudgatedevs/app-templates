@@ -3,7 +3,8 @@
   "idpBaseUrl": "http://localhost:5173",
   "idpApiUrl": "http://apps.localhost:44301",
   "idpTenancyName": "apps",
-  "idpReturnUrl": "http://localhost:3000",
+  "idpReturnUrlNote": "Set idpReturnUrl to your app's URL (dev preview while testing, your published domain in production) to ensure your users are always returned to the app after login. When blank, login returns to the page the user logged in from.",
+  "idpReturnUrl": "",
   "workflowGatewayUrl": "http://apps.localhost:44301",
   "environment": "sbx",
   "localeMappings": {

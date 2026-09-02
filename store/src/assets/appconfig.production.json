@@ -3,6 +3,7 @@
   "idpBaseUrl": "",
   "idpApiUrl": "",
   "idpTenancyName": "",
+  "idpReturnUrlNote": "Set idpReturnUrl to your app's URL (dev preview while testing, your published domain in production) to ensure your users are always returned to the app after login. When blank, login returns to the page the user logged in from.",
   "idpReturnUrl": "",
   "workflowGatewayUrl": "",
   "environment": "prod",
