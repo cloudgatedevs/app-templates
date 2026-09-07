@@ -4,7 +4,7 @@ An Angular podcast demo app for the [Cloudgate](https://cloudgate.dev) **Web Cod
 
 Use it as a starting point when you want more than a blank shell — browse categories, manage playlists, view history, play episodes, and edit a user profile — while still fitting into the Cloudgate editor preview workflow.
 
-**Public demo:** [https://podcast-demo.cloudweb.dev/](https://podcast-demo.cloudweb.dev/)
+**Public demo:** [https://podcast-demo.app.cloudgate.dev/](https://podcast-demo.app.cloudgate.dev/)
 
 ## Screenshots
 

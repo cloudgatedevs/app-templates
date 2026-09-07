@@ -2,7 +2,7 @@
 
 An Angular medical discovery demo app for the [Cloudgate](https://cloudgate.dev) **Web Coder** Quick Start gallery. Browse doctors, book appointments, and explore healthcare providers backed by a Cloudgate workflow.
 
-**Public demo:** [https://medical-demo.cloudweb.dev/](https://medical-demo.cloudweb.dev/)
+**Public demo:** [https://medical-demo.app.cloudgate.dev/](https://medical-demo.app.cloudgate.dev/)
 
 ## Screenshots
 

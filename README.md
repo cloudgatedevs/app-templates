@@ -8,12 +8,12 @@ Browse templates in the hub at **Web Coder → Quick Start** (`/web-coder`). Eac
 
 | Template | Folder | Workflow API | Demo |
 | --- | --- | --- | --- |
-| [Cloudgate Podcast Demo](./podcast/) | [`podcast/`](./podcast/) | `GET /podcasts` | [podcast-demo.cloudweb.dev](https://podcast-demo.cloudweb.dev/) |
-| [Cloudgate Hotel Demo](./hotel/) | [`hotel/`](./hotel/) | `GET /hotels` | [hotel-demo.cloudweb.dev](https://hotel-demo.cloudweb.dev/) |
-| [Cloudgate Medical Demo](./medical/) | [`medical/`](./medical/) | `GET /doctors` | [medical-demo.cloudweb.dev](https://medical-demo.cloudweb.dev/) |
-| [Cloudgate NFT Demo](./nft/) | [`nft/`](./nft/) | `GET /nfts` | [nft-demo.cloudweb.dev](https://nft-demo.cloudweb.dev/) |
-| [Cloudgate Store Demo](./store/) | [`store/`](./store/) | `GET /products` | [store-demo.cloudweb.dev](https://store-demo.cloudweb.dev/) |
-| [Cloudgate Wallet Demo](./wallet/) | [`wallet/`](./wallet/) | `GET /transactions` | [wallet-demo.cloudweb.dev](https://wallet-demo.cloudweb.dev/) |
+| [Cloudgate Podcast Demo](./podcast/) | [`podcast/`](./podcast/) | `GET /podcasts` | [podcast-demo.app.cloudgate.dev](https://podcast-demo.app.cloudgate.dev/) |
+| [Cloudgate Hotel Demo](./hotel/) | [`hotel/`](./hotel/) | `GET /hotels` | [hotel-demo.app.cloudgate.dev](https://hotel-demo.app.cloudgate.dev/) |
+| [Cloudgate Medical Demo](./medical/) | [`medical/`](./medical/) | `GET /doctors` | [medical-demo.app.cloudgate.dev](https://medical-demo.app.cloudgate.dev/) |
+| [Cloudgate NFT Demo](./nft/) | [`nft/`](./nft/) | `GET /nfts` | [nft-demo.app.cloudgate.dev](https://nft-demo.app.cloudgate.dev/) |
+| [Cloudgate Store Demo](./store/) | [`store/`](./store/) | `GET /products` | [store-demo.app.cloudgate.dev](https://store-demo.app.cloudgate.dev/) |
+| [Cloudgate Wallet Demo](./wallet/) | [`wallet/`](./wallet/) | `GET /transactions` | [wallet-demo.app.cloudgate.dev](https://wallet-demo.app.cloudgate.dev/) |
 | [Cloudgate CRM](./crm/) | [`crm/`](./crm/) | `POST /crm/*` (leads, pipeline, email, …) | — |
 | [Cloudgate LMS](./lms/) | [`lms/`](./lms/) | `POST /lms/*` (courses, lessons, quizzes, …) | — |
 | [React Starter](./react/) | [`react/`](./react/) | — | — |

@@ -2,7 +2,7 @@
 
 Angular NFT auction demo for the [Cloudgate](https://cloudgate.dev) **Web Coder** gallery. Browse NFT collections, place bids, and explore listings backed by a Cloudgate workflow (`GET /nfts`).
 
-**Public demo:** [https://nft-demo.cloudweb.dev/](https://nft-demo.cloudweb.dev/)
+**Public demo:** [https://nft-demo.app.cloudgate.dev/](https://nft-demo.app.cloudgate.dev/)
 
 ## Screenshots
 

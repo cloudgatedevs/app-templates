@@ -6,7 +6,7 @@
   "framework": "Angular",
   "devCommand": "npm install && npm run start",
   "devPort": 3000,
-  "demoUrl": "https://hotel-demo.cloudweb.dev/",
+  "demoUrl": "https://hotel-demo.app.cloudgate.dev/",
   "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/hotel/banner.png",
   "tags": ["angular", "hotel", "booking", "tailwind", "capacitor"],
   "workflowTemplate": ".template/workflow-template.json",

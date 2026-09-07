@@ -6,7 +6,7 @@
   "framework": "Angular",
   "devCommand": "npm install && npm run start",
   "devPort": 3000,
-  "demoUrl": "https://wallet-demo.cloudweb.dev/",
+  "demoUrl": "https://wallet-demo.app.cloudgate.dev/",
   "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/wallet/banner.png",
   "tags": ["angular", "wallet", "tailwind", "capacitor"],
   "workflowTemplate": ".template/workflow-template.json",

@@ -2,7 +2,7 @@
 
 Angular e-commerce store demo for the [Cloudgate](https://cloudgate.dev) **Web Coder** gallery. Browse products backed by a Cloudgate workflow (`GET /products`).
 
-**Public demo:** [https://store-demo.cloudweb.dev/](https://store-demo.cloudweb.dev/)
+**Public demo:** [https://store-demo.app.cloudgate.dev/](https://store-demo.app.cloudgate.dev/)
 
 ## Screenshots
 

@@ -4,7 +4,7 @@ An Angular hotel discovery demo app for the [Cloudgate](https://cloudgate.dev) *
 
 Browse featured stays, favourites, and explore listings backed by a Cloudgate workflow.
 
-**Public demo:** [https://hotel-demo.cloudweb.dev/](https://hotel-demo.cloudweb.dev/)
+**Public demo:** [https://hotel-demo.app.cloudgate.dev/](https://hotel-demo.app.cloudgate.dev/)
 
 ## Screenshots
 

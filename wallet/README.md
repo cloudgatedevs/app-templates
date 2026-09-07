@@ -2,7 +2,7 @@
 
 Angular wallet demo for the [Cloudgate](https://cloudgate.dev) **Web Coder** gallery. View balances and transfer funds; catalog data comes from a Cloudgate workflow (`GET /transactions`).
 
-**Public demo:** [https://wallet-demo.cloudweb.dev/](https://wallet-demo.cloudweb.dev/)
+**Public demo:** [https://wallet-demo.app.cloudgate.dev/](https://wallet-demo.app.cloudgate.dev/)
 
 ## Screenshots
 

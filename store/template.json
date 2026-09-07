@@ -6,7 +6,7 @@
   "framework": "Angular",
   "devCommand": "npm install && npm run start",
   "devPort": 3000,
-  "demoUrl": "https://store-demo.cloudweb.dev/",
+  "demoUrl": "https://store-demo.app.cloudgate.dev/",
   "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/store/banner.png",
   "tags": ["angular", "store", "tailwind", "capacitor"],
   "workflowTemplate": ".template/workflow-template.json",
