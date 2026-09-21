@@ -47,7 +47,7 @@ const Profile = () => {
           <div
             className={[
               'rounded-lg px-4 py-3 text-sm',
-              status.type === 'success' ? 'bg-emerald-500/12 text-emerald-300 ring-1 ring-emerald-400/25' : 'bg-red-500/12 text-red-300 ring-1 ring-red-400/25',
+              status.type === 'success' ? 'bg-emerald-500/12 text-emerald-700 dark:text-emerald-300 ring-1 ring-emerald-400/25' : 'bg-red-500/12 text-red-700 dark:text-red-300 ring-1 ring-red-400/25',
             ].join(' ')}
           >
             {status.message}

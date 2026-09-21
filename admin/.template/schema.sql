@@ -1,4 +1,4 @@
--- Admin Starter (Dark) — SQLite schema + sample data
+-- Admin Back Office — SQLite schema + sample data
 -- Run this against the project's `admin_db` SQLite database after importing
 -- .template/workflow-template.json (the Database workflow nodes target this file).
 -- Every table requires `Id INTEGER PRIMARY KEY AUTOINCREMENT` (Cloudgate convention).
@@ -29,6 +29,9 @@ CREATE INDEX IF NOT EXISTS ix_orders_ref ON orders(Reference);
 CREATE INDEX IF NOT EXISTS ix_orders_user ON orders(UserId);
 CREATE INDEX IF NOT EXISTS ix_orders_status ON orders(Status);
 CREATE INDEX IF NOT EXISTS ix_orders_created ON orders(CreatedAt);
+
+-- Appearance/theme configuration lives in Cloudgate's native appearance API.
+-- Existing installations' legacy settings tables are deliberately left untouched.
 
 -- --- Sample users (loaded on Quick Start via schema.sql) ---
 INSERT INTO users (Name, Surname, Email, Phone, Role, Status, LastLoginAt, CreatedAt)

@@ -32,7 +32,7 @@ const GATEWAY_URL = String(import.meta.env.VITE_CLOUDGATE_API_URL ?? '')
 /** Publish slot the app is pointed at — "sbx" or "prod". */
 export const apiEnv = trimSlashes(import.meta.env.VITE_CLOUDGATE_API_ENV) || 'sbx';
 
-const API_PROJECT = trimSlashes(import.meta.env.VITE_CLOUDGATE_API_PROJECT) || 'api';
+const API_PROJECT = trimSlashes(import.meta.env.VITE_CLOUDGATE_API_PROJECT) || 'admin';
 
 /** Fully composed request base, e.g. https://apps.example.com/sbx/api */
 export const apiBaseUrl = GATEWAY_URL ? [GATEWAY_URL, apiEnv, API_PROJECT].join('/') : '';

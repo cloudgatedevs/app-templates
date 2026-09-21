@@ -1,39 +1,42 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: ['selector', '[data-theme="dark"]'],
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
       colors: {
+        'accent-fg': 'rgb(var(--accent-fg) / <alpha-value>)',
         ink: {
-          950: '#080b12',
-          900: '#0c111c',
-          850: '#111827',
-          800: '#161f31',
-          700: '#1e293f',
-          600: '#2a3650',
-          500: '#3a4966',
+          950: 'rgb(var(--ink-950) / <alpha-value>)',
+          900: 'rgb(var(--ink-900) / <alpha-value>)',
+          850: 'rgb(var(--ink-850) / <alpha-value>)',
+          800: 'rgb(var(--ink-800) / <alpha-value>)',
+          700: 'rgb(var(--ink-700) / <alpha-value>)',
+          600: 'rgb(var(--ink-600) / <alpha-value>)',
+          500: 'rgb(var(--ink-500) / <alpha-value>)',
         },
         mist: {
-          DEFAULT: '#e8edf7',
-          muted: '#95a2bd',
-          dim: '#66728e',
+          DEFAULT: 'rgb(var(--mist) / <alpha-value>)',
+          muted: 'rgb(var(--mist-muted) / <alpha-value>)',
+          dim: 'rgb(var(--mist-dim) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: '#7c8bff',
-          600: '#6366f1',
-          500: '#818cf8',
-          400: '#a5b0ff',
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          600: 'rgb(var(--accent) / <alpha-value>)',
+          500: 'rgb(var(--accent) / <alpha-value>)',
+          400: 'rgb(var(--accent) / <alpha-value>)',
         },
       },
+      opacity: { 12: '.12', 15: '.15' },
       boxShadow: {
-        panel: '0 1px 0 0 rgba(255,255,255,0.03) inset, 0 8px 30px -12px rgba(0,0,0,0.6)',
-        glow: '0 0 0 1px rgba(124,139,255,0.25), 0 8px 30px -8px rgba(124,139,255,0.35)',
+        panel: '0 1px 3px rgb(0 0 0 / .05)',
+        glow: '0 1px 2px rgb(var(--accent) / .18)',
       },
       backgroundImage: {
-        'accent-grad': 'linear-gradient(135deg, #7c8bff 0%, #6366f1 50%, #8b5cf6 100%)',
+        'accent-grad': 'linear-gradient(135deg, rgb(var(--accent)), rgb(var(--secondary)))',
       },
     },
   },

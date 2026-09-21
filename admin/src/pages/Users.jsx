@@ -37,7 +37,7 @@ const Users = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <PageHead title="Users" subtitle="Everyone with access to the application, with role and account status.">
+      <PageHead title="Sample users" subtitle="Example database records for extending this starter. Manage sign-in accounts under User management.">
         <button onClick={reload} className="btn-ghost">Refresh</button>
       </PageHead>
 

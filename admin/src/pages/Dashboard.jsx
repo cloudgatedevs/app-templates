@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { UsersRound, ShoppingBag, ChartNoAxesCombined, Clock3, RefreshCw, ArrowUpRight } from 'lucide-react';
 import { admin } from '@/services/admin';
 import { useAsync, Spinner, ErrorNote, StatCard, Table, Badge, PageHead, fmtDate, fmtCurrency } from '@/components/ui';
 import { orderStatusTone } from '@/pages/Orders';
@@ -11,7 +12,7 @@ const Dashboard = () => {
     <div className="flex flex-col gap-7">
       <PageHead title="Dashboard" subtitle="What's happening across the application right now.">
         <button onClick={() => { stats.reload(); recent.reload(); }} className="btn-ghost">
-          Refresh
+          <RefreshCw size={15} /> Refresh
         </button>
       </PageHead>
 
@@ -20,17 +21,17 @@ const Dashboard = () => {
         <Spinner />
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Users" value={stats.data?.Users} sub="registered accounts" />
-          <StatCard label="Orders" value={stats.data?.Orders} sub="all time" />
-          <StatCard label="Revenue (30d)" value={stats.data?.Revenue30d != null ? fmtCurrency(stats.data.Revenue30d) : undefined} sub="last 30 days" />
-          <StatCard label="Pending orders" value={stats.data?.PendingOrders} sub="awaiting action" />
+          <StatCard icon={UsersRound} label="Sample users" value={stats.data?.Users} sub={<Link to="/sample-users" className="text-accent hover:underline">View sample database records →</Link>} />
+          <StatCard icon={ShoppingBag} label="Orders" value={stats.data?.Orders} sub="All time" />
+          <StatCard icon={ChartNoAxesCombined} label="Revenue (30d)" value={stats.data?.Revenue30d != null ? fmtCurrency(stats.data.Revenue30d) : undefined} sub="Last 30 days" />
+          <StatCard icon={Clock3} label="Pending orders" value={stats.data?.PendingOrders} sub="Awaiting action" />
         </div>
       )}
 
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-semibold text-mist">Recent orders</h2>
-        <Link to="/orders" className="text-sm font-medium text-accent-400 hover:text-accent-500">
-          View all →
+        <Link to="/orders" className="text-link inline-flex items-center gap-1.5 text-sm font-medium text-accent">
+          View all <ArrowUpRight size={16} />
         </Link>
       </div>
       <ErrorNote error={recent.error} />

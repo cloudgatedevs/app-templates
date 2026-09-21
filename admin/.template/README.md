@@ -1,43 +1,25 @@
-# Admin Starter (Dark) workflow bundle
+# Admin Back Office workflow bundle
 
-This folder is the Cloudgate import payload for the **Admin Starter (Dark)** backend: a
-SQLite database and the workflow endpoints the React app calls at runtime.
+The bundle provisions the `admin` controller, its `admin_db` database, and three sample POST actions: `dashboard`, `users`, and `orders`. Every action starts with the same **IdP Authorize / Admin** guard used by the Shop back office and has workflow logging enabled.
 
-| File | Purpose |
-| --- | --- |
-| [`workflow-template.json`](./workflow-template.json) | Cloudgate import payload — creates the **Admin** project (path `admin`) with each endpoint and its Function → Database workflow nodes. |
-| [`schema.sql`](./schema.sql) | Creates the `admin_db` SQLite tables (`users`, `orders`) and loads demo data (12 users, 20 orders spread over ~90 days so the 30-day revenue stat is meaningful). Safe to re-run. |
-| [`env.example`](./env.example) | Reference copy of the runtime config (`.env` keys) Quick Start writes, with `{{placeholders}}`. The app does not read it. |
+- `schema.sql`: original example users/orders. Re-running preserves data, including any legacy settings table; new installations do not create appearance storage.
+- `workflow-template.json`: import payload with database schema embedded and all nodes/links included.
+- `scripts/`: readable Function scripts. `helpers.py` is adapted from Shop's Cloudgate runtime helpers.
+- `env.example`: reference copy of the root environment example.
 
-## Import steps
+Import and provision the bundle, publish all actions to sandbox, and sign in with a tenant IdP administrator account. For an existing installation, apply `schema.sql` to its existing database and update its actions with the new guards and scripts. Do not replace an existing database with a fresh seeded one. Production publishing requires configuring a separate production database binding on Database nodes, as with the original starter.
 
-1. **Import** `workflow-template.json` via **Cloudgate → Imports** (or Quick Start / workflow MCP `import_platform_template`). This creates the `admin` controller, its `admin_db` SQLite database, and all endpoints as drafts.
-2. **Provision the database**: Quick Start runs [`schema.sql`](./schema.sql) automatically on import. For manual setup, run it against the `admin_db` database (Cloudgate → Databases → SQL console, or the data MCP `execute_database_sql`).
-3. **Publish** all Admin endpoints to **sandbox**.
+Verify these authenticated requests:
 
-## Verify
-
-```
-POST {apps-gateway}/sbx/admin/dashboard   {"op":"stats"}   -> user/order counts + 30-day revenue
-POST {apps-gateway}/sbx/admin/users       {"op":"list"}    -> seeded users with TotalCount
-POST {apps-gateway}/sbx/admin/orders      {"op":"list"}    -> seeded orders with TotalCount
+```text
+POST /sbx/admin/dashboard  {"op":"stats"}
+POST /api/idp/{tenant}/admin/payments/status   {"projectPath":"admin","environment":"sbx"}
 ```
 
-## Endpoints (project path `admin`)
+Payment readiness is a native IdP Admin backend API, not an action in this bundle. It reads Cloudgate's existing Wallet for the verified tenant/environment without a workflow or app database. An unconfigured Wallet returns HTTP 200 with `ready: false`; 404 means an inaccessible app scope or an undeployed API. Administrators manage providers, transactions and payouts in the Cloudgate Wallet hub. Deploy/restart the updated backend before using the new frontend; no additional Wallet migration is needed. Previously published payments workflows may be retired after all clients move to the native endpoint; this bundle does not delete them.
 
-All are called as `POST {base}/admin/<route>` with a JSON body `{ "op": "...", ... }`
-(same convention as the Cloudgate CRM template). The React client signs every request
-and attaches the IdP bearer token.
+IdP user management, appearance/theme, payments, SMTP, media, Analytics and Logs are host APIs and require no duplicate workflow actions. SQLite `users` remains sample application data, not the IdP identity store.
 
-| Route | Ops | Notes |
-| --- | --- | --- |
-| `dashboard` | `stats` (default), `recent` | `stats` returns `{ Users, Orders, Revenue30d, PendingOrders }`. |
-| `users` | `list` (default), `get`, `create`, `update`, `disable`, `enable`, `delete` | `list` takes `search`, `role`, `status`, `skip`, `take`; rows carry `TotalCount`. |
-| `orders` | `list` (default), `get`, `create`, `update`, `status`, `delete` | `list` takes `search`, `status`, `skip`, `take`; rows carry `TotalCount`. |
+Appearance requires the backend's `admin/appearance/{details|update|reset}` API and its WebDbContext migration. Calls use an IdP Admin bearer token, `projectPath` and `environment`; saves also use the returned `revision`. Before upgrading a customized installation, transfer its old appearance values to the native API as described in the root README. No automated legacy reads or deletes occur.
 
-Paging convention: the client sends `skip`/`take`; every `list` row carries a
-`TotalCount` column (`COUNT(*) OVER ()`) that feeds the app's shared pager.
-
-> The React app composes its request base from `VITE_CLOUDGATE_API_URL` /
-> `VITE_CLOUDGATE_API_ENV` / `VITE_CLOUDGATE_API_PROJECT` in `.env` — see
-> [`../.env.example`](../.env.example) (`VITE_CLOUDGATE_API_PROJECT=admin`).
+Run `npm run cloudgate:package` after changing a node script or schema, then `npm run test:workflows`. The packager updates the existing exported graph; it does not publish or mutate any remote controller. Structural changes should be made with Cloudgate workflow tooling and exported again.

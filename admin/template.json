@@ -1,25 +1,52 @@
 {
   "id": "admin",
-  "name": "Admin Starter (Dark)",
-  "description": "Dark-theme React + Vite + Tailwind admin console with Cloudgate IdP login, a responsive sidebar shell, and sample paginated table pages (Users, Orders) backed by a bundled Cloudgate workflow API with demo data.",
+  "name": "Admin Back Office",
+  "description": "Reusable Cloudgate back office with IdP user management, website analytics, editable theme and appearance, SMTP settings, media, workflow logs, About and Wallet payment readiness.",
   "folder": "admin",
   "framework": "React",
   "devCommand": "npm install && npm run dev",
   "devPort": 3000,
   "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/admin/banner.png",
-  "tags": ["react", "vite", "tailwind", "admin", "dashboard", "dark", "responsive", "starter", "idp"],
+  "tags": [
+    "react",
+    "vite",
+    "tailwind",
+    "admin",
+    "back-office",
+    "analytics",
+    "idp",
+    "wallet",
+    "theming"
+  ],
   "workflowTemplate": ".template/workflow-template.json",
   "workflowImport": {
-    "description": "Creates the Admin controller (project path 'admin') with its SQLite database and the workflow endpoints the app calls at runtime.",
+    "description": "Creates the Admin controller, admin_db and protected sample APIs. Appearance and Wallet readiness use native Cloudgate APIs.",
     "file": ".template/workflow-template.json",
     "schema": ".template/schema.sql",
     "projectPath": "admin",
-    "routes": ["dashboard", "users", "orders"],
-    "publishHint": "Import the bundle (creates admin_db and runs .template/schema.sql), then publish all Admin endpoints to sandbox. Verify POST /sbx/admin/dashboard {\"op\":\"stats\"} returns counts."
+    "routes": [
+      "dashboard",
+      "users",
+      "orders"
+    ],
+    "publishHint": "Import the bundle and schema, publish the three sample actions, and sign in with a tenant IdP Admin account. The server must include the native payments status API and the appearance API with its platform migration."
   },
   "configSetup": {
     "kind": "vite-env",
-    "targets": [".env"],
+    "targets": [
+      ".env"
+    ],
     "example": ".env.example"
-  }
+  },
+  "version": "1.0.0",
+  "adminPath": "/",
+  "features": [
+    "Tenant IdP user management",
+    "Website analytics and scoped workflow logs",
+    "Saved branding and light/dark themes",
+    "Shared tenant SMTP settings",
+    "Media upload and library",
+    "Cloudgate Wallet readiness and setup",
+    "Administrator-only back office"
+  ]
 }

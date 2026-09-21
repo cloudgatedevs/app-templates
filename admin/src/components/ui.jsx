@@ -1,6 +1,7 @@
 // Small shared UI primitives for the admin console.
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AlertCircle, Search } from 'lucide-react';
 
 /** Tiny async-fetch hook: const { data, loading, error, reload } = useAsync(fn, [deps]) */
 export function useAsync(fn, deps = []) {
@@ -21,39 +22,42 @@ export function useAsync(fn, deps = []) {
 }
 
 export const Spinner = () => (
-  <div className="flex items-center justify-center py-12">
-    <div className="h-6 w-6 animate-spin rounded-full border-2 border-accent border-t-transparent" />
+  <div role="status" aria-label="Loading" className="flex items-center justify-center py-12">
+    <div className="loading-orbit"><span /></div>
   </div>
 );
 
 export const ErrorNote = ({ error }) =>
   error ? (
-    <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm text-red-300">
-      {String(error?.message ?? error)}
+    <div role="alert" className="feedback-note flex items-start gap-3 rounded-2xl border border-red-500/20 bg-red-500/5 px-4 py-3.5 text-sm text-red-700 dark:text-red-300">
+      <AlertCircle size={17} className="mt-0.5 shrink-0" aria-hidden="true" />
+      <span>{String(error?.message ?? error)}</span>
     </div>
   ) : null;
 
-export const StatCard = ({ label, value, sub }) => (
-  <div className="card group relative overflow-hidden p-5">
-    <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-accent/10 blur-2xl transition group-hover:bg-accent/20" />
-    <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-mist-dim">{label}</p>
-    <p className="mt-2 text-3xl font-semibold tracking-tight text-mist">{value ?? '—'}</p>
-    {sub ? <p className="mt-1 text-xs text-mist-muted">{sub}</p> : null}
+export const StatCard = ({ label, value, sub, icon: Icon }) => (
+  <div className="card stat-card relative overflow-hidden p-5">
+    <div className="flex items-center justify-between gap-3">
+      <p className="text-xs font-medium text-mist-muted">{label}</p>
+      {Icon && <span className="stat-icon"><Icon size={17} strokeWidth={1.7} aria-hidden="true" /></span>}
+    </div>
+    <p className="mt-4 text-3xl font-semibold tracking-tight tabular-nums text-mist">{value ?? '—'}</p>
+    {sub ? <p className="mt-2 text-xs text-mist-dim">{sub}</p> : null}
   </div>
 );
 
 const badgeTones = {
-  green: 'bg-emerald-500/12 text-emerald-300 ring-emerald-400/25',
-  red: 'bg-red-500/12 text-red-300 ring-red-400/25',
-  amber: 'bg-amber-500/12 text-amber-300 ring-amber-400/25',
+  green: 'bg-emerald-500/12 text-emerald-700 dark:text-emerald-300 ring-emerald-400/25',
+  red: 'bg-red-500/12 text-red-700 dark:text-red-300 ring-red-400/25',
+  amber: 'bg-amber-500/12 text-amber-700 dark:text-amber-300 ring-amber-400/25',
   gray: 'bg-ink-700/60 text-mist-muted ring-ink-500/40',
   blue: 'bg-accent/12 text-accent-400 ring-accent/30',
-  violet: 'bg-violet-500/12 text-violet-300 ring-violet-400/25',
+  violet: 'bg-violet-500/12 text-violet-700 dark:text-violet-300 ring-violet-400/25',
 };
 
 export const Badge = ({ tone = 'gray', children }) => (
   <span
-    className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${badgeTones[tone] ?? badgeTones.gray}`}
+    className={`status-badge inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ring-1 ring-inset ${badgeTones[tone] ?? badgeTones.gray}`}
   >
     {children}
   </span>
@@ -164,7 +168,7 @@ export const Table = ({ columns, rows, empty = 'Nothing here yet.', rowHref }) =
       </div>
 
       {/* Desktop: the full table, still scrollable if the columns are wide. */}
-      <div className="card hidden overflow-x-auto md:block">
+      <div className="card data-table hidden overflow-x-auto md:block">
         <table className="min-w-full divide-y divide-ink-700/60 text-sm">
           <thead>
             <tr className="border-b border-ink-700/60">
@@ -254,12 +258,16 @@ export const Pager = ({ page, pages, total, from, to, noun = 'rows', onPage, chi
  */
 export const SearchBar = ({ value, onChange, onSubmit, onClear, placeholder, mono = false, children }) => (
   <form onSubmit={onSubmit} className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
+    <div className="search-field relative w-full sm:max-w-md">
+    <Search size={16} aria-hidden="true" className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-mist-dim" />
     <input
       value={value}
       onChange={onChange}
+      aria-label={placeholder || 'Search'}
       placeholder={placeholder}
-      className={`input w-full sm:max-w-md ${mono ? 'font-mono' : ''}`}
+      className={`input w-full pl-10 ${mono ? 'font-mono' : ''}`}
     />
+    </div>
     <div className="flex items-center gap-2">
       <button className="btn-primary grow sm:grow-0">Search</button>
       {onClear ? (
@@ -278,9 +286,9 @@ export const SearchBar = ({ value, onChange, onSubmit, onClear, placeholder, mon
  * as the page's orientation text and the actions move above it.
  */
 export const PageHead = ({ title, subtitle, children }) => (
-  <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
+  <div className="page-head flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
     <div className="min-w-0">
-      <h1 className="hidden text-2xl font-semibold tracking-tight text-mist lg:block">{title}</h1>
+      <h1 className="hidden text-3xl font-semibold tracking-tight text-mist lg:block">{title}</h1>
       {subtitle ? <p className="text-sm text-mist-muted lg:mt-1">{subtitle}</p> : null}
     </div>
     {children ? <div className="flex flex-wrap items-center gap-2">{children}</div> : null}
@@ -291,7 +299,7 @@ export const PageHead = ({ title, subtitle, children }) => (
 // 'Z' so JS doesn't misparse them as local time.
 export const utcDate = (v) => {
   if (v === null || v === undefined || v === '') return null;
-  const s = String(v);
+  const s = String(v).trim().replace(/^(\d{4}-\d{2}-\d{2}) /, '$1T');
   return new Date(/[zZ]$|[+-]\d\d:?\d\d$/.test(s) || !s.includes('T') ? s : s + 'Z');
 };
 
