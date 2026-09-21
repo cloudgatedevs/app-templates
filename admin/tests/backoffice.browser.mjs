@@ -53,8 +53,6 @@ await context.route('https://api.example.invalid/**', async route => {
     }
     return reply({ values: settings, revision: appearanceRevision });
   }
-  if (url.pathname === '/sbx/admin/dashboard') return reply([{ Users: 12, Orders: 20, Revenue30d: 2159.34, PendingOrders: 5 }]);
-  if (url.pathname === '/sbx/admin/orders') return reply([{ Id: 1, Reference: 'ORD-1020', CustomerName: 'Ava Nkosi', CustomerEmail: 'ava@example.invalid', Total: 149.95, Status: 'paid', Items: 2, CreatedAt: '2026-09-21 10:00:00', TotalCount: 1 }]);
   if (url.pathname === '/api/idp/qa/admin/payments/status') {
     assert.deepEqual(body, { projectPath: 'admin', environment: 'sbx' });
     assert.equal(request.headers().authorization, `Bearer ${token}`);
@@ -180,6 +178,14 @@ try {
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
   assert.equal(settings.theme_primary, '#047857');
   await shot('theme-dark-desktop');
+  await go('/');
+  await visible(page.getByRole('heading', { name: 'Your overview starts here', exact: true }));
+  await shot('dashboard-dark-desktop');
+  await go('/orders');
+  await visible(page.getByRole('heading', { name: 'Order management starts here', exact: true }));
+  await shot('orders-dark-desktop');
+  await go('/theme');
+  await visible(page.getByLabel('Display mode', { exact: true }));
   await page.getByLabel('Display mode', { exact: true }).selectOption('light');
   await page.getByRole('button', { name: 'Indigo', exact: true }).click();
   await page.getByRole('button', { name: 'Save changes', exact: true }).click();
@@ -190,10 +196,21 @@ try {
   await visible(page.getByRole('heading', { name: 'User management', exact: true }));
   assert.equal(await navigation.evaluate(el => el.isConnected), true, 'Navigation stays mounted during lazy route transitions');
   await page.getByRole('link', { name: 'Dashboard', exact: true }).click();
-  await visible(page.getByRole('heading', { name: 'Recent orders', exact: true }));
-  const revenue = await page.evaluate(() => (2159.34).toLocaleString(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }));
-  await visible(page.getByText(revenue, { exact: true }));
+  await visible(page.getByRole('heading', { name: 'Your overview starts here', exact: true }));
+  await visible(page.getByText('Placeholder', { exact: true }));
+  assert.equal(await page.locator('main table, main .stat-card').count(), 0);
+  assert.equal(await page.getByRole('button', { name: 'Refresh', exact: true }).count(), 0);
   await shot('dashboard-desktop');
+  await page.getByRole('link', { name: 'Orders', exact: true }).click();
+  await visible(page.getByRole('heading', { name: 'Order management starts here', exact: true }));
+  await visible(page.getByText('Placeholder', { exact: true }));
+  assert.equal(await page.locator('main table, main input, main select').count(), 0);
+  assert.equal(await page.getByRole('button', { name: 'Refresh', exact: true }).count(), 0);
+  await shot('orders-desktop');
+  await go('/sample-users');
+  await page.waitForURL(`${origin}/users`);
+  await visible(page.getByRole('cell', { name: 'ava@example.invalid', exact: true }));
+  console.log('PASS Dashboard and Orders placeholders, removed sample users and native user management redirect');
   console.log('PASS appearance persistence, branding updates and theme switching');
 
   await go('/smtp');
@@ -270,12 +287,13 @@ try {
   await dialog.waitFor({ state: 'detached' });
   await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Open menu');
   assert.equal(await page.getByRole('button', { name: 'Open menu', exact: true }).evaluate(el => el === document.activeElement), true);
-  for (const route of ['/users', '/theme', '/appearance', '/smtp', '/media', '/payments', '/analytics', '/logs', '/about']) {
+  for (const route of ['/', '/orders', '/users', '/theme', '/appearance', '/smtp', '/media', '/payments', '/analytics', '/logs', '/about']) {
     await go(route);
     await page.waitForLoadState('networkidle');
     const width = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, viewport: innerWidth, main: document.querySelector('main').scrollWidth, mainViewport: document.querySelector('main').clientWidth }));
     assert.ok(width.doc <= width.viewport, `${route}: horizontal overflow ${JSON.stringify(width)}`);
     assert.ok(width.main <= width.mainViewport, `${route}: content overflow ${JSON.stringify(width)}`);
+    if (route === '/' || route === '/orders') await shot(route === '/' ? 'dashboard-mobile' : 'orders-mobile');
   }
   await shot('about-mobile');
   await go('/users');
@@ -303,6 +321,7 @@ try {
   assert.equal(calls.slice(count).filter(call => call.path.includes('/admin/users/') || call.path.includes('/admin/appearance/') || call.path.includes('/admin/payments/')).length, 0);
   assert.equal(calls.filter(call => call.path === '/sbx/admin/settings').length, 0);
   assert.equal(calls.filter(call => call.path === '/sbx/admin/payments').length, 0);
+  assert.equal(calls.filter(call => /^\/(sbx|prod)\/admin\/(dashboard|orders|users)$/.test(call.path)).length, 0, 'Placeholders and legacy sample URLs never call sample workflows');
   console.log('PASS non-admin users cannot open back office or trigger admin data calls');
   assert.deepEqual(errors, []);
   console.log('PASS no browser runtime errors');

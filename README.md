@@ -1,110 +1,62 @@
 # Cloudgate App Templates
 
-Official starter apps for the [Cloudgate](https://cloudgate.dev) **Web Coder** Quick Start gallery.
+The official **Admin Back Office** skeleton for the [Cloudgate](https://cloudgate.dev) Web Coder Quick Start gallery. This repository contains the `admin/` app only.
 
-Browse templates in the hub at **Web Coder → Quick Start** (`/web-coder`). Each card shows a preview image, framework, description, and a link to the template source on GitHub. Choose **Use this template** to copy the project into your Cloudgate workspace and open it in the editor.
+![Admin Back Office](./admin/banner.png)
 
-## Templates
+## Admin Back Office
 
-| Template | Folder | Workflow API | Demo |
-| --- | --- | --- | --- |
-| [Cloudgate Podcast Demo](./podcast/) | [`podcast/`](./podcast/) | `GET /podcasts` | [podcast-demo.app.cloudgate.dev](https://podcast-demo.app.cloudgate.dev/) |
-| [Cloudgate Hotel Demo](./hotel/) | [`hotel/`](./hotel/) | `GET /hotels` | [hotel-demo.app.cloudgate.dev](https://hotel-demo.app.cloudgate.dev/) |
-| [Cloudgate Medical Demo](./medical/) | [`medical/`](./medical/) | `GET /doctors` | [medical-demo.app.cloudgate.dev](https://medical-demo.app.cloudgate.dev/) |
-| [Cloudgate NFT Demo](./nft/) | [`nft/`](./nft/) | `GET /nfts` | [nft-demo.app.cloudgate.dev](https://nft-demo.app.cloudgate.dev/) |
-| [Cloudgate Store Demo](./store/) | [`store/`](./store/) | `GET /products` | [store-demo.app.cloudgate.dev](https://store-demo.app.cloudgate.dev/) |
-| [Cloudgate Wallet Demo](./wallet/) | [`wallet/`](./wallet/) | `GET /transactions` | [wallet-demo.app.cloudgate.dev](https://wallet-demo.app.cloudgate.dev/) |
-| [Cloudgate CRM](./crm/) | [`crm/`](./crm/) | `POST /crm/*` (leads, pipeline, email, …) | — |
-| [Cloudgate LMS](./lms/) | [`lms/`](./lms/) | `POST /lms/*` (courses, lessons, quizzes, …) | — |
-| [React Starter](./react/) | [`react/`](./react/) | — | — |
-| [Admin Starter (Dark)](./admin/) | [`admin/`](./admin/) | `POST /admin/*` (users, orders, dashboard) | — |
-| [Admin Starter (Light)](./admin-light/) | [`admin-light/`](./admin-light/) | `POST /admin-light/*` (users, orders, dashboard) | — |
+A polished React 18, Vite and Tailwind foundation with native Cloudgate back-office capabilities:
 
-Most gallery templates are **Angular 17** apps with Tailwind CSS, Capacitor-ready mobile shells, Cloudgate IdP login, and a bundled workflow import (`.template/workflow-template.json`) for the catalog API each app calls at runtime.
+- Tenant IdP user management and administrator access controls.
+- Website analytics and application-scoped workflow logs.
+- Custom branding, appearance, light/dark/system themes and density settings.
+- Tenant SMTP settings and a media library.
+- About information and Cloudgate Wallet payment readiness.
+- Responsive navigation, soft surfaces and page, modal and button transitions.
+- Dashboard and Orders placeholders for application-specific features.
 
-**Cloudgate CRM** is a fuller, data-driven example: a **React 18 + Vite + Tailwind** application backed by a complete Cloudgate workflow API — a SQLite database with leads, companies, contacts, pipeline stages, activities, tasks, tags and emails, plus SendGrid email send, reply/open tracking webhooks, and mass-email campaigns. Its `.template/workflow-template.json` bundles every CRM endpoint and `.template/schema.sql` provisions the database schema and sample data.
+The template includes an empty controller definition for native API application scope. It contains no sample workflow actions, app database or seeded business records. See the [Admin setup guide](./admin/README.md) for backend requirements, controller configuration and upgrades.
 
-**Cloudgate LMS** is another full **React 18 + Vite + Tailwind** example: a Learning Management System backed by a complete Cloudgate workflow API — a SQLite database of courses, lessons, enrolments, lesson progress, quizzes and certificates, served by op-dispatch endpoints. It features a course catalog, a lesson player with progress tracking, auto-graded quizzes, completion certificates, and a unified activity feed. Its `.template/workflow-template.json` bundles every LMS endpoint and `.template/schema.sql` provisions the schema and demo data.
+## Use the template
 
-**React Starter** is the bare skeleton to build on: **React 18 + Vite + Tailwind** with Cloudgate IdP login, a route guard, and a profile page — no workflow import and no sample data. Its `configSetup` renders `.env` for your tenant when the template is created, so the login flow works on first `npm run dev`.
+Open **Web Coder → Quick Start** (`/web-coder`) in the Cloudgate hub and select **Admin Back Office**. The gallery card shows the banner, description and source link; **Use this template** copies the app into your workspace.
 
-**Admin Starter (Dark)** is a dark-theme **React 18 + Vite + Tailwind** admin console: Cloudgate IdP login, a responsive shell (desktop sidebar, mobile flyout with safe-area handling), a dashboard with stat cards, and sample server-paginated table pages (Users, Orders) with search — tables collapse to stacked cards on phones. Like the CRM, it ships a backend: its `.template/workflow-template.json` creates the `admin` controller (op-dispatch endpoints `/dashboard`, `/users`, `/orders`) and `.template/schema.sql` provisions the `admin_db` SQLite database with demo users and orders, so the tables come up populated. Includes an `npm run build:dev` script for unminified development-mode builds.
+For local development, configure `admin/.env` using `admin/.env.example`, then run:
 
-**Admin Starter (Light)** is the light-theme twin of Admin Starter (Dark): the same pages, responsive shell, bundled workflow import (project path `admin-light`, database `admin_light_db`), and scripts. The Tailwind token names (`ink`/`mist`/`accent`) are identical across the pair — only the values differ — so components copy cleanly between the two.
-
-### Production build before publish
-
-Published apps are served as static files from `dist/`. For the smallest bundles and best live performance:
-
-```bash
+```sh
+cd admin
 npm install
-npm run build -- --configuration production
+npm run dev
 ```
 
-Then publish the **`dist/`** folder from **Web Coder → Web Apps**. Production builds use hashed filenames so browsers and Cloudflare can cache JS/CSS aggressively after deploy.
-
-A template only shows up in the gallery once it is listed in [`templates.json`](./templates.json) — folders in this repo that are missing from the manifest are ignored.
-
-### Per-template docs
-
-Each demo folder has its own README with screenshots, local dev steps, and workflow import instructions:
-
-- [podcast/README.md](./podcast/README.md)
-- [hotel/README.md](./hotel/README.md)
-- [medical/README.md](./medical/README.md)
-- [nft/README.md](./nft/README.md)
-- [store/README.md](./store/README.md)
-- [wallet/README.md](./wallet/README.md)
-- [crm/README.md](./crm/README.md)
-- [lms/README.md](./lms/README.md)
-- [react/README.md](./react/README.md)
-- [admin/README.md](./admin/README.md)
-- [admin-light/README.md](./admin-light/README.md)
+Create a production build with `npm run build` and publish the `admin/dist/` output. Static hosting must fall back to `index.html` for application routes.
 
 ## Repository layout
 
-```
-templates.json          # Manifest published to the Quick Start gallery
-podcast/                # Angular podcast demo + workflow import
-hotel/                  # Angular hotel discovery demo + workflow import
-medical/                # Angular medical / doctor booking demo + workflow import
-nft/                    # Angular NFT auction demo + workflow import
-store/                  # Angular e-commerce store demo + workflow import
-wallet/                 # Angular wallet / transfer demo + workflow import
-crm/                    # React CRM app + workflow import (leads, pipeline, email, SQLite)
-lms/                    # React LMS app + workflow import (courses, lessons, quizzes, SQLite)
-react/                  # Bare React starter with IdP login (no workflow import)
-admin/                  # Dark-theme React admin console + workflow import (users, orders, SQLite)
-admin-light/            # Light-theme twin of admin/ + its own workflow import
+```text
+templates.json       # Quick Start gallery entry for Admin Back Office
+admin/               # Reusable back-office skeleton
+  template.json      # App metadata and installation configuration
+  banner.png         # Gallery banner captured from the current interface
+  .template/         # Empty controller bundle and setup notes
+  src/               # Application source
+  tests/             # API and browser checks
 ```
 
-Each template folder contains a runnable project and a `template.json` with the same metadata as its manifest entry.
+## Gallery metadata
 
-## Manifest fields
+Keep the Admin entry in `templates.json` aligned with `admin/template.json`, including its name, description, tags and banner URL. The gallery copies only the `admin/` folder.
 
-Entries in `templates.json` drive the Quick Start cards:
+Keep generated files such as `node_modules/` and `dist/` out of Git. After changes are merged and pushed to `main`, the gallery uses the updated metadata when it refreshes.
 
-| Field | Purpose |
-| --- | --- |
-| `id` | Unique template identifier |
-| `name` | Card title |
-| `description` | Short summary on the card |
-| `folder` | Repo subfolder copied into the user's workspace |
-| `framework` | Badge label (e.g. Angular, React) |
-| `devCommand` | Suggested start command shown in the use-template dialog |
-| `devPort` | Dev server port (informational) |
-| `thumbnail` | Preview image URL on the card |
-| `demoUrl` | Live hosted demo link shown on the card (optional) |
-| `tags` | Search/filter tags in Quick Start |
+## Checks
 
-## Adding a template
+```sh
+cd admin
+npm test
+npm run test:ui
+npm run build
+```
 
-1. Add a new top-level folder with the starter source.
-2. Add `template.json` inside the folder (include a `banner.png` gallery thumbnail).
-3. Register the template in `templates.json`.
-4. Keep each template folder lean — Web Coder copies only that folder (50 MB per-template limit), and skips `docs/`. README screenshots live on [cloudgate.dev/assets/app-templates/](https://cloudgate.dev/assets/app-templates/), not in this repo. Do not commit `node_modules/`, `dist/`, Capacitor `android/`/`ios/` shells, or large unused preview GIFs.
-5. Push to `main` — new and updated templates appear in Quick Start after the gallery refreshes.
-
-## License
-
-Template projects include their own licenses where applicable. See each folder for details.
+The [Admin README](./admin/README.md#checks) documents browser setup and the checks' scope.

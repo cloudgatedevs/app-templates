@@ -1,7 +1,7 @@
 // Cloudgate workflow-API access — powered by @cloudgatedevs/cloudgate-client.
 //
-// The React client talks ONLY to Cloudgate workflow endpoints — never to any
-// backend service or database directly.
+// Optional helper for application-specific workflow extensions. The included
+// back-office screens use native IdP APIs; placeholders make no domain calls.
 //
 // The request base is composed from three .env keys rather than one hardcoded
 // URL, so moving between publish slots is a one-value change:

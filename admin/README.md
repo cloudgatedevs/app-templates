@@ -1,11 +1,13 @@
 # Admin Back Office
 
-A reusable Cloudgate back-office skeleton based on the Shop application's administration experience. React 18, Vite, Tailwind and the Cloudgate client SDK; a compact light theme by default, with saved dark/system mode and custom colours.
+A polished React back office for Cloudgate with native user management, analytics, branding and themes, SMTP, media, logs, About and Wallet readiness. Responsive layouts, soft surfaces and smooth transitions support light, dark and system modes. Dashboard and Orders are clean placeholders for your own application features. Built with React 18, Vite, Tailwind and the Cloudgate client SDK.
 
 ## Included sections
 
 | Section | Capability | Data source |
 | --- | --- | --- |
+| Dashboard | Placeholder for application-specific metrics and activity. | None |
+| Orders | Placeholder for application-specific order management. | None |
 | User management | Search, create, edit, enable/disable, delete and request a password reset. Administrator accounts are read-only here. | Tenant IdP admin user APIs |
 | Analytics | Website views, sessions, visitors, periods, pages, countries, sources and devices; visitor workflow calls. | Cloudgate Web App Insights |
 | Theme styling | Colour presets, custom primary/secondary colours, light/dark/system mode and density. | Native Cloudgate appearance API |
@@ -16,7 +18,7 @@ A reusable Cloudgate back-office skeleton based on the Shop application's admini
 | About us | App/version, configured identity/contact details, tenancy information and Cloudgate links. | Manifest, appearance settings and IdP profile |
 | Payments | Wallet provider, onboarding, charges/payouts, environment and readiness; open Wallet to manage transactions and setup. | Native Cloudgate payments status API |
 
-The existing Dashboard, Orders and sample database users remain examples for building domain features. `/users` now manages **real tenant IdP identities**. The original sample users are at `/sample-users`, linked from the Dashboard; they do not control sign-in. Orders remain sample business records, separate from Wallet transactions. Checkout, charging cards and refund processing are extension work, not part of this generic skeleton.
+Dashboard and Orders are clearly labelled placeholders. They make no domain API calls and display no fabricated metrics, users or orders. `/users` manages **real tenant IdP identities**; the old `/sample-users` URL redirects there. Checkout, charging cards and refund processing are extension work, not part of this generic skeleton.
 
 ## Run
 
@@ -34,11 +36,13 @@ The single app entry is `/`; all routes use the same `index.html`. Static hostin
 ## Cloudgate setup and upgrading an existing installation
 
 1. Deploy/restart Cloudgate with its native appearance and payments status APIs. Apply the appearance API's `20260921050037_web_app_appearance_settings` **WebDbContext** migration if not already installed. Payments reuses the existing platform Wallet service and needs no additional migration on a Wallet-enabled host.
-2. Import `.template/workflow-template.json`. The bundle contains only the three sample actions (`dashboard`, `users`, `orders`), all guarded by an **IdP Authorize / Admin** entry node. Its `admin_db` schema contains only sample domain data. Re-running `.template/schema.sql` preserves existing data and does not create or delete any legacy settings table.
-3. Update and publish those three sample actions in the chosen environment. For an existing controller, update its actions rather than creating a second installation; retain its database binding. The packaged database uses the starter's existing sandbox binding; configure a separate production database and each Database node's production binding before production publishing. Payments and appearance need no workflow publication or database-node binding.
+2. Use an existing non-private tenant controller or import `.template/workflow-template.json` to create the empty `admin` controller. It provides application scope for the native APIs; there are no bundled workflow actions, database connections, schema or seeded records. The App Store imports it automatically. For manual installations and Quick Start, import it through Cloudgate's template import if the controller does not already exist. Quick Start's action selection does not import empty controllers.
+3. Set `VITE_CLOUDGATE_API_PROJECT` to that controller's actual path and select `sbx` or `prod` with `VITE_CLOUDGATE_API_ENV`. No workflow publication or app database is required. Existing installations should retain their controller path so their appearance settings and app scope continue to resolve.
 4. Use an active tenant IdP account with an administrator role. Grant initial administrator access in the Cloudgate hub, under App users.
 5. For existing custom branding, export the old settings workflow's `values` (or the SQLite settings table from a backup). Read the native appearance `details` endpoint and send those twelve appearance/theme fields to `update` with the returned revision. This is a one-time transfer; the new frontend never reads the old workflow. Rebuild the frontend, check Appearance/Theme and Wallet readiness, then retire the obsolete settings workflow separately.
 6. The updated frontend reads payment readiness through the native API. There is no payment data to migrate: the old workflow also read Cloudgate's existing Wallet. Retire any previously published `payments` action only after other clients have moved to the native endpoint. Updating the local bundle does not delete deployed workflows or Wallet data.
+
+The old sample `dashboard`, `users` and `orders` actions are no longer called. This template update does not delete existing remote workflows, databases or records; review other consumers before retiring those resources separately.
 
 User management, appearance, payments, SMTP and files use native tenant APIs. Appearance, Payments and Logs resolve the installation's controller (with a non-private tenant-controller fallback for manually deployed skeletons). Analytics requires the corresponding published website scope and also resolves Cloudgate's `cg-analytics.json`. Unavailable host features display errors rather than fabricated data. No additional browser credentials are required.
 
@@ -46,19 +50,13 @@ User management and SMTP are **tenant-wide**. Appearance/theme settings are spec
 
 ## Backend contract
 
-All workflow calls use `POST {gateway}/{sbx|prod}/{projectPath}/{route}` with `{ "op": "..." }`. The SDK signs requests and attaches the IdP bearer token. The server's IdP authorization nodes enforce administrator access; the React guard is only the corresponding UI gate.
-
-| Action | Operations |
-| --- | --- |
-| `dashboard` | `stats`, `recent` (sample application data) |
-| `users` | `list`, `get`, `create`, `update`, `disable`, `enable`, `delete` (sample SQLite records) |
-| `orders` | `list`, `get`, `create`, `update`, `status`, `delete` (sample SQLite records) |
+Back-office features use native Cloudgate APIs with IdP bearer authentication and server-side administrator authorization. The React guard provides the corresponding UI gate. Dashboard and Orders have no backend contract until you implement those domain features.
 
 Appearance uses `POST {idpApi}/api/idp/{tenant}/admin/appearance/{details|update|reset}` with the IdP bearer token. All requests carry `{ projectPath, environment }`; `details` returns `{ values, revision }`. `update` adds `{ values: { ...changedFields }, revision }`; `reset` adds `{ revision }` to restore defaults. Both writes return the complete values and a new revision. Only the twelve supported appearance/theme fields are accepted. A stale revision returns 409 and requires a reload. No workflow signing key is used for these requests.
 
 Payments uses `POST {idpApi}/api/idp/{tenant}/admin/payments/status` with an active tenant IdP Admin bearer token and `{ projectPath, environment }`. It returns `{ ready, provider, status, chargesEnabled, payoutsEnabled, currency, country, production, reason }`, optionally wrapped in `result`. The application scope is checked before reading the Wallet; apps in the same tenant/environment share a Wallet, while sandbox and production are separate. Missing/incomplete Wallet setup returns HTTP 200 with `ready: false` and a setup reason. Invalid scope returns 400; missing/inaccessible applications or an undeployed native endpoint return 404; invalid/non-admin identities receive 401/403. The status API does not provision Wallets or move money. It requires no HMAC key, workflow or app database. Provider setup and transactions remain in the Cloudgate hub's Wallet page.
 
-SMTP secrets are never stored in the app database. All three sample workflow actions enable logging. Keep the sample domain's validation/business rules under review when replacing demo records with real operations.
+SMTP secrets are managed by the native tenant email settings API. The skeleton does not provision an app database.
 
 ## Extending the skeleton
 
@@ -66,19 +64,18 @@ SMTP secrets are never stored in the app database. All three sample workflow act
 - `src/integrations/`: adapted shared Shop Analytics, Logs, SMTP and About components.
 - `src/services/`: signed workflows and bearer-authenticated tenant APIs.
 - `src/settings/`: saved settings, branding updates and contrast-aware theme application.
-- `src/pages/`: back-office screens and example business pages.
-- `.template/scripts/`: readable node scripts and shared Cloudgate helpers.
-- `scripts/package-workflows.py`: refreshes script/schema contents in the checked-in export; it does not deploy or change node wiring.
+- `src/pages/`: back-office screens and Dashboard/Orders placeholders.
+- `src/components/PlaceholderPage.jsx`: shared placeholder presentation.
+- `.template/workflow-template.json`: empty controller definition for native API scope.
 
-After editing node scripts or schema, run `npm run cloudgate:package`. Structural graph changes should use Cloudgate's workflow tooling and be re-exported. Appearance and payment readiness are implemented by the backend, outside this workflow bundle.
+Replace the placeholders with your application's metrics and order management when their domain APIs are ready. If you add workflow APIs, `src/services/api.js` provides the optional signed workflow client; enforce administrator authorization in the backend and export the new actions into the bundle. Appearance and payment readiness are implemented by the native backend.
 
 ## Checks
 
 ```sh
 npm test                   # API refresh/errors, theme validation and Analytics clients
-npm run test:workflows     # Python 3; sample SQLite data, guards and legacy preservation
 npm run test:ui            # Playwright; real app with intercepted Cloudgate APIs
 npm run build
 ```
 
-Install a browser for UI checks once with `npx playwright install chromium` if needed. UI checks bind local port 3199 and supply fixture configuration; they never change tenant accounts, settings, media or send real email. Set `ADMIN_TEST_OUTPUT_DIR` to save screenshots. The browser checks cover account operations, confirmation/cancellation, branding persistence, themes, SMTP, media, Analytics/Logs/Payments/About, non-admin access and a 360px mobile viewport.
+Install a browser for UI checks once with `npx playwright install chromium` if needed. UI checks bind local port 3199 and supply fixture configuration; they never change tenant accounts, settings, media or send real email. Set `ADMIN_TEST_OUTPUT_DIR` to save screenshots. The browser checks cover placeholders without sample API calls, account operations, confirmation/cancellation, branding persistence, themes, SMTP, media, Analytics/Logs/Payments/About, non-admin access and a 360px mobile viewport.

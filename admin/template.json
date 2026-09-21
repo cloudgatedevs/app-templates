@@ -1,7 +1,7 @@
 {
   "id": "admin",
   "name": "Admin Back Office",
-  "description": "Reusable Cloudgate back office with IdP user management, website analytics, editable theme and appearance, SMTP settings, media, workflow logs, About and Wallet payment readiness.",
+  "description": "Polished React back office for Cloudgate with native user management, analytics, branding and themes, SMTP, media, logs, About and Wallet readiness. Includes light/dark modes, responsive layouts and smooth transitions, plus Dashboard and Orders placeholders for your own features.",
   "folder": "admin",
   "framework": "React",
   "devCommand": "npm install && npm run dev",
@@ -16,20 +16,17 @@
     "analytics",
     "idp",
     "wallet",
-    "theming"
+    "theming",
+    "responsive",
+    "skeleton"
   ],
   "workflowTemplate": ".template/workflow-template.json",
   "workflowImport": {
-    "description": "Creates the Admin controller, admin_db and protected sample APIs. Appearance and Wallet readiness use native Cloudgate APIs.",
+    "description": "Creates an empty Admin controller for native API app scoping. No sample workflows, databases or records are included.",
     "file": ".template/workflow-template.json",
-    "schema": ".template/schema.sql",
     "projectPath": "admin",
-    "routes": [
-      "dashboard",
-      "users",
-      "orders"
-    ],
-    "publishHint": "Import the bundle and schema, publish the three sample actions, and sign in with a tenant IdP Admin account. The server must include the native payments status API and the appearance API with its platform migration."
+    "routes": [],
+    "publishHint": "Import the empty controller bundle or use your existing controller, then sign in with a tenant IdP Admin account. No workflow publication or app database is required. The server must include the native payments status API and the appearance API with its platform migration."
   },
   "configSetup": {
     "kind": "vite-env",
@@ -41,6 +38,7 @@
   "version": "1.0.0",
   "adminPath": "/",
   "features": [
+    "Dashboard and Orders placeholders for app-specific features",
     "Tenant IdP user management",
     "Website analytics and scoped workflow logs",
     "Saved branding and light/dark themes",

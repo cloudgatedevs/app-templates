@@ -9,9 +9,7 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "test": "node --test tests/*.test.mjs",
-    "test:workflows": "python -B tests/workflows.py",
-    "test:ui": "node tests/backoffice.browser.mjs",
-    "cloudgate:package": "python -B scripts/package-workflows.py"
+    "test:ui": "node tests/backoffice.browser.mjs"
   },
   "dependencies": {
     "@cloudgatedevs/cloudgate-client": "^0.5.0",

@@ -6,7 +6,6 @@ import { SettingsProvider } from '@/settings/SettingsProvider';
 import { ScreenLoader } from '@/components/ScreenLoader';
 import { Layout } from '@/components/Layout';
 import { Dashboard } from '@/pages/Dashboard';
-import { Users } from '@/pages/Users';
 import { Orders } from '@/pages/Orders';
 import { Profile } from '@/pages/Profile';
 
@@ -37,7 +36,7 @@ const App = () => (
               <Route element={<Layout />}>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/users" element={<UserManagement />} />
-                <Route path="/sample-users" element={<Users />} />
+                <Route path="/sample-users" element={<Navigate to="/users" replace />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/analytics" element={<Analytics />} />

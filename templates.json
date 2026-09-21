@@ -1,188 +1,9 @@
 {
   "templates": [
     {
-      "id": "podcast",
-      "name": "Podcast Demo",
-      "description": "Angular podcast demo app with workflow-backed catalog — import .template/workflow-template.json for GET /podcasts.",
-      "folder": "podcast",
-      "framework": "Angular",
-      "devCommand": "npm install && npm run start",
-      "devPort": 3000,
-      "demoUrl": "https://podcast-demo.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/podcast/banner.png",
-      "tags": [
-        "angular",
-        "podcast",
-        "tailwind",
-        "capacitor"
-      ]
-    },
-    {
-      "id": "hotel",
-      "name": "Hotel Demo",
-      "description": "Angular hotel discovery demo with workflow-backed catalog — import .template/workflow-template.json for GET /hotels.",
-      "folder": "hotel",
-      "framework": "Angular",
-      "devCommand": "npm install && npm run start",
-      "devPort": 3000,
-      "demoUrl": "https://hotel-demo.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/hotel/banner.png",
-      "tags": [
-        "angular",
-        "hotel",
-        "booking",
-        "tailwind",
-        "capacitor"
-      ]
-    },
-    {
-      "id": "medical",
-      "name": "Medical Demo",
-      "description": "Angular medical discovery demo with doctor booking — import .template/workflow-template.json for GET /doctors.",
-      "folder": "medical",
-      "framework": "Angular",
-      "devCommand": "npm install && npm run start",
-      "devPort": 3000,
-      "demoUrl": "https://medical-demo.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/medical/banner.png",
-      "tags": [
-        "angular",
-        "medical",
-        "healthcare",
-        "tailwind",
-        "capacitor"
-      ]
-    },
-    {
-      "id": "nft",
-      "name": "NFT Demo",
-      "description": "Angular NFT auction demo with workflow-backed catalog — import .template/workflow-template.json for GET /nfts.",
-      "folder": "nft",
-      "framework": "Angular",
-      "devCommand": "npm install && npm run start",
-      "devPort": 3000,
-      "demoUrl": "https://nft-demo.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/nft/banner.png",
-      "tags": [
-        "angular",
-        "nft",
-        "tailwind",
-        "capacitor"
-      ]
-    },
-    {
-      "id": "store",
-      "name": "Store Demo",
-      "description": "Angular store demo with product catalog — import .template/workflow-template.json for GET /products.",
-      "folder": "store",
-      "framework": "Angular",
-      "devCommand": "npm install && npm run start",
-      "devPort": 3000,
-      "demoUrl": "https://store-demo.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/store/banner.png",
-      "tags": [
-        "angular",
-        "store",
-        "ecommerce",
-        "tailwind",
-        "capacitor"
-      ]
-    },
-    {
-      "id": "wallet",
-      "name": "Wallet Demo",
-      "description": "Angular wallet demo with transfer flow — import .template/workflow-template.json for GET /transactions.",
-      "folder": "wallet",
-      "framework": "Angular",
-      "devCommand": "npm install && npm run start",
-      "devPort": 3000,
-      "demoUrl": "https://wallet-demo.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/wallet/banner.png",
-      "tags": [
-        "angular",
-        "wallet",
-        "fintech",
-        "tailwind",
-        "capacitor"
-      ]
-    },
-    {
-      "id": "react-auth",
-      "name": "React IdP Auth Portal",
-      "description": "Standalone React login portal for Cloudgate IdP — custom UI calling Login, Register, and password reset APIs with returnUrl token redirect.",
-      "folder": "react-auth",
-      "framework": "React",
-      "devCommand": "npm install && npm run dev",
-      "devPort": 3000,
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/react-auth/banner.png",
-      "tags": [
-        "react",
-        "vite",
-        "tailwind",
-        "auth",
-        "idp"
-      ]
-    },
-    {
-      "id": "cloudgate-crm",
-      "name": "Cloudgate CRM",
-      "description": "React + Vite CRM for leads, sales pipeline, companies, contacts, tasks, and email campaigns.",
-      "folder": "crm",
-      "framework": "React",
-      "devCommand": "npm install && npm run dev",
-      "devPort": 3000,
-      "demoUrl": "https://crm.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/crm/banner.png",
-      "tags": [
-        "react",
-        "vite",
-        "tailwind",
-        "crm",
-        "sales",
-        "pipeline",
-        "email",
-        "idp"
-      ]
-    },
-    {
-      "id": "cloudgate-lms",
-      "name": "Cloudgate LMS",
-      "description": "React + Vite Learning Management System for courses, lessons, enrolments, progress tracking, auto-graded quizzes, and completion certificates.",
-      "folder": "lms",
-      "framework": "React",
-      "devCommand": "npm install && npm run dev",
-      "devPort": 3000,
-      "demoUrl": "https://lms.app.cloudgate.dev/",
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/lms/banner.png",
-      "tags": [
-        "react",
-        "vite",
-        "lms",
-        "education"
-      ]
-    },
-    {
-      "id": "react",
-      "name": "React Starter",
-      "description": "Minimal React + Vite + Tailwind starter with Cloudgate IdP login, a protected-route guard and a profile page — a clean base for a new app.",
-      "folder": "react",
-      "framework": "React",
-      "devCommand": "npm install && npm run dev",
-      "devPort": 3000,
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/react/banner.png",
-      "tags": [
-        "react",
-        "vite",
-        "tailwind",
-        "starter",
-        "skeleton",
-        "idp"
-      ]
-    },
-    {
       "id": "admin",
-      "name": "Admin Starter (Dark)",
-      "description": "Dark-theme React + Vite + Tailwind admin console with Cloudgate IdP login, a responsive sidebar shell, and sample paginated table pages (Users, Orders) backed by a bundled Cloudgate workflow API with demo data — import .template/workflow-template.json.",
+      "name": "Admin Back Office",
+      "description": "Polished React back office for Cloudgate with native user management, analytics, branding and themes, SMTP, media, logs, About and Wallet readiness. Includes light/dark modes, responsive layouts and smooth transitions, plus Dashboard and Orders placeholders for your own features.",
       "folder": "admin",
       "framework": "React",
       "devCommand": "npm install && npm run dev",
@@ -193,32 +14,13 @@
         "vite",
         "tailwind",
         "admin",
-        "dashboard",
-        "dark",
+        "back-office",
+        "analytics",
+        "idp",
+        "wallet",
+        "theming",
         "responsive",
-        "starter",
-        "idp"
-      ]
-    },
-    {
-      "id": "admin-light",
-      "name": "Admin Starter (Light)",
-      "description": "Light-theme React + Vite + Tailwind admin console with Cloudgate IdP login, a responsive sidebar shell, and sample paginated table pages (Users, Orders) backed by a bundled Cloudgate workflow API with demo data — import .template/workflow-template.json.",
-      "folder": "admin-light",
-      "framework": "React",
-      "devCommand": "npm install && npm run dev",
-      "devPort": 3000,
-      "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/admin-light/banner.png",
-      "tags": [
-        "react",
-        "vite",
-        "tailwind",
-        "admin",
-        "dashboard",
-        "light",
-        "responsive",
-        "starter",
-        "idp"
+        "skeleton"
       ]
     }
   ]

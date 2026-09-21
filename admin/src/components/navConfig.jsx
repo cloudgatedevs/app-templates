@@ -28,8 +28,6 @@ export const NAV = [
 export const routeTitle = (path) =>
   path === '/profile'
     ? 'My account'
-    : path === '/sample-users'
-      ? 'Sample users'
-      : NAV.find((item) => (item.end ? path === item.to : path === item.to || path.startsWith(`${item.to}/`)))
-          ?.label || 'Back office';
-export const backTargetFor = (path) => (['/profile', '/sample-users'].includes(path) ? '/' : null);
+    : NAV.find((item) => (item.end ? path === item.to : path === item.to || path.startsWith(`${item.to}/`)))
+        ?.label || 'Back office';
+export const backTargetFor = (path) => (path === '/profile' ? '/' : null);

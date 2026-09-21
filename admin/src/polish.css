@@ -75,6 +75,7 @@
   transition: border-color 200ms, box-shadow 240ms var(--ease-out);
 }
 .stat-card { background-image: radial-gradient(ellipse at 100% 0%, rgb(var(--accent) / .045), transparent 70%); }
+.placeholder-surface { background-image: radial-gradient(ellipse at 50% 0%, rgb(var(--accent) / .06), transparent 65%); }
 .stat-icon { display: grid; place-items: center; width: 33px; height: 33px; color: rgb(var(--accent-text)); background: rgb(var(--accent) / .065); border: 1px solid rgb(var(--accent) / .07); border-radius: 11px; }
 .data-table { overflow-x: auto; }
 .data-table thead { background: rgb(var(--ink-900) / .8); }
