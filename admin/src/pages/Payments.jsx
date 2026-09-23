@@ -77,11 +77,11 @@ export function Payments() {
           Transactions, payment-provider credentials and payouts are managed securely in the Cloudgate hub.
         </p>
       </section>
-      <Notice>
-        {/^prod/i.test(paymentsApi.scope.environment)
+      {status && <Notice>
+        {status.production
           ? 'This installation uses the production wallet.'
           : 'This installation uses the sandbox wallet for testing.'}
-      </Notice>
+      </Notice>}
     </div>
   );
 }

@@ -20,14 +20,6 @@
     "responsive",
     "skeleton"
   ],
-  "workflowTemplate": ".template/workflow-template.json",
-  "workflowImport": {
-    "description": "Creates an empty Admin controller for native API app scoping. No sample workflows, databases or records are included.",
-    "file": ".template/workflow-template.json",
-    "projectPath": "admin",
-    "routes": [],
-    "publishHint": "Import the empty controller bundle or use your existing controller, then sign in with a tenant IdP Admin account. No workflow publication or app database is required. The server must include the native payments status API and the appearance API with its platform migration."
-  },
   "configSetup": {
     "kind": "vite-env",
     "targets": [

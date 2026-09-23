@@ -1,6 +1,6 @@
 import { auth } from './auth';
 import { createAppAnalyticsClient } from './appAnalyticsClient';
-import { createPublishedAnalyticsResolver } from './publishedAnalytics';
+import { resolveAppIdentity } from './appIdentity';
 
 export const appAnalyticsApi = createAppAnalyticsClient({
   auth,
@@ -8,5 +8,8 @@ export const appAnalyticsApi = createAppAnalyticsClient({
   projectPath: import.meta.env.VITE_CLOUDGATE_API_PROJECT,
   environment: import.meta.env.VITE_CLOUDGATE_API_ENV,
   preview: import.meta.env.MODE === 'preview',
-  resolvePublishedApp: createPublishedAnalyticsResolver(),
+  resolvePublishedApp: async () => {
+    const scope = await resolveAppIdentity();
+    return scope.webAppId ? { webAppId: scope.webAppId, isProduction: /^prod/.test(scope.environment) } : null;
+  },
 });

@@ -1,14 +1,12 @@
 import { normalizeSettings } from '../settings/model.js';
+import { createAppIdentityResolver, isWebAppId } from './appIdentityClient.js';
 
 /** Native IdP configuration; no workflow signatures or application database are involved. */
-export function createAppearanceClient({ request, projectPath, environment = 'sbx' }) {
-  const scope = {
-    projectPath: String(projectPath || '').trim().replace(/^\/+|\/+$/g, ''),
-    environment: String(environment || 'sbx').trim().toLowerCase(),
-  };
+export function createAppearanceClient({ request, webAppId, environment = 'sbx', resolveAppIdentity = createAppIdentityResolver({ webAppId, environment }) }) {
   async function run(action, body = {}) {
-    if (!scope.projectPath || scope.projectPath === '*' || !/^(sbx|sandbox|prod|production)$/.test(scope.environment))
-      throw new Error('Appearance needs an application controller path and a sandbox or production environment.');
+    const scope = await resolveAppIdentity();
+    if (!isWebAppId(scope.webAppId) || !/^(sbx|sandbox|prod|production)$/.test(scope.environment))
+      throw new Error('Appearance needs a Cloudgate web app. Open the published app, or set VITE_CLOUDGATE_WEB_APP_ID for local development.');
     const response = await request(`admin/appearance/${action}`, { body: { ...body, ...scope } });
     if (!response?.values || typeof response.values !== 'object' || Array.isArray(response.values) ||
         typeof response.revision !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(response.revision))

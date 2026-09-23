@@ -9,9 +9,9 @@ export function createAppAnalyticsClient({ auth, apiUrl, projectPath, environmen
   const base = String(apiUrl || '').trim().replace(/\/+$/, '');
   const path = String(projectPath || '').trim().replace(/^\/+|\/+$/g, '');
   const env = String(environment || 'sbx').trim().toLowerCase();
-  const scope = Object.freeze({ projectPath: path, environment: env, isProduction: /^prod/.test(env), configured: !preview && Boolean(base && auth.tenancyName && path) });
+  const scope = Object.freeze({ projectPath: path, environment: env, isProduction: /^prod/.test(env), configured: !preview && Boolean(base && auth.tenancyName) });
   async function request(section, body, signal) {
-    if (!scope.configured) throw new AppAnalyticsError('Connect this app to Cloudgate and deploy it through the App Store to see its website analytics.', 0, 'unavailable');
+    if (!scope.configured) throw new AppAnalyticsError('Connect this app to Cloudgate and publish it to see its website analytics.', 0, 'unavailable');
     const url = `${base}/api/idp/${encodeURIComponent(auth.tenancyName)}/admin/analytics/${section}`;
     let response;
     try {

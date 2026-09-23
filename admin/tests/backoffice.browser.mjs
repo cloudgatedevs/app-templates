@@ -7,10 +7,11 @@ import { chromium } from 'playwright';
 import { createServer } from 'vite';
 import { DEFAULT_SETTINGS } from '../src/settings/model.js';
 
+const webAppId = '12345678-1234-1234-1234-123456789abc';
 const origin = 'http://127.0.0.1:3199';
 const env = {
   VITE_IDP_BASE_URL: 'https://hub.example.invalid', VITE_IDP_API_URL: 'https://api.example.invalid', VITE_IDP_TENANCY_NAME: 'qa', VITE_IDP_RETURN_URL: '',
-  VITE_CLOUDGATE_API_URL: 'https://api.example.invalid', VITE_CLOUDGATE_API_ENV: 'sbx', VITE_CLOUDGATE_API_PROJECT: 'admin', VITE_API_KEY: 'test-key', VITE_API_SECRET: 'test-secret',
+  VITE_CLOUDGATE_API_URL: 'https://api.example.invalid', VITE_CLOUDGATE_API_ENV: 'sbx', VITE_CLOUDGATE_API_PROJECT: '', VITE_CLOUDGATE_MEDIA_FOLDER: '', VITE_API_KEY: 'test-key', VITE_API_SECRET: 'test-secret',
 };
 const server = await createServer({ server: { host: '127.0.0.1', port: 3199, strictPort: true }, define: Object.fromEntries(Object.entries(env).map(([key, value]) => [`import.meta.env.${key}`, JSON.stringify(value)])) });
 await server.listen();
@@ -27,14 +28,14 @@ let users = [
   { id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role: 'Admin', isActive: true },
   { id: 2, name: 'Ava', surname: 'Nkosi', email: 'ava@example.invalid', role: 'User', isActive: true, phoneNumber: '' },
 ];
-let files = [{ id: 'image-1', fileId: 'image-1', name: 'Workspace.png', path: 'admin/media', url: 'https://api.example.invalid/image.png', thumbUrl: 'https://api.example.invalid/image.png', size: 1400 }];
+let files = [{ id: 'image-1', fileId: 'image-1', name: 'Workspace.png', path: `apps/${webAppId}/media`, url: 'https://api.example.invalid/image.png', thumbUrl: 'https://api.example.invalid/image.png', size: 1400 }];
 let smtp = { smtpEnabled: false, smtpHost: '', smtpPort: 587, smtpUserName: '', smtpDomain: '', fromAddress: '', fromDisplayName: '', smtpEnableSsl: true, smtpUseDefaultCredentials: false, hasPassword: true };
 const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=', 'base64');
 const log = { id: 'call-1', route: 'orders', op: 'list', outcome: 'success', httpStatusCode: 200, durationMs: 45, creationTime: '2026-09-21T10:00:00Z', sessionId: 'session-1', idpUserId: 2, idpUserEmail: 'ava@example.invalid', country: 'ZA', method: 'POST', body: '{"take":10}', response: '{"items":[]}' };
 const token = `eyJhbGciOiJub25lIn0.${Buffer.from(JSON.stringify({ sub: '1', email: 'admin@example.invalid', name: 'Alex Admin', exp: Math.floor(Date.now() / 1000) + 3600 })).toString('base64url')}.test`;
 await context.addInitScript(value => { localStorage.setItem('idp_access_token', value); }, token);
 await context.route('https://fonts.googleapis.com/**', route => route.fulfill({ body: '', contentType: 'text/css' }));
-await context.route('**/cg-analytics.json', route => route.fulfill({ status: 404, body: '{}' }));
+await context.route('**/cg-analytics.json', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ webAppId, isProduction: false }) }));
 await context.route('https://api.example.invalid/**', async route => {
   const request = route.request();
   const url = new URL(request.url());
@@ -45,7 +46,7 @@ await context.route('https://api.example.invalid/**', async route => {
   if (url.pathname.endsWith('/profile')) return reply({ id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role });
   if (url.pathname.startsWith('/api/idp/qa/admin/appearance/')) {
     if (appearanceUnavailable) return reply({ message: 'Appearance API is unavailable on this server.' }, 404);
-    assert.equal(body.projectPath, 'admin'); assert.equal(body.environment, 'sbx');
+    assert.equal(body.webAppId, webAppId); assert.equal(body.projectPath, undefined); assert.equal(body.environment, 'sbx');
     assert.equal(request.headers().authorization, `Bearer ${token}`);
     if (url.pathname.endsWith('/update')) {
       if (body.revision !== appearanceRevision) return reply({ message: 'Appearance changed since you loaded it. Reload the page before saving again.' }, 409);
@@ -54,7 +55,7 @@ await context.route('https://api.example.invalid/**', async route => {
     return reply({ values: settings, revision: appearanceRevision });
   }
   if (url.pathname === '/api/idp/qa/admin/payments/status') {
-    assert.deepEqual(body, { projectPath: 'admin', environment: 'sbx' });
+    assert.deepEqual(body, { environment: 'sbx' });
     assert.equal(request.headers().authorization, `Bearer ${token}`);
     assert.equal(request.headers()['x-authentication-signature'], undefined);
     if (paymentsUnavailable) return reply({ message: 'Payments API is unavailable on this server.' }, 404);
@@ -254,26 +255,13 @@ try {
   await page.getByLabel('Analytics period').selectOption('2');
   await visible(page.getByRole('heading', { name: 'Pages', exact: true }));
   await shot('analytics-desktop');
-  const visitorCalls = page.getByRole('button', { name: 'Workflow calls for Ava Nkosi', exact: true });
-  await visitorCalls.click();
-  const visitorDialog = page.getByRole('dialog', { name: 'Workflow calls · Ava Nkosi', exact: true });
-  await visible(visitorDialog.getByRole('cell', { name: 'success', exact: true }));
-  await shot('analytics-dialog');
-  await page.keyboard.press('Escape');
-  await visitorDialog.waitFor({ state: 'detached' });
-  await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Workflow calls for Ava Nkosi');
+  assert.equal(await page.getByRole('button', { name: 'Workflow calls for Ava Nkosi', exact: true }).count(), 0);
   analyticsUnavailable = true;
   await page.getByRole('button', { name: 'Refresh', exact: true }).click();
   await visible(page.getByText('Analytics is not connected yet', { exact: true }));
   analyticsUnavailable = false;
-  await go('/logs'); await visible(page.getByText('Calls per hour', { exact: true }));
-  await page.getByRole('button', { name: 'Details', exact: true }).click();
-  const logDialog = page.getByRole('dialog');
-  await visible(logDialog.getByText('Request body', { exact: true }));
-  await shot('logs-drawer');
-  await page.keyboard.press('Escape');
-  await logDialog.waitFor({ state: 'detached' });
-  await page.waitForFunction(() => document.activeElement?.textContent.includes('Details'));
+  await go('/logs'); await visible(page.getByText(/This app has no workflow controller configured/));
+  assert.equal(calls.filter(call => call.path.includes('/admin/workflow-logs/')).length, 0);
   await go('/about'); await visible(page.getByRole('heading', { name: 'Your Cloudgate tenancy', exact: true }));
   console.log('PASS Wallet status/link, Analytics filters/unavailable server, Logs and About');
 

@@ -230,7 +230,7 @@ const Unavailable = ({ error }) => {
   const code = error?.code;
   const title = code === 'forbidden' ? 'Admin account required' : code === 'not-installed' ? 'This controller is not an installed app' : 'Workflow logs are not available here';
   const text = !workflowLogsScope.configured
-    ? 'The local preview does not talk to Cloudgate. Run the app against a Cloudgate environment and sign in as a tenant administrator to see its workflow logs.'
+    ? 'This app has no workflow controller configured. Its native back-office features work independently. If you add workflows, set VITE_CLOUDGATE_API_PROJECT to their controller path to see logs here.'
     : error?.message || 'Update the Cloudgate host to a version that ships the workflow logs admin API.';
   return <Empty title={title} text={text} />;
 };
