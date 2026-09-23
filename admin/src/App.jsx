@@ -3,6 +3,7 @@ import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom
 import { AuthProvider, RequireAuth } from '@/auth';
 import { RequireAdmin } from '@/auth/RequireAdmin';
 import { SettingsProvider } from '@/settings/SettingsProvider';
+import { NotificationsProvider } from '@/notifications/NotificationsProvider';
 import { ScreenLoader } from '@/components/ScreenLoader';
 import { Layout } from '@/components/Layout';
 import { Dashboard } from '@/pages/Dashboard';
@@ -17,12 +18,15 @@ const Smtp = load(() => import('@/pages/Smtp'), 'Smtp');
 const Media = load(() => import('@/pages/Media'), 'Media');
 const Payments = load(() => import('@/pages/Payments'), 'Payments');
 const Logs = load(() => import('@/pages/Logs'), 'Logs');
+const Notifications = load(() => import('@/pages/Notifications'), 'Notifications');
 const About = load(() => import('@/pages/About'), 'About');
 const Workspace = () => (
   <SettingsProvider>
-    <Suspense fallback={<ScreenLoader />}>
-      <Outlet />
-    </Suspense>
+    <NotificationsProvider>
+      <Suspense fallback={<ScreenLoader />}>
+        <Outlet />
+      </Suspense>
+    </NotificationsProvider>
   </SettingsProvider>
 );
 
@@ -46,6 +50,7 @@ const App = () => (
                 <Route path="/media" element={<Media />} />
                 <Route path="/payments" element={<Payments />} />
                 <Route path="/logs" element={<Logs />} />
+                <Route path="/notifications" element={<Notifications />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/settings" element={<Navigate to="/appearance" replace />} />
               </Route>

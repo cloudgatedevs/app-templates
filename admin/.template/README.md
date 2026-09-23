@@ -1,13 +1,9 @@
-# Admin Back Office controller bundle
+# Admin Back Office setup reference
 
-`workflow-template.json` provisions an empty, non-private `admin` controller. Native appearance, payments and workflow-log APIs use this controller to resolve the application scope. The bundle contains no workflow actions, database connections, schema or seeded records. Dashboard and Orders are static placeholders.
+This template uses native Cloudgate APIs and does not bundle a controller, workflow database or seeded app records. Dashboard and Orders remain placeholders. Use the root README and `.env.example` for current installation and upgrade instructions; `env.example` here is a reference copy.
 
-The App Store imports the controller automatically. For manual installations or Quick Start, import this bundle through Cloudgate's template import, or select an existing non-private tenant controller. Quick Start selects workflow actions for import and cannot import an empty controller through that selection. Set `VITE_CLOUDGATE_API_PROJECT` to the actual controller path and `VITE_CLOUDGATE_API_ENV` to `sbx` or `prod`. No workflow publication is required.
+Sign in with an active tenant **IdP Admin**. Published metadata identifies the web app and environment; local development can configure these explicitly. Keep `VITE_CLOUDGATE_API_PROJECT` only when using your own workflows or an existing legacy installation mapping. Logs explain when no workflow controller is configured.
 
-Existing installations keep their current controller path. Updating this template does not delete deployed workflows, databases or records. The frontend no longer calls the old `dashboard`, `users` or `orders` workflow actions. Review any other consumers before retiring those resources separately.
+Notifications belong to IdP users within a tenant and environment. Apply the `AddIdpNotifications` ZeroDbContext migration and configure the existing Redis connection on every backend instance. The inbox uses native WebSocket updates and persisted read receipts. An **IdP Notification** workflow node can send to all current app users or one user ID, with an optional link action. See the root README and the tenant API documentation for the REST and WebSocket contracts.
 
-`env.example` is a reference copy of the root environment example. IdP user management, appearance/theme, payments, SMTP, media, Analytics and Logs use native host APIs. Use an active tenant IdP administrator account; appearance also requires the platform migration described in the root README.
-
-Payment readiness uses `POST /api/idp/{tenant}/admin/payments/status` with `{ projectPath, environment }` and an IdP Admin bearer token. An unconfigured Wallet returns HTTP 200 with `ready: false`. Provider setup and transactions remain in the Cloudgate Wallet hub.
-
-To add application-specific features, replace the placeholder pages and implement their domain APIs. The optional workflow client is available in `src/services/api.js`; native back-office features require no workflow signing credentials or app database.
+Native back-office features require no workflow signing credentials or app database. To extend the placeholders, add your domain APIs and use the optional workflow client in `src/services/api.js` where appropriate.

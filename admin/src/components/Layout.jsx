@@ -6,6 +6,7 @@ import { useAuthContext, getProfileDisplayName } from '@/auth';
 import { useSettings } from '@/settings/SettingsProvider';
 import { PoweredByCloudgate } from '@/integrations/CloudgateAbout';
 import { Brand } from './Brand';
+import { NotificationBell } from '@/notifications/NotificationBell';
 import { NAV, routeTitle, backTargetFor } from './navConfig';
 import { PageSkeleton } from './ScreenLoader';
 
@@ -119,9 +120,9 @@ export function Layout() {
             <ChevronRight size={13} className="shrink-0 text-mist-dim/60" />
             <span className="truncate font-medium text-mist-muted">{routeTitle(location.pathname)}</span>
           </div>
-          <span className={`environment-pill ${isProduction ? 'is-production' : ''}`}>
+          <div className="flex items-center gap-3"><NotificationBell /><span className={`environment-pill ${isProduction ? 'is-production' : ''}`}>
             <span aria-hidden="true" />{isProduction ? 'Production' : 'Sandbox'}
-          </span>
+          </span></div>
         </header>
         <header className="app-bar flex shrink-0 items-center gap-2 border-b border-ink-700 bg-ink-850 lg:hidden">
           {back ? (
@@ -156,6 +157,7 @@ export function Layout() {
           <p className="min-w-0 flex-1 truncate px-1 text-base font-semibold">
             {routeTitle(location.pathname)}
           </p>
+          <NotificationBell />
         </header>
         <main ref={main} tabIndex={-1} className="app-main flex-1 overflow-y-auto" id="main-content">
           <div className="mx-auto w-full max-w-7xl">

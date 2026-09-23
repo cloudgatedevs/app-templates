@@ -16,6 +16,7 @@
     "back-office",
     "analytics",
     "idp",
+    "notifications",
     "wallet",
     "theming",
     "responsive",
@@ -33,6 +34,7 @@
   "features": [
     "Dashboard and Orders placeholders for app-specific features",
     "Tenant IdP user management",
+    "Live IdP notifications, read receipts and link actions over native WebSocket",
     "Website analytics and scoped workflow logs",
     "Saved branding and light/dark themes",
     "Shared tenant SMTP settings",

@@ -10,6 +10,7 @@ A polished React back office for Cloudgate with native user management, analytic
 | --- | --- | --- |
 | Dashboard | Placeholder for application-specific metrics and activity. | None |
 | Orders | Placeholder for application-specific order management. | None |
+| Notifications | Bell popup with the five latest updates and a full-inbox link, live unread badge, read receipts, all/unread filters and optional link actions. | Tenant IdP notifications API and native WebSocket |
 | User management | Search, create, edit, enable/disable, delete and request a password reset. Administrator accounts are read-only here. | Tenant IdP admin user APIs |
 | Analytics | Website views, sessions, visitors, periods, pages, countries, sources and devices; visitor workflow calls. | Cloudgate Web App Insights |
 | Theme styling | Colour presets, custom primary/secondary colours, light/dark/system mode and density. | Native Cloudgate appearance API |
@@ -50,6 +51,12 @@ User management and SMTP are **tenant-wide**. Appearance belongs to the **web ap
 Media uses `apps/<webAppId>/media` and `apps/<webAppId>/branding`. Set `VITE_CLOUDGATE_MEDIA_FOLDER` to an existing prefix (for example `admin`) to retain an older library. An existing `VITE_CLOUDGATE_API_PROJECT` is also accepted as a legacy media prefix. These are file folders, not controller requirements. Media deletion checks saved branding before removing an image.
 
 ## Backend contract
+
+Notifications use the signed-in **IdP user** within the tenant and environment. Apply the `AddIdpNotifications` and `AddIdpNotificationStyle` **ZeroDbContext** migrations and restart the backend before publishing this version. The inbox is shared by apps in the same tenant/environment. `POST /api/idp/{tenant}/notifications/{list|unread-count|read|read-all}` uses the IdP bearer token and `{ environment }`; list also accepts skip/take/unreadOnly, and read requires the notification GUID. IdP Admins can send through `/admin/notifications/send` and inspect `/history` and `/recipients`. Workflows can send using the **IdP Notification** node. Broadcasts snapshot all current non-deleted IdP users; offline recipients retain unread messages.
+
+The browser connects using native WebSocket at `/ws-idp-notifications?environment=sbx&access_token=…`. Each ready/change event refreshes the authenticated inbox; reconnect, focus and periodic refresh recover missed events. For a backend running multiple instances, all instances must use the same existing `Abp:RedisCache:ConnectionString`. Delivery uses the `websocket:idp-notifications` Redis channel; no SignalR client or hub is used. Without Redis only local-instance sockets receive live events. The proxy must forward WebSocket upgrades, and its logs must redact `access_token`. Redis Pub/Sub channels are shared across database indexes, so separate deployments should use separate Redis endpoints.
+
+Notification title/body are plain text. Optional `style` accepts `info` (default), `success`, `warning` or `danger`; the bell popup and inbox show a matching color, icon and label. Existing notifications default to info. Choose the alert style in the hub's create modal or the workflow node (`Param7`); inbox and history responses include it. Actions accept a local `/path` or absolute HTTP(S) URL, and clicking an action marks the message read before navigation. Read state is stored per recipient and synchronized across sessions. The hub's **Web Apps → App Notifications** page shows sent messages and recipient read timestamps. See the tenant's `/idp/{tenant}/api` documentation for request/response examples, WebSocket integration and workflow configuration.
 
 Back-office features use native Cloudgate APIs with IdP bearer authentication and server-side administrator authorization. The React guard provides the corresponding UI gate. Dashboard and Orders have no backend contract until you implement those domain features.
 

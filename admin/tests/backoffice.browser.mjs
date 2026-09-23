@@ -23,6 +23,12 @@ const errors = [], calls = [];
 page.on('pageerror', error => errors.push(error.message));
 let role = 'Admin', analyticsUnavailable = false, usersFail = false, appearanceUnavailable = false, paymentsUnavailable = false, walletReady = true;
 let settings = { ...DEFAULT_SETTINGS };
+let notificationsUnavailable = false;
+let notifications = [
+  { id: 'notification-1', title: 'Order ready', body: 'Your order is ready to collect.', style: 'success', actionUrl: '/orders', actionLabel: 'View order', creationTime: '2026-09-23T10:00:00Z', isRead: false, readAtUtc: null },
+  { id: 'notification-2', title: 'Account update', body: '<b>This is plain text</b>', actionUrl: 'javascript:alert(1)', creationTime: '2026-09-23T09:00:00Z', isRead: false, readAtUtc: null },
+];
+const notificationSockets = new Set();
 let appearanceRevision = '00000000-0000-0000-0000-000000000000';
 let users = [
   { id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role: 'Admin', isActive: true },
@@ -34,6 +40,14 @@ const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ
 const log = { id: 'call-1', route: 'orders', op: 'list', outcome: 'success', httpStatusCode: 200, durationMs: 45, creationTime: '2026-09-21T10:00:00Z', sessionId: 'session-1', idpUserId: 2, idpUserEmail: 'ava@example.invalid', country: 'ZA', method: 'POST', body: '{"take":10}', response: '{"items":[]}' };
 const token = `eyJhbGciOiJub25lIn0.${Buffer.from(JSON.stringify({ sub: '1', email: 'admin@example.invalid', name: 'Alex Admin', exp: Math.floor(Date.now() / 1000) + 3600 })).toString('base64url')}.test`;
 await context.addInitScript(value => { localStorage.setItem('idp_access_token', value); }, token);
+await context.routeWebSocket('wss://api.example.invalid/ws-idp-notifications?*', socket => {
+  const url = new URL(socket.url());
+  assert.equal(url.searchParams.get('access_token'), token);
+  assert.equal(url.searchParams.get('environment'), 'sbx');
+  notificationSockets.add(socket);
+  socket.onClose(() => notificationSockets.delete(socket));
+  socket.send(JSON.stringify({ type: 'ready', environment: 'sbx' }));
+});
 await context.route('https://fonts.googleapis.com/**', route => route.fulfill({ body: '', contentType: 'text/css' }));
 await context.route('**/cg-analytics.json', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ webAppId, isProduction: false }) }));
 await context.route('https://api.example.invalid/**', async route => {
@@ -44,6 +58,16 @@ await context.route('https://api.example.invalid/**', async route => {
   const reply = (value, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(value) });
   if (url.pathname === '/image.png') return route.fulfill({ contentType: 'image/png', body: pixel });
   if (url.pathname.endsWith('/profile')) return reply({ id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role });
+  if (url.pathname.startsWith('/api/idp/qa/notifications/')) {
+    assert.equal(request.headers().authorization, `Bearer ${token}`);
+    assert.equal(body.environment, 'sbx'); assert.equal(body.userId, undefined);
+    if (notificationsUnavailable) return reply({ error: { message: 'Notification service temporarily unavailable' } }, 503);
+    const action = url.pathname.split('/').pop();
+    if (action === 'unread-count') return reply({ result: { unreadCount: notifications.filter(item => !item.isRead).length } });
+    if (action === 'list') { const items = notifications.filter(item => !body.unreadOnly || !item.isRead); return reply({ result: { totalCount: items.length, items: items.slice(body.skip, body.skip + body.take) } }); }
+    if (action === 'read') { const item = notifications.find(item => item.id === body.id); Object.assign(item, { isRead: true, readAtUtc: item.readAtUtc || new Date().toISOString() }); return reply({ read: true }); }
+    if (action === 'read-all') { let count = 0; for (const item of notifications) if (!item.isRead) { item.isRead = true; item.readAtUtc = new Date().toISOString(); count++; } return reply({ updatedCount: count }); }
+  }
   if (url.pathname.startsWith('/api/idp/qa/admin/appearance/')) {
     if (appearanceUnavailable) return reply({ message: 'Appearance API is unavailable on this server.' }, 404);
     assert.equal(body.webAppId, webAppId); assert.equal(body.projectPath, undefined); assert.equal(body.environment, 'sbx');
@@ -107,6 +131,113 @@ const shot = async name => {
   await page.screenshot({ path: path.join(process.env.ADMIN_TEST_OUTPUT_DIR, `${name}.png`), fullPage: true, animations: 'disabled' });
 };
 try {
+  await go('/');
+  const notificationPopup = page.getByRole('dialog', { name: 'Notifications', exact: true });
+  await page.getByRole('button', { name: 'Notifications, 2 unread' }).click();
+  await visible(notificationPopup.getByText('Order ready', { exact: true }));
+  assert.equal(new URL(page.url()).pathname, '/', 'The bell opens a popup without changing pages');
+  assert.equal(await notificationPopup.getByRole('listitem').count(), 2);
+  await visible(notificationPopup.locator('[data-notification-style="success"]').getByText('Success', { exact: true }));
+  await visible(notificationPopup.locator('[data-notification-style="info"]').getByText('Info', { exact: true }));
+  assert.ok(notifications.every(item => !item.isRead), 'Previewing notifications does not mark them read');
+  assert.equal(await notificationPopup.getByRole('link', { name: 'View all notifications' }).getAttribute('href'), '/notifications');
+  await shot('notification-popup-desktop');
+  await page.keyboard.press('Escape');
+  await notificationPopup.waitFor({ state: 'detached' });
+  await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Notifications, 2 unread');
+  await page.getByRole('button', { name: 'Notifications, 2 unread' }).click();
+  await visible(notificationPopup);
+  await page.getByRole('heading', { name: 'Your overview starts here', exact: true }).click();
+  await notificationPopup.waitFor({ state: 'detached' });
+  await page.getByRole('button', { name: 'Notifications, 2 unread' }).click();
+  await notificationPopup.getByRole('link', { name: 'View all notifications' }).click();
+  await visible(page.getByRole('heading', { name: 'Notifications', exact: true }));
+  await notificationPopup.waitFor({ state: 'detached' });
+  assert.equal(new URL(page.url()).pathname, '/notifications');
+  console.log('PASS bell popup previews, full inbox link, outside click, Escape and focus restoration');
+
+  await go('/notifications');
+  await visible(page.getByRole('heading', { name: 'Order ready', exact: true }));
+  assert.deepEqual(await page.getByRole('table').getByRole('columnheader').allTextContents(), ['Notification', 'Style', 'Status', 'Received', 'Actions']);
+  assert.equal(await page.getByRole('table').locator('tbody tr').count(), 2);
+  await visible(page.getByRole('button', { name: 'Notifications, 2 unread' }));
+  await visible(page.getByText('Live updates connected', { exact: true }));
+  assert.equal(await page.locator('main a[href^="javascript:"]').count(), 0);
+  await visible(page.getByRole('table').getByText('<b>This is plain text</b>', { exact: true }));
+  await shot('notifications-desktop');
+  await page.getByRole('row').filter({ hasText: 'Account update' }).getByRole('button', { name: 'Mark read', exact: true }).click();
+  await visible(page.getByRole('button', { name: 'Notifications, 1 unread' }));
+  await page.getByRole('button', { name: 'Unread', exact: true }).click();
+  await page.getByRole('heading', { name: 'Account update', exact: true }).waitFor({ state: 'detached' });
+  await page.getByRole('link', { name: 'View order', exact: true }).click();
+  await visible(page.getByRole('heading', { name: 'Order management starts here', exact: true }));
+  assert.equal(notifications[0].isRead, true);
+  await go('/notifications');
+  await page.getByRole('button', { name: 'Notifications, 0 unread' }).click();
+  await visible(notificationPopup.getByText('Order ready', { exact: true }));
+  notifications.unshift({ id: 'notification-3', title: 'Live update arrived', body: 'Delivered while this inbox was open.', style: 'danger', creationTime: '2026-09-23T11:00:00Z', isRead: false });
+  await visible(page.getByText('Live updates connected', { exact: true }));
+  for (const socket of notificationSockets) socket.send(JSON.stringify({ type: 'notificationsChanged', environment: 'sbx' }));
+  await visible(page.getByRole('heading', { name: 'Live update arrived', exact: true }));
+  await visible(notificationPopup.getByText('Live update arrived', { exact: true }));
+  await visible(notificationPopup.locator('[data-notification-style="danger"]').getByText('Danger', { exact: true }));
+  await notificationPopup.getByRole('link', { name: 'View all notifications' }).click();
+  await notificationPopup.waitFor({ state: 'detached' });
+  await visible(page.getByRole('button', { name: 'Notifications, 1 unread' }));
+  await page.getByRole('button', { name: 'Mark all read', exact: true }).click();
+  await visible(page.getByRole('button', { name: 'Notifications, 0 unread' }));
+  await page.getByRole('button', { name: 'Unread', exact: true }).click();
+  await visible(page.getByRole('cell', { name: 'You’re all caught up.', exact: true }));
+  notificationsUnavailable = true;
+  await page.getByRole('button', { name: 'Refresh', exact: true }).click();
+  await visible(page.getByRole('alert').filter({ hasText: 'Notification service temporarily unavailable' }));
+  await page.getByRole('button', { name: 'Notifications, 0 unread' }).click();
+  await visible(notificationPopup.getByRole('alert').filter({ hasText: 'Notification service temporarily unavailable' }));
+  await visible(notificationPopup.getByRole('link', { name: 'View all notifications' }));
+  notificationsUnavailable = false;
+  await notificationPopup.getByRole('button', { name: 'Try again' }).click();
+  await visible(notificationPopup.getByText('Live update arrived', { exact: true }));
+  await notificationPopup.getByRole('button', { name: 'Close notifications' }).click();
+  await notificationPopup.waitFor({ state: 'detached' });
+  const savedNotifications = notifications;
+  notifications = [];
+  await page.getByRole('button', { name: 'Notifications, 0 unread' }).click();
+  await visible(notificationPopup.getByText('No notifications yet.', { exact: true }));
+  await visible(notificationPopup.getByRole('link', { name: 'View all notifications' }));
+  await page.keyboard.press('Escape');
+  await notificationPopup.waitFor({ state: 'detached' });
+  notifications = savedNotifications;
+  console.log('PASS notification inbox, badge, live WebSocket refresh, read receipts, safe links and failure states');
+
+  notifications = ['info', 'success', 'warning', 'danger'].map(style => ({ id: 'style-' + style, title: style[0].toUpperCase() + style.slice(1) + ' notification', body: 'This update uses the ' + style + ' alert style.', style, creationTime: '2026-09-23T12:00:00Z', isRead: true }));
+  await go('/notifications');
+  await visible(page.getByRole('heading', { name: 'Warning notification', exact: true }));
+  const checkStyles = async selector => {
+    // Capture one rendered frame: a WebSocket resync can replace the list with a spinner.
+    const snapshot = await page.waitForFunction(selector => {
+      const items = [...document.querySelectorAll(selector + ' [data-notification-style]')].filter(el => el.getClientRects().length);
+      return items.length === 4 && items.map(el => ({ style: el.dataset.notificationStyle, text: el.textContent,
+        icons: el.querySelectorAll('svg').length, color: getComputedStyle(el.querySelector('span.inline-flex')).color }));
+    }, selector);
+    const appearances = await snapshot.jsonValue(); await snapshot.dispose();
+    for (const item of appearances) {
+      assert.ok(item.text.includes(item.style[0].toUpperCase() + item.style.slice(1)));
+      assert.equal(item.icons, 1, 'Each alert has an icon in addition to color');
+    }
+    assert.equal(new Set(appearances.map(item => item.color)).size, 4, 'All four alert styles have distinct badge colors');
+  };
+  const previousTheme = await page.evaluate(() => document.documentElement.dataset.theme);
+  for (const dark of [false, true]) {
+    await page.evaluate(dark => { document.documentElement.dataset.theme = dark ? 'dark' : 'light'; }, dark);
+    await checkStyles('main'); await shot(`notification-styles-${dark ? 'dark' : 'light'}`);
+    await page.getByRole('button', { name: 'Notifications, 0 unread' }).click();
+    await checkStyles('[role="dialog"]'); await shot(`notification-popup-styles-${dark ? 'dark' : 'light'}`);
+    await page.keyboard.press('Escape'); await notificationPopup.waitFor({ state: 'detached' });
+  }
+  await page.evaluate(theme => { document.documentElement.dataset.theme = theme; }, previousTheme);
+  notifications = savedNotifications;
+  console.log('PASS all four alert styles, legacy info default, realtime style updates, icons and light/dark inbox and popup rendering');
+
   await go('/users');
   await visible(page.getByRole('cell', { name: 'ava@example.invalid', exact: true }));
   assert.equal(await page.getByLabel('Actions for admin@example.invalid').count(), 0);
@@ -267,6 +398,16 @@ try {
 
   await page.setViewportSize({ width: 360, height: 800 });
   await go('/users');
+  await page.getByRole('button', { name: 'Notifications, 0 unread' }).click();
+  await visible(notificationPopup.getByText('Live update arrived', { exact: true }));
+  const popupBounds = await notificationPopup.boundingBox();
+  assert.ok(popupBounds.x >= 0 && popupBounds.x + popupBounds.width <= 360, 'Notification popup fits the mobile width');
+  assert.ok(popupBounds.y >= 0 && popupBounds.y + popupBounds.height <= 800, 'Notification popup fits the mobile height');
+  await shot('notification-popup-mobile');
+  await notificationPopup.getByRole('link', { name: 'View all notifications' }).click();
+  await notificationPopup.waitFor({ state: 'detached' });
+  assert.equal(new URL(page.url()).pathname, '/notifications');
+  await go('/users');
   await page.getByRole('button', { name: 'Open menu', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Navigation' });
   await visible(dialog);
@@ -275,13 +416,14 @@ try {
   await dialog.waitFor({ state: 'detached' });
   await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Open menu');
   assert.equal(await page.getByRole('button', { name: 'Open menu', exact: true }).evaluate(el => el === document.activeElement), true);
-  for (const route of ['/', '/orders', '/users', '/theme', '/appearance', '/smtp', '/media', '/payments', '/analytics', '/logs', '/about']) {
+  for (const route of ['/', '/orders', '/notifications', '/users', '/theme', '/appearance', '/smtp', '/media', '/payments', '/analytics', '/logs', '/about']) {
     await go(route);
     await page.waitForLoadState('networkidle');
     const width = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, viewport: innerWidth, main: document.querySelector('main').scrollWidth, mainViewport: document.querySelector('main').clientWidth }));
     assert.ok(width.doc <= width.viewport, `${route}: horizontal overflow ${JSON.stringify(width)}`);
     assert.ok(width.main <= width.mainViewport, `${route}: content overflow ${JSON.stringify(width)}`);
     if (route === '/' || route === '/orders') await shot(route === '/' ? 'dashboard-mobile' : 'orders-mobile');
+    if (route === '/notifications') await shot('notifications-mobile');
   }
   await shot('about-mobile');
   await go('/users');
@@ -315,7 +457,7 @@ try {
   console.log('PASS no browser runtime errors');
 } catch (error) {
   await shot('failure');
-  console.error(await page.locator('main').innerText());
+  console.error(errors, await page.locator('body').innerText());
   throw error;
 } finally {
   await context.close(); await browser.close(); await server.close();

@@ -10,6 +10,7 @@ import {
   Activity,
   Info,
   Wallet,
+  Bell,
 } from 'lucide-react';
 
 export const NAV = [
@@ -17,6 +18,7 @@ export const NAV = [
   { to: '/orders', label: 'Orders', icon: ShoppingBag, group: 'Workspace' },
   { to: '/analytics', label: 'Analytics', icon: ChartNoAxesCombined, group: 'Workspace' },
   { to: '/users', label: 'User management', icon: Users, group: 'Administration' },
+  { to: '/notifications', label: 'Notifications', icon: Bell, group: 'Workspace' },
   { to: '/payments', label: 'Payments', icon: Wallet, group: 'Administration' },
   { to: '/media', label: 'Media server', icon: Images, group: 'Administration' },
   { to: '/logs', label: 'Logs', icon: Activity, group: 'Administration' },
