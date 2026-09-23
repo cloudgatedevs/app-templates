@@ -4,6 +4,8 @@ The official **Admin Back Office** skeleton for the [Cloudgate](https://cloudgat
 
 ![Admin Back Office](./admin/banner.png)
 
+[View the live app](https://admin.app.cloudgate.dev/)
+
 ## Admin Back Office
 
 A polished React 18, Vite and Tailwind foundation with native Cloudgate back-office capabilities:
@@ -20,7 +22,7 @@ The template includes an empty controller definition for native API application 
 
 ## Use the template
 
-Open **Web Coder → Quick Start** (`/web-coder`) in the Cloudgate hub and select **Admin Back Office**. The gallery card shows the banner, description and source link; **Use this template** copies the app into your workspace.
+Open **Web Coder → Quick Start** (`/web-coder`) in the Cloudgate hub and select **Admin Back Office**. The gallery card shows the banner, description, live demo and source links; **Use this template** copies the app into your workspace.
 
 For local development, configure `admin/.env` using `admin/.env.example`, then run:
 

@@ -2,6 +2,8 @@
 
 A polished React back office for Cloudgate with native user management, analytics, branding and themes, SMTP, media, logs, About and Wallet readiness. Responsive layouts, soft surfaces and smooth transitions support light, dark and system modes. Dashboard and Orders are clean placeholders for your own application features. Built with React 18, Vite, Tailwind and the Cloudgate client SDK.
 
+[View the live app](https://admin.app.cloudgate.dev/)
+
 ## Included sections
 
 | Section | Capability | Data source |
