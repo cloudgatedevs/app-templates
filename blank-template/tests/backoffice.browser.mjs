@@ -28,6 +28,7 @@ let notificationsUnavailable = false;
 let notificationAdminAccess = 'allowed', notificationSendFails = false;
 const sentNotifications = { sbx: [], prod: [] }, notificationRecipients = new Map();
 let accountLinked = false, accountApproved = false;
+let linkedPhoto = true;
 let emailTemplate = { templateEnabled: false, templateHtml: '', scope: 'tenant' }, templateAccess = 'allowed', templateSaveFails = false;
 let allowSelfRegistration = false, registrationAccess = 'allowed', registrationSaveFails = false;
 const linkCode = 'x'.repeat(43);
@@ -108,7 +109,7 @@ await context.route('https://api.example.invalid/**', async route => {
     if (url.pathname.endsWith('/start')) { accountApproved = false; return reply({ code: linkCode, expiresAt: new Date(Date.now() + 300000).toISOString(), authorizationUrl: `https://hub.example.invalid/account-link#code=${linkCode}` }); }
     if (url.pathname.endsWith('/complete')) { assert.equal(body.code, linkCode); if (!accountApproved) return reply({ pending: true }, 202); accountLinked = true; }
     if (request.method() === 'DELETE') { accountLinked = false; accountApproved = false; }
-    return reply({ linked: accountLinked, available: accountLinked, userId: accountLinked ? 7 : null, displayName: accountLinked ? 'Alex Cloudgate' : null, email: accountLinked ? 'hub@example.invalid' : null });
+    return reply({ linked: accountLinked, available: accountLinked, userId: accountLinked ? 7 : null, displayName: accountLinked ? 'Alex Cloudgate' : null, email: accountLinked ? 'hub@example.invalid' : null, photoUrl: accountLinked && linkedPhoto ? `data:image/png;base64,${pixel.toString('base64')}` : null });
   }
   if (url.pathname.startsWith('/api/idp/qa/admin/notifications/')) {
     assert.equal(request.headers().authorization, `Bearer ${token}`);
@@ -208,6 +209,7 @@ const shot = async name => {
 };
 try {
   await (await import('./account-security.browser.mjs')).checkAccountSecurity({ page, context, token, go, visible, shot });
+  await (await import('./profile-picture.browser.mjs')).checkProfilePicture({ page, context, token, go, visible, shot });
   await go('/');
   const sidebar = page.getByRole('complementary', { name: 'Sidebar' });
   const administration = sidebar.getByRole('button', { name: 'Administration', exact: true });
@@ -456,8 +458,16 @@ try {
   await visible(page.getByRole('button', { name: 'Cancel linking' }));
   accountApproved = true;
   await visible(page.getByText('Alex Cloudgate', { exact: true }));
+  await visible(page.getByRole('img', { name: 'Profile picture of Alex Cloudgate' }));
+  await page.getByRole('img', { name: 'Profile picture of Alex Cloudgate' }).evaluate(image => image.decode());
+  await shot('linked-account-photo');
+  await page.getByRole('img', { name: 'Profile picture of Alex Cloudgate' }).evaluate(image => image.dispatchEvent(new Event('error')));
+  await visible(page.getByText('AC', { exact: true }));
+  linkedPhoto = false;
   await page.reload();
   await visible(page.getByText('Alex Cloudgate', { exact: true }));
+  await visible(page.getByText('AC', { exact: true }));
+  linkedPhoto = true;
   await page.getByRole('button', { name: 'Detach Cloudgate account' }).click();
   await visible(page.getByRole('button', { name: 'Link Cloudgate account', exact: true }));
   assert.equal(accountLinked, false);
@@ -469,6 +479,19 @@ try {
   await visible(page.getByText('Custom email template saved and enabled for this tenant.', { exact: true }));
   assert.equal(accountLinked, false, 'Detaching ABP does not revoke the IdP Admin settings access');
   await go('/profile');
+  const cancelledPopupPromise = context.waitForEvent('page');
+  await page.getByRole('button', { name: 'Link Cloudgate account', exact: true }).click();
+  const cancelledPopup = await cancelledPopupPromise;
+  await cancelledPopup.waitForURL('https://hub.example.invalid/account-link**');
+  await visible(page.getByRole('button', { name: 'Cancel linking' }));
+  const deletesBeforeCancel = calls.filter(call => call.path.endsWith('/profile/cloudgate-link') && call.method === 'DELETE').length;
+  await page.getByRole('button', { name: 'Cancel linking' }).click();
+  await visible(page.getByRole('button', { name: 'Link Cloudgate account', exact: true }));
+  assert.equal(calls.filter(call => call.path.endsWith('/profile/cloudgate-link') && call.method === 'DELETE').length, deletesBeforeCancel + 1);
+  assert.equal(await page.evaluate(() => Object.keys(sessionStorage).some(key => key.startsWith('cloudgate-link:'))), false);
+  // Removing window.opener isolates the sign-in window, so browsers may block the parent's
+  // best-effort close. Cancellation must revoke the request and allow a fresh start regardless.
+  await cancelledPopup.close();
   // Blocked popup: redirect automatically, then resume the saved request on return.
   await page.evaluate(() => { window.open = () => null; });
   await page.getByRole('button', { name: 'Link Cloudgate account', exact: true }).click();
@@ -792,6 +815,7 @@ try {
   paymentsUnavailable = false; walletReady = true;
   await page.getByRole('button', { name: 'Refresh', exact: true }).click();
   await visible(page.getByText('Ready to accept payments', { exact: true }));
+  await (await import('./payments.browser.mjs')).checkPayments({ page, context, token, go, visible, shot });
   await go('/analytics'); await visible(page.getByRole('heading', { name: 'Countries', exact: true }));
   await page.getByLabel('Analytics period').selectOption('2');
   await visible(page.getByRole('heading', { name: 'Pages', exact: true }));

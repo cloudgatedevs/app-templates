@@ -31,7 +31,9 @@ const server = await createServer(mergeConfig(mergeConfig(config, {
   configFile: false, root,
   // Source aliases let Vite watch the checkout directly. No npm link, package write, or build required.
   resolve: { alias: aliases, dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom', 'lucide-react', '@radix-ui/react-dialog'] },
-  optimizeDeps: { exclude: ['@cloudgatedevs/cloudgate-client'] },
+  // Prebundle the lazy photo editor too, so opening it for the first time does not
+  // trigger Vite's dependency-discovery reload and discard the open dialog.
+  optimizeDeps: { exclude: ['@cloudgatedevs/cloudgate-client'], include: ['@uppy/core', '@uppy/react/lib/Dashboard.js', '@uppy/webcam', 'react-easy-crop'] },
   css: { postcss: { plugins: [tailwind({ ...preset, content: [root.replaceAll('\\', '/') + '/src/**/*.{js,jsx}', source('src/**/*.{js,jsx}')] }), autoprefixer()] } },
   server: { host: option('--host') || '127.0.0.1', port: Number(option('--port') || 3000), strictPort: true, fs: { allow: [root, sdk] } },
 }), extraConfig));
