@@ -1,4 +1,4 @@
-# Admin Back Office
+# Blank Template
 
 A polished React back office for Cloudgate with native user management, analytics, branding and themes, SMTP, media, logs, About and Wallet readiness. Responsive layouts, soft surfaces and smooth transitions support light, dark and system modes. Dashboard and Orders are clean placeholders for your own application features. Built with React 18, Vite, Tailwind and the Cloudgate client SDK.
 
@@ -32,7 +32,7 @@ npm run build
 npm run preview
 ```
 
-This folder is the deployable admin application. The startup wizard lives in the separate `launcher/` project; the admin app never starts onboarding or writes environment files.
+This folder is the deployable Blank Template application. The startup wizard lives in the separate Cloudgate Launcher repository; this app never starts onboarding or writes environment files.
 
 Quick Start and App Store installations supply connection settings before the build. For local development, copy `.env.example` to `.env`, replace its placeholders, and set `VITE_CLOUDGATE_WEB_APP_ID` to a web app in your tenant. Choose `VITE_CLOUDGATE_API_ENV` and leave `VITE_CLOUDGATE_API_PROJECT` empty unless you add workflows. Restart/rebuild after changing environment values.
 

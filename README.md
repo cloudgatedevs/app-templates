@@ -1,14 +1,14 @@
 # Cloudgate App Templates
 
-Two independent projects currently share this repository: the **Admin Back Office** skeleton for the [Cloudgate](https://cloudgate.dev) Quick Start gallery and the **Cloudgate App Launcher** onboarding project intended for `app.cloudgate.dev`.
+This repository contains **Blank Template**, a reusable app foundation for the [Cloudgate](https://cloudgate.dev) Quick Start gallery and Cloudgate App Launcher.
 
-`admin/` is the application customers receive. `launcher/` owns the setup journey and has its own dependencies, build and entry point. Neither imports files from the other, so the launcher can be moved into its own repository later. See the [launcher guide](./launcher/README.md) for its current implementation status and the hosted-launch plan.
+`blank-template/` is the application customers receive. Cloudgate Launcher owns the setup journey in its separate repository at `D:/repos/AzureDevOps/Cloudgate Launcher`. The projects have independent dependencies, assets and builds.
 
-![Admin Back Office](./admin/banner.png)
+![Blank Template](./blank-template/banner.svg)
 
 [View the live app](https://admin.app.cloudgate.dev/)
 
-## Admin Back Office
+## Blank Template
 
 A polished React 18, Vite and Tailwind foundation with native Cloudgate back-office capabilities:
 
@@ -20,33 +20,29 @@ A polished React 18, Vite and Tailwind foundation with native Cloudgate back-off
 - Responsive navigation, soft surfaces and page, modal and button transitions.
 - Dashboard and Orders placeholders for application-specific features.
 
-The template includes an empty controller definition for native API application scope. It contains no sample workflow actions, app database or seeded business records. See the [Admin setup guide](./admin/README.md) for backend requirements, controller configuration and upgrades.
+The template includes an empty controller definition for native API application scope. It contains no sample workflow actions, app database or seeded business records. See the [template setup guide](./blank-template/README.md) for backend requirements, controller configuration and upgrades.
 
 ## Use the template
 
-Open **Web Coder → Quick Start** (`/web-coder`) in the Cloudgate hub and select **Admin Back Office**. The gallery card shows the banner, description, live demo and source links; **Use this template** copies the app into your workspace.
+Open **Web Coder → Quick Start** (`/web-coder`) in the Cloudgate hub and select **Blank Template**. The gallery card shows the banner, description, live demo and source links; **Use this template** copies the app into your workspace.
 
-For local development, configure `admin/.env` using `admin/.env.example`, then run:
+For local development, configure `blank-template/.env` using `blank-template/.env.example`, then run:
 
 ```sh
-cd admin
+cd blank-template
 npm install
 npm run dev
 ```
 
-Create a production build with `npm run build` and publish the `admin/dist/` output. Static hosting must fall back to `index.html` for application routes.
+Create a production build with `npm run build` and publish the `blank-template/dist/` output. Static hosting must fall back to `index.html` for application routes.
 
 ## Repository layout
 
 ```text
-templates.json       # Quick Start gallery entry for Admin Back Office
-launcher/            # Separate onboarding project; not a customer template
-  package.json       # Independent install/dev/build/test commands
-  src/               # Setup flow and Cloudgate visual assets
-  docs/              # Hosted launch implementation plan
-admin/               # Reusable back-office skeleton
+templates.json       # GitHub catalogue entry for Blank Template
+blank-template/      # Reusable app template
   template.json      # App metadata and installation configuration
-  banner.png         # Gallery banner captured from the current interface
+  banner.svg         # Blank Template gallery preview
   .template/         # Empty controller bundle and setup notes
   src/               # Application source
   tests/             # API and browser checks
@@ -54,17 +50,17 @@ admin/               # Reusable back-office skeleton
 
 ## Gallery metadata
 
-Keep the Admin entry in `templates.json` aligned with `admin/template.json`, including its name, description, tags and banner URL. The gallery copies only the `admin/` folder.
+Keep the Blank Template entry in `templates.json` aligned with `blank-template/template.json`, including its ID, name, folder, description, tags and banner URL. The gallery copies only the `blank-template/` folder. The launcher displays names directly from this catalogue.
 
 Keep generated files such as `node_modules/` and `dist/` out of Git. After changes are merged and pushed to `main`, the gallery uses the updated metadata when it refreshes.
 
 ## Checks
 
 ```sh
-cd admin
+cd blank-template
 npm test
 npm run test:ui
 npm run build
 ```
 
-The [Admin README](./admin/README.md#checks) documents browser setup and the checks' scope.
+The [template README](./blank-template/README.md#checks) documents browser setup and the checks' scope.

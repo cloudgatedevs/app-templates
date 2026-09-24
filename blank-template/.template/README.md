@@ -1,4 +1,4 @@
-# Admin Back Office setup reference
+# Blank Template setup reference
 
 This template uses native Cloudgate APIs and does not bundle a controller, workflow database or seeded app records. Dashboard and Orders remain placeholders. Use the root README and `.env.example` for current installation and upgrade instructions; `env.example` here is a reference copy.
 
