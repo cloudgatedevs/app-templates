@@ -1,5 +1,5 @@
 import { ShoppingBag } from 'lucide-react';
-import { PlaceholderPage } from '@/components/PlaceholderPage';
+import { PlaceholderPage } from '@cloudgatedevs/cloudgate-client/react';
 
 export const Orders = () => (
   <PlaceholderPage

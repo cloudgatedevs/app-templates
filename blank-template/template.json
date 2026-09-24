@@ -1,7 +1,7 @@
 {
   "id": "blank-template",
   "name": "Blank Template",
-  "description": "Polished React back office for Cloudgate with native user management, analytics, branding and themes, SMTP, media, logs, About and Wallet readiness. Includes light/dark modes, responsive layouts and smooth transitions, plus Dashboard and Orders placeholders for your own features.",
+  "description": "Minimal React back office powered by the Cloudgate npm SDK. Shared authentication, profile/account linking, users, notifications, analytics, appearance, SMTP, media and payments are managed by the package. Dashboard and Orders are ready for app-specific logic.",
   "folder": "blank-template",
   "framework": "React",
   "devCommand": "npm install && npm run dev",
@@ -29,10 +29,11 @@
     ],
     "example": ".env.example"
   },
-  "version": "1.0.0",
+  "version": "1.1.0",
   "adminPath": "/",
   "features": [
     "Dashboard and Orders placeholders for app-specific features",
+    "Persistent, verified Cloudgate account linking and detach from Profile",
     "Tenant IdP user management",
     "Live IdP notifications, read receipts and link actions over native WebSocket",
     "Website analytics and scoped workflow logs",

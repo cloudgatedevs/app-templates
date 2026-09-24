@@ -1,0 +1,120 @@
+import assert from 'node:assert/strict';
+
+export async function checkRoleManagement({ page, context, token, calls, getUsers, go, visible, shot }) {
+  const roles = ['User', 'Contributor', 'Admin'].map(name => ({ id: null, name, isDefault: true, permissions: [] }));
+  let nextId = 101, unavailable = false, saveFailure = false, writes = 0;
+  const handler = async route => {
+    const request = route.request();
+    assert.equal(request.headers().authorization, `Bearer ${token}`);
+    assert.equal(request.headers()['x-authentication-signature'], undefined);
+    const body = request.postDataJSON() || {};
+    calls.push({ path: new URL(request.url()).pathname, body, method: request.method() });
+    const action = new URL(request.url()).pathname.split('/').pop();
+    const reply = (value, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(value) });
+    const count = name => getUsers().filter(u => u.role === name).length;
+    if (unavailable) return reply({ message: 'Role management is not available on this server.' }, 404);
+    if (action === 'list') return reply({ items: roles.map(r => ({ ...r, userCount: count(r.name) })) });
+    writes++;
+    if (saveFailure) return reply({ message: 'Unable to save roles right now.' }, 503);
+    if (action === 'set-role') {
+      assert.notEqual(body.id, 1);
+      assert.ok(roles.some(r => r.name === body.role));
+      const user = getUsers().find(u => u.id === body.id); user.role = body.role; return reply(user);
+    }
+    const role = roles.find(r => body.id != null ? r.id === body.id : r.name === body.name);
+    if (action === 'delete') {
+      if (!role || role.isDefault || count(role.name)) return reply({ message: 'This role cannot be deleted.' }, 400);
+      roles.splice(roles.indexOf(role), 1); return reply({ deleted: true });
+    }
+    if (roles.some(r => (action === 'create' || r !== role) && r.name.toLowerCase() === body.name.toLowerCase())) return reply({ message: 'A role with this name already exists.' }, 400);
+    if (action === 'create') {
+      const value = { ...body, id: nextId++, isDefault: false }; roles.push(value); return reply(value);
+    }
+    assert.ok(role);
+    for (const user of getUsers()) if (user.role === role.name) user.role = body.name;
+    Object.assign(role, body, { id: role.id ?? nextId++ }); return reply(role);
+  };
+  await context.route('**/api/idp/qa/admin/roles/*', handler);
+  await context.route('**/api/idp/qa/admin/users/set-role', handler);
+  await go('/roles');
+  await visible(page.getByRole('heading', { name: 'Roles', exact: true }));
+  await visible(page.getByRole('button', { name: 'Edit Admin', exact: true }).last());
+  assert.equal(await page.getByRole('button', { name: 'Delete Admin', exact: true }).count(), 0);
+  assert.equal(await page.getByRole('link', { name: 'Roles', exact: true }).getAttribute('aria-current'), 'page');
+  await page.getByRole('button', { name: 'Create role', exact: true }).click();
+  await page.getByLabel('Role name', { exact: true }).fill('Support');
+  await page.getByRole('button', { name: 'Add permission', exact: true }).click();
+  await page.getByLabel('Permission key 1').fill('orders.view'); await page.getByLabel('Permission value 1').fill('true');
+  await page.getByRole('button', { name: 'Add permission', exact: true }).click();
+  await page.getByLabel('Permission key 2').fill('ORDERS.VIEW');
+  const before = writes;
+  await page.getByRole('button', { name: 'Save role', exact: true }).click();
+  await visible(page.getByRole('alert').filter({ hasText: 'Permission keys must be unique' })); assert.equal(writes, before);
+  await page.getByRole('button', { name: 'Remove permission 2', exact: true }).click();
+  await shot('role-editor-desktop');
+  await page.getByRole('button', { name: 'Save role', exact: true }).click();
+  await visible(page.getByRole('button', { name: 'Edit Support', exact: true }).last());
+  await page.getByRole('button', { name: 'Create role', exact: true }).click();
+  await page.getByLabel('Role name', { exact: true }).fill('support');
+  await page.getByRole('button', { name: 'Save role', exact: true }).click();
+  await visible(page.getByRole('alert').filter({ hasText: 'already exists' }));
+  await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
+  await go('/users');
+  await visible(page.getByRole('button', { name: 'Change role for ava@example.invalid', exact: true }).last());
+  assert.equal(await page.getByRole('button', { name: 'Change role for admin@example.invalid', exact: true }).count(), 0);
+  const assign = async name => {
+    await page.getByRole('button', { name: 'Change role for ava@example.invalid', exact: true }).last().click();
+    await page.getByLabel('Role', { exact: true }).selectOption(name);
+    await page.getByRole('button', { name: 'Save user role', exact: true }).click();
+    await page.getByRole('dialog', { name: 'Change user role', exact: true }).waitFor({ state: 'detached' });
+  };
+  await assign('Support'); assert.equal(getUsers().find(u => u.id === 2).role, 'Support');
+  await go('/roles');
+  await visible(page.getByRole('button', { name: 'Edit Support', exact: true }).last());
+  assert.equal(await page.getByRole('button', { name: 'Delete Support', exact: true }).last().isDisabled(), true);
+  await page.getByRole('button', { name: 'Edit Support', exact: true }).last().click();
+  await page.getByLabel('Role name', { exact: true }).fill('Support team');
+  saveFailure = true;
+  await page.getByRole('button', { name: 'Save role', exact: true }).click();
+  await visible(page.getByRole('alert').filter({ hasText: 'Cloudgate could not complete this request' }));
+  assert.equal(await page.getByLabel('Role name', { exact: true }).inputValue(), 'Support team');
+  saveFailure = false;
+  await page.getByRole('button', { name: 'Save role', exact: true }).click();
+  await visible(page.getByRole('button', { name: 'Edit Support team', exact: true }).last());
+  assert.equal(getUsers().find(u => u.id === 2).role, 'Support team');
+  await page.getByRole('button', { name: 'Edit User', exact: true }).last().click();
+  assert.equal(await page.getByLabel('Role name', { exact: true }).isDisabled(), true);
+  await page.getByRole('button', { name: 'Add permission', exact: true }).click();
+  await page.getByLabel('Permission key 1').fill('reports.view'); await page.getByLabel('Permission value 1').fill('false');
+  await page.getByRole('button', { name: 'Save role', exact: true }).click();
+  await visible(page.getByRole('button', { name: 'Edit User', exact: true }).last());
+  assert.equal(roles.find(r => r.name === 'User').permissions[0].value, 'false');
+  await shot('roles-desktop');
+  const theme = await page.evaluate(() => document.documentElement.dataset.theme);
+  await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; }); await shot('roles-dark');
+  await page.evaluate(theme => { document.documentElement.dataset.theme = theme; }, theme);
+  await page.setViewportSize({ width: 360, height: 800 }); await shot('roles-mobile');
+  await page.getByRole('button', { name: 'Edit Support team', exact: true }).first().click();
+  await shot('role-editor-mobile');
+  const modal = page.getByRole('dialog');
+  assert.ok((await modal.boundingBox()).width <= 360);
+  await page.keyboard.press('Escape'); await modal.waitFor({ state: 'detached' });
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await go('/users'); await assign('Admin'); assert.equal(getUsers().find(u => u.id === 2).role, 'Admin');
+  await assign('User'); assert.equal(getUsers().find(u => u.id === 2).role, 'User');
+  await go('/roles');
+  await visible(page.getByRole('button', { name: 'Delete Support team', exact: true }).last());
+  await page.getByRole('button', { name: 'Delete Support team', exact: true }).last().click();
+  await page.getByRole('button', { name: 'Cancel', exact: true }).click(); assert.ok(roles.some(r => r.name === 'Support team'));
+  await page.getByRole('button', { name: 'Delete Support team', exact: true }).last().click();
+  await page.getByRole('button', { name: 'Delete role', exact: true }).click();
+  await visible(page.getByText('Role deleted.', { exact: true })); assert.ok(!roles.some(r => r.name === 'Support team'));
+  unavailable = true;
+  await page.getByRole('button', { name: 'Refresh', exact: true }).click();
+  await visible(page.getByRole('alert').filter({ hasText: 'Role management is not available' }));
+  assert.equal(await page.getByRole('button', { name: 'Create role', exact: true }).isDisabled(), true);
+  unavailable = false;
+  await page.getByRole('button', { name: 'Refresh', exact: true }).click();
+  await visible(page.getByRole('button', { name: 'Edit Admin', exact: true }).last());
+  console.log('PASS IdP role CRUD, permissions, assignment, built-in protection, tenant token, failed saves, unavailable API, light/dark and mobile');
+}

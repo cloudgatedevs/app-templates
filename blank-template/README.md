@@ -1,96 +1,149 @@
-# Blank Template
+# Cloudgate blank template
 
-A polished React back office for Cloudgate with native user management, analytics, branding and themes, SMTP, media, logs, About and Wallet readiness. Responsive layouts, soft surfaces and smooth transitions support light, dark and system modes. Dashboard and Orders are clean placeholders for your own application features. Built with React 18, Vite, Tailwind and the Cloudgate client SDK.
-
-[View the live app](https://admin.app.cloudgate.dev/)
-
-## Included sections
-
-| Section | Capability | Data source |
-| --- | --- | --- |
-| Dashboard | Placeholder for application-specific metrics and activity. | None |
-| Orders | Placeholder for application-specific order management. | None |
-| Notifications | Bell popup with the five latest updates and a full-inbox link, live unread badge, read receipts, all/unread filters and optional link actions. | Tenant IdP notifications API and native WebSocket |
-| User management | Search, create, edit, enable/disable, delete and request a password reset. Administrator accounts are read-only here. | Tenant IdP admin user APIs |
-| Analytics | Website views, sessions, visitors, periods, pages, countries, sources and devices; visitor workflow calls. | Cloudgate Web App Insights |
-| Theme styling | Colour presets, custom primary/secondary colours, light/dark/system mode and density. | Native Cloudgate appearance API |
-| Appearance | Application name, tagline, description, logo, favicon, app URL, support email and footer. | Native Cloudgate appearance API |
-| SMTP settings | Cloudgate delivery or tenant SMTP override, preserved encrypted password, removal confirmation and explicit test send. | Tenant IdP email settings APIs |
-| Media server | Paginated image folders, multiple uploads, previews, public URLs and confirmed deletion. Branding images in use are protected. | Cloudgate IdP files APIs |
-| Logs | App-scoped workflow calls, timing, outcomes, filters, payload details and node logs. | Tenant IdP workflow logs APIs |
-| About us | App/version, configured identity/contact details, tenancy information and Cloudgate links. | Manifest, appearance settings and IdP profile |
-| Payments | Wallet provider, onboarding, charges/payouts, environment and readiness; open Wallet to manage transactions and setup. | Native Cloudgate payments status API |
-
-Dashboard and Orders are clearly labelled placeholders. They make no domain API calls and display no fabricated metrics, users or orders. `/users` manages **real tenant IdP identities**; the old `/sample-users` URL redirects there. Checkout, charging cards and refund processing are extension work, not part of this generic skeleton.
+A small React app composed with `@cloudgatedevs/cloudgate-client`. The SDK owns authentication,
+native Cloudgate APIs and the shared back-office UI. Dashboard and Orders remain app-owned
+placeholders for your own logic. No workflow controller is needed for the shared features.
 
 ## Run
 
 ```sh
 npm install
 npm run dev
-npm run build
-npm run preview
 ```
 
-This folder is the deployable Blank Template application. The startup wizard lives in the separate Cloudgate Launcher repository; this app never starts onboarding or writes environment files.
+Cloudgate Quick Start fills `.env.example` placeholders into `.env`. For manual setup, supply
+the hub URL, API URL, tenant and local web app ID. Published site metadata overrides the local
+web app/environment defaults. Allow the app origin in the tenant's IdP return URLs. Sign in as
+an IdP `Admin`. Native features send an IdP bearer token; do not put signing secrets in `VITE_` values.
 
-Apps published by Cloudgate Launcher support automatic entry through **Open your app**. The backend provisions the hub account's tenant IdpUser with the `Admin` role. The app consumes a short-lived `cloudgate_login` code from the URL fragment, immediately removes it, and redeems it at the configured IdP API using the build's tenant and web app ID. It then uses the normal IdP session and refresh flow. No hub token is sent to this app. Invalid or expired codes show a sign-in recovery message. This requires the backend launcher login endpoints and the updated template source to be deployed together.
-
-Quick Start and App Store installations supply connection settings before the build. For local development, copy `.env.example` to `.env`, replace its placeholders, and set `VITE_CLOUDGATE_WEB_APP_ID` to a web app in your tenant. Choose `VITE_CLOUDGATE_API_ENV` and leave `VITE_CLOUDGATE_API_PROJECT` empty unless you add workflows. Restart/rebuild after changing environment values.
-
-Normal sign-in uses an active tenant **IdpUser** with the **Admin** role. The admin template does not use a Cloudgate hub account. If IdP settings are missing, it displays its existing **Sign-in not configured** state rather than opening the wizard. The published return URL must be allowed in the tenant's IdP settings.
-
-Built-in back-office features use IdP bearer tokens. Any `CLOUDGATE_API_KEY` / `CLOUDGATE_API_SECRET` values are for server-side integrations only and must never be prefixed with `VITE_` or compiled into the browser bundle.
-
-The single app entry is `/`; all routes use the same `index.html`. Static hosting must fall back to `index.html` for routes such as `/users`, `/analytics` and `/appearance`.
-
-## Cloudgate setup and upgrading an existing installation
-
-1. Deploy/restart Cloudgate and apply the **WebDbContext** migrations, including `20260923023151_web_app_native_appearance_scope`. It adds web-app-scoped appearance storage while keeping legacy settings. Payments uses the existing tenant Wallet and needs no additional Wallet migration.
-2. Publish this app from Quick Start / the code editor or the App Store. There is no bundled controller, workflow or app database. Cloudgate publishes `cg-analytics.json` with the web app ID and environment; the skeleton reads those public selectors and authenticates API calls with the tenant IdP Admin session.
-3. For local development or hosting outside Cloudgate, open **Web Apps → Apps** in Cloudgate, click the app’s **Edit** pencil button, and select the **General** tab. Click the copy icon beside **Web app ID**, paste it into `VITE_CLOUDGATE_WEB_APP_ID`, and set `VITE_CLOUDGATE_API_ENV` to `sbx` or `prod`. You can also copy the ID beside the app’s path in the Apps list. Restart/rebuild after changing build variables. Publishing metadata takes precedence over these defaults.
-4. Sign in with an active tenant IdP account with an administrator role. Grant initial administrator access in the Cloudgate hub under App users.
-5. Rebuild and republish older skeletons to use the new API selectors. You do not need to create an empty `admin` controller to fix **No application uses that controller path in this environment**. Backend deployment alone does not change an older frontend's appearance requests. If you never added workflows, clear the old `VITE_CLOUDGATE_API_PROJECT=admin` setting; retain an existing media library by setting `VITE_CLOUDGATE_MEDIA_FOLDER=admin` first.
-6. Existing App Store installs preserve controller-scoped native branding through their saved installation mapping and copy it into web-app storage on the first save. Legacy clients remain supported. For a manually deployed app without an installation mapping, read its old settings using the legacy `projectPath` selector and explicitly save those values using the desired `webAppId` and its current revision. No settings or remote controllers are deleted automatically.
-7. Branding from an old custom workflow or SQLite table still needs a one-time transfer through the native appearance API. Only retire old workflows after checking their other consumers.
-
-User management and SMTP are **tenant-wide**. Appearance belongs to the **web app and environment**. Payments belongs to the **tenant and environment**. Analytics uses the published web app ID. Only workflow logs require an optional controller; without one, the Logs page explains that no workflows are configured.
-
-Media uses `apps/<webAppId>/media` and `apps/<webAppId>/branding`. Set `VITE_CLOUDGATE_MEDIA_FOLDER` to an existing prefix (for example `admin`) to retain an older library. An existing `VITE_CLOUDGATE_API_PROJECT` is also accepted as a legacy media prefix. These are file folders, not controller requirements. Media deletion checks saved branding before removing an image.
-
-## Backend contract
-
-Notifications use the signed-in **IdP user** within the tenant and environment. Apply the `AddIdpNotifications` and `AddIdpNotificationStyle` **ZeroDbContext** migrations and restart the backend before publishing this version. The inbox is shared by apps in the same tenant/environment. `POST /api/idp/{tenant}/notifications/{list|unread-count|read|read-all}` uses the IdP bearer token and `{ environment }`; list also accepts skip/take/unreadOnly, and read requires the notification GUID. IdP Admins can send through `/admin/notifications/send` and inspect `/history` and `/recipients`. Workflows can send using the **IdP Notification** node. Broadcasts snapshot all current non-deleted IdP users; offline recipients retain unread messages.
-
-The browser connects using native WebSocket at `/ws-idp-notifications?environment=sbx&access_token=…`. Each ready/change event refreshes the authenticated inbox; reconnect, focus and periodic refresh recover missed events. For a backend running multiple instances, all instances must use the same existing `Abp:RedisCache:ConnectionString`. Delivery uses the `websocket:idp-notifications` Redis channel; no SignalR client or hub is used. Without Redis only local-instance sockets receive live events. The proxy must forward WebSocket upgrades, and its logs must redact `access_token`. Redis Pub/Sub channels are shared across database indexes, so separate deployments should use separate Redis endpoints.
-
-Notification title/body are plain text. Optional `style` accepts `info` (default), `success`, `warning` or `danger`; the bell popup and inbox show a matching color, icon and label. Existing notifications default to info. Choose the alert style in the hub's create modal or the workflow node (`Param7`); inbox and history responses include it. Actions accept a local `/path` or absolute HTTP(S) URL, and clicking an action marks the message read before navigation. Read state is stored per recipient and synchronized across sessions. The hub's **Web Apps → App Notifications** page shows sent messages and recipient read timestamps. See the tenant's `/idp/{tenant}/api` documentation for request/response examples, WebSocket integration and workflow configuration.
-
-Back-office features use native Cloudgate APIs with IdP bearer authentication and server-side administrator authorization. The React guard provides the corresponding UI gate. Dashboard and Orders have no backend contract until you implement those domain features.
-
-Appearance uses `POST {idpApi}/api/idp/{tenant}/admin/appearance/{details|update|reset}` with the IdP bearer token. All requests carry `{ webAppId, environment }`; `details` returns `{ values, revision }`. `update` adds `{ values: { ...changedFields }, revision }`; `reset` adds `{ revision }` to restore defaults. Both writes return the complete values and a new revision. Only the twelve supported appearance/theme fields are accepted. A stale revision returns 409 and requires a reload. No workflow signing key is used for these requests.
-
-Payments uses `POST {idpApi}/api/idp/{tenant}/admin/payments/status` with an active tenant IdP Admin bearer token and `{ environment }`. It returns `{ ready, provider, status, chargesEnabled, payoutsEnabled, currency, country, production, reason }`, optionally wrapped in `result`. The authenticated tenant is checked before reading the Wallet; apps in the same tenant/environment share a Wallet, while sandbox and production are separate. Missing/incomplete Wallet setup returns HTTP 200 with `ready: false` and a setup reason. Invalid environment returns 400; an undeployed native endpoint returns 404; invalid/non-admin identities receive 401/403. The status API does not provision Wallets or move money. It requires no HMAC key, workflow or app database. Provider setup and transactions remain in the Cloudgate hub's Wallet page.
-
-SMTP secrets are managed by the native tenant email settings API. The skeleton does not provision an app database.
-
-## Extending the skeleton
-
-- `src/components/navConfig.jsx` and `src/App.jsx`: navigation and routes.
-- `src/integrations/`: adapted shared Shop Analytics, Logs, SMTP and About components.
-- `src/services/`: signed workflows and bearer-authenticated tenant APIs.
-- `src/settings/`: saved settings, branding updates and contrast-aware theme application.
-- `src/pages/`: back-office screens and Dashboard/Orders placeholders.
-- `src/components/PlaceholderPage.jsx`: shared placeholder presentation.
-
-Replace the placeholders with your application's metrics and order management when their domain APIs are ready. If you add workflow APIs, `src/services/api.js` provides the optional signed workflow client; enforce administrator authorization in the backend and add a workflow bundle to your template manifest when needed. Appearance and payment readiness are implemented by the native backend.
-
-## Checks
+## Develop the SDK locally
 
 ```sh
-npm test                   # API refresh/errors, theme validation and Analytics clients
-npm run test:ui            # Playwright; real app with intercepted Cloudgate APIs
-npm run build
+npm run dev:sdk
 ```
 
-Install a browser for UI checks once with `npx playwright install chromium` if needed. UI checks bind local port 3199 and supply fixture configuration; they never change tenant accounts, settings, media or send real email. Set `ADMIN_TEST_OUTPUT_DIR` to save screenshots. The browser checks cover placeholders without sample API calls, account operations, confirmation/cancellation, branding persistence, themes, SMTP, media, Analytics/Logs/Payments/About, non-admin access and a 360px mobile viewport.
+This resolves `../../client`, matching the normal `GitHub/client` and `GitHub/app templates/blank-template`
+layout. It serves SDK source directly with Vite updates for JS, JSX and CSS, without publishing,
+pushing, rebuilding the SDK, changing your package dependency or using a global npm link.
+React and other UI peers resolve from this app to avoid duplicate React installations.
+
+```sh
+npm run dev:sdk -- --sdk "D:/repos/GitHub/client" --port 3000
+```
+
+Alternatively set `CLOUDGATE_SDK_PATH`. The local checkout needs the 0.6 source structure;
+its own node_modules are not needed to run this mode. Restart the dev server after changing
+SDK build/theme configuration. Ordinary `npm run dev` and `npm run build` use the installed
+dependency, making it easy to compare a release with local changes.
+
+This review includes a portable `vendor/cloudgatedevs-cloudgate-client-0.6.0.tgz` dependency
+so a clean checkout also builds before 0.6 is published. Once released, replace it using
+`npm install @cloudgatedevs/cloudgate-client@0.6.0` and commit the updated lockfile.
+
+## Add your app logic
+
+- `src/services/cloudgate.js`: your Cloudgate configuration.
+- `src/App.jsx`: your routes and navigation, composed with `CloudgateBackoffice`.
+- `src/pages/Dashboard.jsx` and `Orders.jsx`: replace with your domain logic.
+- `template.json`: application metadata supplied to the shared About screen.
+- `src/index.css`: your Tailwind utilities. Shared SDK CSS is imported after utilities so
+  responsive rules stay in order. Import separate app-specific overrides after shared CSS if needed.
+
+Use `useCloudgate()` to access native clients from your own components. Domain workflow clients
+belong in your app; privileged signing should live on your server. The optional project setting
+only scopes the shared native Logs screen and has no implicit `admin` default.
+
+### Navigation that grows with your app
+
+Your modules are the primary navigation. Cloudgate's shared controls are grouped under a
+collapsed **Administration** menu beneath them. The template demonstrates a `Commerce` module
+containing Orders. Add links or nested modules in `src/App.jsx`:
+
+```jsx
+{ id: 'inventory', label: 'Inventory', defaultExpanded: true, children: [
+  { to: '/products', label: 'Products', keywords: ['stock', 'catalog'] },
+  { to: '/suppliers', label: 'Suppliers' },
+] }
+```
+
+Add matching React Router routes for your pages. Use stable group IDs; `icon` is optional.
+Existing flat links and `group` captions still work. The SDK supplies expandable menus,
+search, active-route breadcrumbs, saved expansion state and a hideable desktop sidebar.
+Desktop spacing is compact, while the mobile drawer keeps comfortable touch targets.
+These shared behaviors update through npm and work with `npm run dev:sdk`.
+
+## Link a Cloudgate account
+
+Open Profile and choose **Link Cloudgate account**. Sign in to Cloudgate in the popup and
+approve the two displayed identities. The popup closes automatically after approval.
+A busy **Linking…** button is shown while approval is pending.
+If popups are blocked, Cloudgate opens in the current window automatically.
+The SDK completes the request using the original IdP session. The relationship persists on the
+server between sign-ins. **Detach Cloudgate account** removes it and invalidates pending approvals.
+This requires the backend `AddIdpCloudgateAccountLink` migration and hub `/account-link` screen.
+Linking is an optional identity association. All back-office controls use the current IdP Admin role;
+linking or detaching does not change access and no ABP token is used for settings changes.
+
+## Email template
+
+For app-user email layouts, use **Administration → Content & email → Email template** (`/email-template`).
+The shared SDK includes the HTML editor, merge fields, default restoration, live sample preview and
+enable/disable control. Save changes to apply the layout tenant-wide. Disabling retains your HTML.
+This needs the updated backend email-template endpoints and an active IdP user with the Admin role. SMTP configuration is separate. Use `npm run dev:sdk` to test SDK edits
+locally without publishing.
+
+## Allow self-registration
+
+Open **Administration → People & access → Registration**, change **Allow self-registration**, and
+choose **Save changes**. The setting persists on Cloudgate and affects all apps in the tenant,
+including sandbox and production. Existing users can still sign in when registration is disabled.
+Your IdP account must have the Admin role. Both the API client and screen live in the SDK. Deploy
+the updated backend endpoints before using the control; an older backend shows an unavailable message.
+Account linking is optional and has no effect on this permission check.
+
+## Create app notifications
+
+Open **Administration → People & access → App notifications** (`/app-notifications`) to create
+notifications, view sent history and inspect read receipts. Choose Sandbox or Production, select one
+app user or all current users, enter a plain-text message, and review it before sending. Four alert styles
+and optional action links are supported. The personal inbox links to this management page.
+
+The UI and native API client live in the SDK and use the existing IdP Admin notification endpoints.
+Notification creation needs an active IdP Admin, with no ABP link or new backend migration required.
+Broadcasts apply to current app users across the tenant. Test local SDK edits with `npm run dev:sdk`.
+
+## Developer workspace
+
+The bottom **Developers** bar comes from the SDK. Sign in as an IdP Admin, link the corresponding
+Cloudgate account under **Profile**, then open the bar. It frames Cloudgate's workflow editor and
+development tools with the project fixed to this app's tenant. Workflow controllers within that
+project remain selectable. API metrics, databases, WebSockets, schedules, keys, tests, releases and
+logs use the linked ABP user's actual permissions. Ordinary backoffice controls still use IdP Admin.
+
+Minimize the panel to return to your app without discarding the open workflow. **End developer
+session** closes it. Developer sessions expire after 20 minutes; save before closing or reconnecting.
+Set `developerMode={false}` on `CloudgateBackoffice` if an app should not show this entry point.
+
+Deploy the matching Cloudgate backend and React hub changes. Add this app's origin to the tenant's
+IdP allowed redirect URLs, allow the hub origin in backend CORS, and allow this app in the hub's
+`frame-ancestors` policy specifically for `/developer`. The hub's configured API must point at the
+same backend as this app. No npm publication is needed for testing: use `npm run dev:sdk`.
+
+## Validate and release
+
+```sh
+npm run build
+npm run test:ui
+```
+
+Browser checks build the real app and mock APIs; they do not change tenant data. They cover
+account linking, responsive pages, dialogs, permissions, settings, users, media, notifications,
+analytics and payment readiness. Install Playwright Chromium once if needed, or set
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to a locally installed Chromium browser. Port 3199 is used.
+Set `ADMIN_TEST_OUTPUT_DIR` to retain screenshots.
+
+Quick Start uses the `app-templates/templates.json` catalog. App Store uses a separate catalog
+(normally `cloudgatedevs/apps/apps.json`). Updating this template does not update the other catalog
+or applications already copied by customers. Release the SDK, update the template dependency and
+catalog entry, and explicitly update any App Store listing that should offer this template.
+Existing apps adopt shared features by updating their npm dependency and rebuilding.

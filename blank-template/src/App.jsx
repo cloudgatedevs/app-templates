@@ -1,66 +1,22 @@
-import { lazy, Suspense } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, Outlet } from 'react-router-dom';
-import { AuthProvider, RequireAuth } from '@/auth';
-import { RequireAdmin } from '@/auth/RequireAdmin';
-import { SettingsProvider } from '@/settings/SettingsProvider';
-import { NotificationsProvider } from '@/notifications/NotificationsProvider';
-import { ScreenLoader } from '@/components/ScreenLoader';
-import { Layout } from '@/components/Layout';
-import { Dashboard } from '@/pages/Dashboard';
-import { Orders } from '@/pages/Orders';
-import { Profile } from '@/pages/Profile';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { LayoutDashboard, ShoppingBag, Store } from 'lucide-react';
+import { CloudgateBackoffice } from '@cloudgatedevs/cloudgate-client/react';
+import { cloudgate } from './services/cloudgate';
+import { Dashboard } from './pages/Dashboard';
+import { Orders } from './pages/Orders';
+import metadata from '../template.json';
 
-const load = (file, name) => lazy(() => file().then((module) => ({ default: module[name] })));
-const UserManagement = load(() => import('@/pages/UserManagement'), 'UserManagement');
-const Analytics = load(() => import('@/pages/Analytics'), 'Analytics');
-const Appearance = load(() => import('@/pages/Appearance'), 'Appearance');
-const Smtp = load(() => import('@/pages/Smtp'), 'Smtp');
-const Media = load(() => import('@/pages/Media'), 'Media');
-const Payments = load(() => import('@/pages/Payments'), 'Payments');
-const Logs = load(() => import('@/pages/Logs'), 'Logs');
-const Notifications = load(() => import('@/pages/Notifications'), 'Notifications');
-const About = load(() => import('@/pages/About'), 'About');
-const Workspace = () => (
-  <SettingsProvider>
-    <NotificationsProvider>
-      <Suspense fallback={<ScreenLoader />}>
-        <Outlet />
-      </Suspense>
-    </NotificationsProvider>
-  </SettingsProvider>
-);
+const navigation = [
+  { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true, group: 'Workspace' },
+  { id: 'commerce', label: 'Commerce', icon: Store, defaultExpanded: true, children: [
+    { to: '/orders', label: 'Orders', icon: ShoppingBag },
+  ] },
+];
 
-const App = () => (
-  <BrowserRouter>
-    <AuthProvider>
-      <Routes>
-        <Route element={<RequireAuth />}>
-          <Route element={<RequireAdmin />}>
-            <Route element={<Workspace />}>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/users" element={<UserManagement />} />
-                <Route path="/sample-users" element={<Navigate to="/users" replace />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/analytics" element={<Analytics />} />
-                <Route path="/appearance" element={<Appearance key="appearance" />} />
-                <Route path="/theme" element={<Appearance key="theme" theme />} />
-                <Route path="/smtp" element={<Smtp />} />
-                <Route path="/media" element={<Media />} />
-                <Route path="/payments" element={<Payments />} />
-                <Route path="/logs" element={<Logs />} />
-                <Route path="/notifications" element={<Notifications />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/settings" element={<Navigate to="/appearance" replace />} />
-              </Route>
-            </Route>
-          </Route>
-        </Route>
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </AuthProvider>
-  </BrowserRouter>
-);
-
-export { App };
+// Add your application's routes and navigation here. Shared features update through npm.
+export const App = () => <BrowserRouter>
+  <CloudgateBackoffice client={cloudgate} metadata={metadata} navigation={navigation} fallback="/">
+    <Route path="/" element={<Dashboard />} />
+    <Route path="/orders" element={<Orders />} />
+  </CloudgateBackoffice>
+</BrowserRouter>;
