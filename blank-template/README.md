@@ -32,7 +32,13 @@ npm run build
 npm run preview
 ```
 
-Copy `.env.example` to `.env` for a manual installation and fill in your tenant values. The App Store / Quick Start supplies the environment automatically. Published apps discover their web app ID and environment from Cloudgate site metadata. For local development, set `VITE_CLOUDGATE_WEB_APP_ID` to a web app owned by your tenant and choose `VITE_CLOUDGATE_API_ENV`. Leave `VITE_CLOUDGATE_API_PROJECT` empty unless you add workflows. Vite embeds environment values at build time; restart/rebuild after changes. Never use browser-embedded signing credentials as the administrator authorization boundary.
+This folder is the deployable admin application. The startup wizard lives in the separate `launcher/` project; the admin app never starts onboarding or writes environment files.
+
+Quick Start and App Store installations supply connection settings before the build. For local development, copy `.env.example` to `.env`, replace its placeholders, and set `VITE_CLOUDGATE_WEB_APP_ID` to a web app in your tenant. Choose `VITE_CLOUDGATE_API_ENV` and leave `VITE_CLOUDGATE_API_PROJECT` empty unless you add workflows. Restart/rebuild after changing environment values.
+
+Normal sign-in uses an active tenant **IdpUser** with the **Admin** role. The admin template does not use a Cloudgate hub account. If IdP settings are missing, it displays its existing **Sign-in not configured** state rather than opening the wizard. The published return URL must be allowed in the tenant's IdP settings.
+
+Built-in back-office features use IdP bearer tokens. Any `CLOUDGATE_API_KEY` / `CLOUDGATE_API_SECRET` values are for server-side integrations only and must never be prefixed with `VITE_` or compiled into the browser bundle.
 
 The single app entry is `/`; all routes use the same `index.html`. Static hosting must fall back to `index.html` for routes such as `/users`, `/analytics` and `/appearance`.
 

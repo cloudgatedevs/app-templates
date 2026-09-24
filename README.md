@@ -1,6 +1,8 @@
 # Cloudgate App Templates
 
-The official **Admin Back Office** skeleton for the [Cloudgate](https://cloudgate.dev) Web Coder Quick Start gallery. This repository contains the `admin/` app only.
+Two independent projects currently share this repository: the **Admin Back Office** skeleton for the [Cloudgate](https://cloudgate.dev) Quick Start gallery and the **Cloudgate App Launcher** onboarding project intended for `app.cloudgate.dev`.
+
+`admin/` is the application customers receive. `launcher/` owns the setup journey and has its own dependencies, build and entry point. Neither imports files from the other, so the launcher can be moved into its own repository later. See the [launcher guide](./launcher/README.md) for its current implementation status and the hosted-launch plan.
 
 ![Admin Back Office](./admin/banner.png)
 
@@ -38,6 +40,10 @@ Create a production build with `npm run build` and publish the `admin/dist/` out
 
 ```text
 templates.json       # Quick Start gallery entry for Admin Back Office
+launcher/            # Separate onboarding project; not a customer template
+  package.json       # Independent install/dev/build/test commands
+  src/               # Setup flow and Cloudgate visual assets
+  docs/              # Hosted launch implementation plan
 admin/               # Reusable back-office skeleton
   template.json      # App metadata and installation configuration
   banner.png         # Gallery banner captured from the current interface

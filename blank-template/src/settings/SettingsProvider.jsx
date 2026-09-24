@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState, useCallback } from 'react';
 import { settingsApi } from '@/services/settings';
 import { DEFAULT_SETTINGS, normalizeSettings, rgb, foreground, accentText } from './model';
+import cloudgateIcon from '@/assets/cloudgate-icon.svg';
 
 const SettingsContext = createContext(null);
 export function SettingsProvider({ children }) {
@@ -56,7 +57,7 @@ export function SettingsProvider({ children }) {
       .querySelector('meta[name="description"]')
       ?.setAttribute('content', settings.app_description || 'Cloudgate administration');
     let icon = document.querySelector('link[rel="icon"][data-app-brand]');
-    const href = settings.app_icon_url || settings.app_logo_url;
+    const href = settings.app_icon_url || settings.app_logo_url || cloudgateIcon;
     if (href) {
       if (!icon) {
         icon = document.createElement('link');

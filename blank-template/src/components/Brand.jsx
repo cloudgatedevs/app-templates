@@ -1,16 +1,12 @@
-import { PanelsTopLeft } from 'lucide-react';
+import cloudgateIcon from '@/assets/cloudgate-icon.svg';
 import { useSettings } from '@/settings/SettingsProvider';
 
 export function Brand() {
   const { settings } = useSettings();
   return (
     <div className="flex min-w-0 items-center gap-3">
-      <span className="brand-mark grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-2xl bg-accent-grad text-accent-fg">
-        {settings.app_logo_url ? (
-          <img src={settings.app_logo_url} alt="" className="h-full w-full object-contain" />
-        ) : (
-          <PanelsTopLeft size={21} />
-        )}
+      <span className={`brand-mark grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-2xl ${settings.app_logo_url ? 'bg-accent-grad text-accent-fg' : 'border border-ink-700 bg-ink-850'}`}>
+        <img src={settings.app_logo_url || cloudgateIcon} alt="" className={settings.app_logo_url ? 'h-full w-full object-contain' : 'h-7 w-7 object-contain'} />
       </span>
       <div className="min-w-0 leading-tight">
         <p className="truncate text-sm font-semibold">{settings.app_name}</p>
