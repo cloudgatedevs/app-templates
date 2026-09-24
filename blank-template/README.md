@@ -34,6 +34,8 @@ npm run preview
 
 This folder is the deployable Blank Template application. The startup wizard lives in the separate Cloudgate Launcher repository; this app never starts onboarding or writes environment files.
 
+Apps published by Cloudgate Launcher support automatic entry through **Open your app**. The backend provisions the hub account's tenant IdpUser with the `Admin` role. The app consumes a short-lived `cloudgate_login` code from the URL fragment, immediately removes it, and redeems it at the configured IdP API using the build's tenant and web app ID. It then uses the normal IdP session and refresh flow. No hub token is sent to this app. Invalid or expired codes show a sign-in recovery message. This requires the backend launcher login endpoints and the updated template source to be deployed together.
+
 Quick Start and App Store installations supply connection settings before the build. For local development, copy `.env.example` to `.env`, replace its placeholders, and set `VITE_CLOUDGATE_WEB_APP_ID` to a web app in your tenant. Choose `VITE_CLOUDGATE_API_ENV` and leave `VITE_CLOUDGATE_API_PROJECT` empty unless you add workflows. Restart/rebuild after changing environment values.
 
 Normal sign-in uses an active tenant **IdpUser** with the **Admin** role. The admin template does not use a Cloudgate hub account. If IdP settings are missing, it displays its existing **Sign-in not configured** state rather than opening the wizard. The published return URL must be allowed in the tenant's IdP settings.

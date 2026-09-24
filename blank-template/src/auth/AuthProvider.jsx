@@ -1,6 +1,6 @@
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isTokenValid } from '@cloudgatedevs/cloudgate-client';
-import { auth as cloudgateAuth, redirectToLogin } from '@/services/auth';
+import { auth as cloudgateAuth, initializeAuth, redirectToLogin } from '@/services/auth';
 import { getIdpProfile, PROFILE_REJECTED, getProfilePictureSrc, updateIdpProfile } from './idpProfileApi';
 
 const AuthContext = createContext(null);
@@ -46,6 +46,7 @@ const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState(undefined);
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [bootstrapError, setBootstrapError] = useState(null);
   const logoutRef = useRef(() => {});
 
   const loadProfile = useCallback(async (accessToken) => {
@@ -89,7 +90,7 @@ const AuthProvider = ({ children }) => {
     let cancelled = false;
 
     (async () => {
-      const session = await cloudgateAuth.init();
+      const session = await initializeAuth();
       if (cancelled) return;
       if (!session) {
         setAuth(undefined);
@@ -100,7 +101,9 @@ const AuthProvider = ({ children }) => {
       setAuth({ accessToken: session.accessToken, refreshToken: session.refreshToken });
       await loadProfile(session.accessToken);
       if (!cancelled) setLoading(false);
-    })();
+    })().catch(error => {
+      if (!cancelled) { setBootstrapError(error); setLoading(false); }
+    });
 
     return () => {
       cancelled = true;
@@ -143,6 +146,13 @@ const AuthProvider = ({ children }) => {
     [loading, auth, currentUser, logout, updateUserProfile, loadProfile],
   );
 
+  if (bootstrapError) return <div className="grid min-h-screen place-items-center p-6">
+    <section className="card max-w-md space-y-4 p-8 text-center" role="alert">
+      <h1 className="text-xl font-semibold">Let’s get you signed in</h1>
+      <p className="text-sm text-mist-muted">{bootstrapError.message || 'Sign-in could not be completed. Open your app from the launcher again.'}</p>
+      <button className="btn-primary" onClick={() => redirectToLogin()}>Sign in</button>
+    </section>
+  </div>;
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

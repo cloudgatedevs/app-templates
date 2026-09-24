@@ -8,6 +8,7 @@
 // then VITE_IDP_TENANCY_NAME, then the subdomain.
 
 import { createCloudgateAuth } from '@cloudgatedevs/cloudgate-client';
+import { consumeLauncherLogin } from '../auth/launcherLogin';
 
 const configuredReturnUrl = String(import.meta.env.VITE_IDP_RETURN_URL ?? '').trim();
 
@@ -16,6 +17,19 @@ export const auth = createCloudgateAuth({
   idpApiUrl: import.meta.env.VITE_IDP_API_URL,
   tenancyName: import.meta.env.VITE_IDP_TENANCY_NAME,
 });
+
+let bootstrap;
+export function initializeAuth() {
+  // Share the bootstrap promise across mounts so a one-use code is only redeemed once.
+  return bootstrap ??= (async () => {
+    await consumeLauncherLogin({
+      apiUrl: String(import.meta.env.VITE_IDP_API_URL || import.meta.env.VITE_IDP_BASE_URL || '').trim(),
+      tenancyName: String(import.meta.env.VITE_IDP_TENANCY_NAME || '').trim(),
+      webAppId: String(import.meta.env.VITE_CLOUDGATE_WEB_APP_ID || '').trim(), auth,
+    });
+    return auth.init();
+  })();
+}
 
 /** Hosted login URL. Prefers VITE_IDP_RETURN_URL, falling back to the current page. */
 export function loginUrl(returnUrl) {
