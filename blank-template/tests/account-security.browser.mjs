@@ -31,10 +31,10 @@ export async function checkAccountSecurity({ page, context, token, go, visible, 
   const menu = page.getByRole('menu', { name: 'My account' }); await visible(menu);
   assert.equal(await menu.evaluate(el => getComputedStyle(el).position), 'absolute');
   assert.ok((await page.locator('.workspace-bar').boundingBox()).height <= 50, 'Opening the account dropdown must not enlarge the header');
-  assert.deepEqual(await menu.getByRole('menuitem').allTextContents(), ['Profile', 'Change profile picture', 'Settings', 'About', 'Log out']);
+  assert.deepEqual(await menu.getByRole('menuitem').allTextContents(), ['Profile', 'Settings', 'About', 'Log out']);
   assert.equal(await menu.getByRole('menuitem', { name: 'Profile', exact: true }).evaluate(el => el === document.activeElement), true);
   await page.keyboard.press('End'); assert.equal(await menu.getByRole('menuitem', { name: 'Log out' }).evaluate(el => el === document.activeElement), true);
-  await page.keyboard.press('Home'); await page.keyboard.press('ArrowDown'); await page.keyboard.press('ArrowDown');
+  await page.keyboard.press('Home'); await page.keyboard.press('ArrowDown');
   assert.equal(await menu.getByRole('menuitem', { name: 'Settings', exact: true }).evaluate(el => el === document.activeElement), true);
   await shot('account-menu-desktop');
   await page.keyboard.press('Escape'); assert.equal(await menu.count(), 0); assert.equal(await trigger.evaluate(el => el === document.activeElement), true);

@@ -43,8 +43,8 @@ export async function checkProfilePicture({ page, context, token, go, visible, s
     }), 'base64');
     const file = { name: 'portrait.png', mimeType: 'image/png', buffer: image };
     const trigger = page.locator('.workspace-bar .account-trigger');
-    await trigger.click();
-    await page.getByRole('menuitem', { name: 'Change profile picture', exact: true }).click();
+    const photoButton = page.getByRole('button', { name: 'Change profile picture', exact: true });
+    await photoButton.click();
     const dialog = page.getByRole('dialog');
     await visible(dialog.locator('.uppy-Dashboard'));
     await shot('profile-photo-picker');
@@ -58,7 +58,7 @@ export async function checkProfilePicture({ page, context, token, go, visible, s
     await dialog.getByRole('button', { name: 'Cancel', exact: true }).click();
     await dialog.waitFor({ state: 'hidden' });
     assert.equal(uploads, 0, 'Selection and cancellation do not upload');
-    await page.waitForFunction(() => document.activeElement?.matches('.workspace-bar .account-trigger'));
+    await page.waitForFunction(button => document.activeElement === button, await photoButton.elementHandle());
 
     await page.getByRole('button', { name: 'Change profile picture', exact: true }).click();
     await dialog.locator('input[type=file]').first().setInputFiles(file);

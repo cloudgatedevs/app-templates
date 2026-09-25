@@ -84,9 +84,32 @@ This requires the backend `AddIdpCloudgateAccountLink` migration and hub `/accou
 Linking is an optional identity association. All back-office controls use the current IdP Admin role;
 linking or detaching does not change access and no ABP token is used for settings changes.
 
+## User invitations
+
+The Users view shows profile photos, email verification, role and account status, phone, identity
+number, address, metadata, creation date and last sign-in. Hover dates for the full time; open
+**View metadata** for the complete value. Each row has Edit/View and a compact actions menu for
+roles, invitations, password resets, activation and deletion. Existing account protections and IdP
+Admin authorization still apply. Rebuild/restart Cloudgate for the additional user fields; no
+migration is required. The shared UI lives in the SDK and includes mobile cards and keyboard controls.
+
+In **Administration → People & access → Users**, **Add user** creates an account and sends an
+invitation to this app's published URL. The shared SDK shows the destination, collects email/name
+and optional phone details, and offers **Create & send invite**. New users choose their own
+password from a single-use link valid for three days. Failed email delivery can be retried without
+creating another account; existing users have a **Send app invite** action.
+
+Use the current backend and Hub UI together: the acceptance page is
+`/idp/:tenancyName/accept-invite`. Restart the backend after rebuilding it. The app must be
+published and its URL allowed in IdP settings for public invitations. When running locally in
+sandbox with a `Development` backend, the SDK uses the current localhost origin instead, so you
+can test creation and invitations without publishing. Local invitation links open on the computer
+running the app. Configuration and invitation logic live in the SDK and native IdP backend;
+no workflow or linked ABP token is involved.
+
 ## Email template
 
-For app-user email layouts, use **Administration → Content & email → Email template** (`/email-template`).
+For app-user email layouts, use **Administration → Messaging → Email template** (`/email-template`).
 The shared SDK includes the HTML editor, merge fields, default restoration, live sample preview and
 enable/disable control. Save changes to apply the layout tenant-wide. Disabling retains your HTML.
 This needs the updated backend email-template endpoints and an active IdP user with the Admin role. SMTP configuration is separate. Use `npm run dev:sdk` to test SDK edits
@@ -94,19 +117,30 @@ locally without publishing.
 
 ## Allow self-registration
 
-Open **Administration → People & access → Registration**, change **Allow self-registration**, and
+Open **Administration → People & access → Settings**, change **Allow self-registration**, and
 choose **Save changes**. The setting persists on Cloudgate and affects all apps in the tenant,
 including sandbox and production. Existing users can still sign in when registration is disabled.
 Your IdP account must have the Admin role. Both the API client and screen live in the SDK. Deploy
 the updated backend endpoints before using the control; an older backend shows an unavailable message.
 Account linking is optional and has no effect on this permission check.
 
+The same screen includes **Prompt for email verification**. Enable it and save to show an email
+verification reminder above every signed-in page for unverified users. The shared SDK handles
+resending, a 60-second cooldown, delivery errors and refreshing confirmation status when the user
+returns from their inbox. Verified users see no reminder, and disabling the policy removes it.
+Rebuild/restart the backend for the new setting and self-service resend endpoint; no migration is
+required. The setting defaults to off and applies to all apps and environments in the tenant.
+
 ## Create app notifications
 
-Open **Administration → People & access → App notifications** (`/app-notifications`) to create
+Open **Administration → Messaging → App notifications** (`/app-notifications`) to create
 notifications, view sent history and inspect read receipts. Choose Sandbox or Production, select one
 app user or all current users, enter a plain-text message, and review it before sending. Four alert styles
 and optional action links are supported. The personal inbox links to this management page.
+
+The recipient dropdown loads only on input focus, searches remotely after a short typing pause,
+and pages through 10 users at a time. Closing it cancels pending searches. Keyboard selection,
+empty/error states and retry are included; no user-directory download or backend change is needed.
 
 The UI and native API client live in the SDK and use the existing IdP Admin notification endpoints.
 Notification creation needs an active IdP Admin, with no ABP link or new backend migration required.

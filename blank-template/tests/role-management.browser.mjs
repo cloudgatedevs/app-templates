@@ -60,10 +60,11 @@ export async function checkRoleManagement({ page, context, token, calls, getUser
   await visible(page.getByRole('alert').filter({ hasText: 'already exists' }));
   await page.getByRole('button', { name: 'Close dialog', exact: true }).click();
   await go('/users');
-  await visible(page.getByRole('button', { name: 'Change role for ava@example.invalid', exact: true }).last());
-  assert.equal(await page.getByRole('button', { name: 'Change role for admin@example.invalid', exact: true }).count(), 0);
+  await visible(page.getByRole('button', { name: 'Actions for ava@example.invalid', exact: true }).last());
+  assert.equal(await page.getByRole('button', { name: 'Actions for admin@example.invalid', exact: true }).count(), 0);
   const assign = async name => {
-    await page.getByRole('button', { name: 'Change role for ava@example.invalid', exact: true }).last().click();
+    await page.getByRole('button', { name: 'Actions for ava@example.invalid', exact: true }).last().click();
+    await page.getByRole('menuitem', { name: 'Change role', exact: true }).click();
     await page.getByLabel('Role', { exact: true }).selectOption(name);
     await page.getByRole('button', { name: 'Save user role', exact: true }).click();
     await page.getByRole('dialog', { name: 'Change user role', exact: true }).waitFor({ state: 'detached' });

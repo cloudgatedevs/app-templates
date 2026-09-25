@@ -166,6 +166,9 @@ await context.route('https://api.example.invalid/**', async route => {
     if (usersFail) return reply({ error: { message: 'User service temporarily unavailable' } }, 503);
     const action = url.pathname.split('/').pop();
     const user = users.find(item => item.id === body.id);
+    if (action === 'invitation-app') return reply({ webAppId, name: 'Example app', url: 'https://app.example.invalid/' });
+    if (action === 'invite') { assert.equal(body.webAppId, webAppId); assert.equal(body.password, undefined); const value = { ...body, id: 3, role: 'User', isActive: true }; users.push(value); return reply({ user: value, created: true, invitation: { sent: true, appName: 'Example app', appUrl: 'https://app.example.invalid/' } }); }
+    if (action === 'resend-invite') return reply({ user, created: false, invitation: { sent: true, appName: 'Example app', appUrl: 'https://app.example.invalid/' } });
     if (action === 'list') { const items = users.filter(item => JSON.stringify(item).toLowerCase().includes((body.filter || '').toLowerCase())); return reply({ items: items.slice(body.skip, body.skip + body.take), totalCount: items.length }); }
     if (action === 'details') return reply(user);
     if (action === 'create') { const value = { ...body, id: 3, role: 'User', isActive: true }; delete value.password; users.push(value); return reply(value); }
@@ -210,6 +213,7 @@ const shot = async name => {
 try {
   await (await import('./account-security.browser.mjs')).checkAccountSecurity({ page, context, token, go, visible, shot });
   await (await import('./profile-picture.browser.mjs')).checkProfilePicture({ page, context, token, go, visible, shot });
+  await (await import('./user-invitations.browser.mjs')).checkUserInvitations({ page, context, token, webAppId, go, visible, shot });
   await go('/');
   const sidebar = page.getByRole('complementary', { name: 'Sidebar' });
   const administration = sidebar.getByRole('button', { name: 'Administration', exact: true });
@@ -217,7 +221,7 @@ try {
   await visible(commerce);
   assert.equal(await administration.getAttribute('aria-expanded'), 'false');
   assert.equal(await commerce.getAttribute('aria-expanded'), 'true');
-  assert.equal(await sidebar.getByRole('link', { name: 'User management', exact: true }).isVisible(), false);
+  assert.equal(await sidebar.getByRole('link', { name: 'Users', exact: true }).isVisible(), false);
   assert.equal(Math.round((await sidebar.boundingBox()).width), 232);
   assert.ok((await page.locator('.workspace-bar').boundingBox()).height <= 50);
   await shot('compact-navigation-desktop');
@@ -227,7 +231,7 @@ try {
   assert.equal(await commerce.getAttribute('aria-expanded'), 'false', 'Module collapse survives reload');
   await commerce.click();
   await administration.focus(); await page.keyboard.press('Space');
-  await sidebar.getByRole('button', { name: 'Content & email', exact: true }).click();
+  await sidebar.getByRole('button', { name: 'Messaging', exact: true }).click();
   await sidebar.getByRole('link', { name: 'SMTP settings', exact: true }).waitFor();
   await administration.click();
   const menuSearch = sidebar.getByRole('searchbox', { name: 'Search menu' });
@@ -250,7 +254,7 @@ try {
   await visible(sidebar.getByRole('link', { name: 'SMTP settings', exact: true }));
   assert.equal(await administration.getAttribute('aria-expanded'), 'true', 'Deep link opens its ancestors');
   assert.equal(await sidebar.getByRole('link', { name: 'SMTP settings', exact: true }).getAttribute('aria-current'), 'page');
-  assert.match(await page.getByRole('navigation', { name: 'Breadcrumb' }).innerText(), /Administration.*Content & email.*SMTP settings/s);
+  assert.match(await page.getByRole('navigation', { name: 'Breadcrumb' }).innerText(), /Administration.*Messaging.*SMTP settings/s);
   console.log('PASS compact app-first navigation, nested keyboard toggles, search, persistence, sidebar toggle and deep links');
   await go('/app-notifications');
   const notificationEnvironment = page.getByRole('combobox', { name: 'Notification environment', exact: true });
@@ -265,7 +269,7 @@ try {
   await composer.getByRole('button', { name: 'Review notification', exact: true }).click();
   await visible(composer.getByRole('alert').filter({ hasText: 'Select one app user' }));
   await composer.getByLabel('Search app users', { exact: true }).fill('ava');
-  await composer.getByRole('button', { name: 'Select ava@example.invalid', exact: true }).click();
+  await composer.getByRole('option', { name: 'Select ava@example.invalid', exact: true }).click();
   await composer.getByLabel('Alert style', { exact: true }).selectOption('success');
   await composer.getByLabel('Action link (optional)', { exact: true }).fill('javascript:alert(1)');
   await composer.getByRole('button', { name: 'Review notification', exact: true }).click();
@@ -332,6 +336,7 @@ try {
   notificationAdminAccess = 'allowed'; await page.getByRole('button', { name: 'Refresh history', exact: true }).click();
   await visible(page.getByRole('row').filter({ hasText: 'Maintenance update' }));
   console.log('PASS notification creation, review, safe links/plain text, recipient search, environment isolation, read receipts, duplicate clicks, retained drafts and denied/unavailable server');
+  await (await import('./notification-recipient-picker.browser.mjs')).checkNotificationRecipientPicker({ page, context, token, go, visible, shot });
 
   assert.equal(accountLinked, false, 'Admin settings work before any account linking');
   await go('/email-template');
@@ -360,6 +365,8 @@ try {
   assert.equal(emailTemplate.templateHtml, '<h1>Welcome</h1>${body}', 'Restore does not save automatically');
   await page.getByRole('button', { name: 'Undo restore', exact: true }).click();
   assert.equal(await templateEditor.inputValue(), '<h1>Welcome</h1>${body}');
+  // Undo resets the caret on the next frame. Let it finish before fill selects the text.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(resolve)));
   const hostile = '<style>body{background:rgb(1,2,3)}</style><script>parent.__templateScriptRan=true</script><meta http-equiv="refresh" content="0;url=https://example.invalid"><iframe src="https://example.invalid"></iframe><img src="data:," onerror="parent.__templateScriptRan=true"><a href="https://example.invalid">Preview link</a><h1>${title}</h1>${body}<p>${EMAIL} / ${unknown}</p>';
   const parentBackground = await page.locator('body').evaluate(node => getComputedStyle(node).backgroundColor);
   await templateEditor.fill(hostile);
@@ -404,7 +411,7 @@ try {
   await visible(registrationToggle);
   assert.equal(await registrationToggle.isChecked(), false);
   assert.equal(await saveRegistration.isDisabled(), true);
-  await visible(page.getByText('This setting applies to all apps in your Cloudgate tenant, across sandbox and production.', { exact: true }));
+  await visible(page.getByText('These settings apply to all apps in your Cloudgate tenant, across sandbox and production.', { exact: true }));
   await registrationToggle.check(); await saveRegistration.click();
   await visible(page.getByText('Self-registration enabled for this tenant.', { exact: true }));
   assert.equal(allowSelfRegistration, true);
@@ -671,34 +678,38 @@ try {
   console.log('PASS all four alert styles, legacy info default, realtime style updates, icons and light/dark inbox and popup rendering');
 
   await go('/users');
-  await visible(page.getByRole('cell', { name: 'ava@example.invalid', exact: true }));
+  await visible(page.getByText('ava@example.invalid', { exact: true }).last());
   assert.equal(await page.getByLabel('Actions for admin@example.invalid').count(), 0);
   await page.getByRole('button', { name: 'Add user', exact: true }).click();
   await visible(page.getByRole('dialog', { name: 'Create user', exact: true }));
   await shot('create-user-dialog');
-  await page.getByLabel('Email', { exact: true }).fill('new@example.invalid');
+  await page.getByLabel('Email address', { exact: true }).fill('new@example.invalid');
   await page.getByLabel('First name', { exact: true }).fill('New');
   await page.getByLabel('Surname', { exact: true }).fill('Person');
-  await page.getByLabel('Initial password').fill('Test-password-123');
-  await page.getByRole('button', { name: 'Save user', exact: true }).click();
-  await visible(page.getByRole('cell', { name: 'new@example.invalid', exact: true }));
+  await page.getByRole('button', { name: 'Create & send invite', exact: true }).click();
+  await visible(page.getByText('new@example.invalid', { exact: true }).last());
   await page.getByRole('row').filter({ hasText: 'new@example.invalid' }).getByRole('button', { name: 'Edit', exact: true }).click();
   await page.getByLabel('First name', { exact: true }).fill('Updated');
   await page.getByRole('button', { name: 'Save user', exact: true }).click();
-  await visible(page.getByRole('cell', { name: 'Updated Person', exact: true }));
-  await page.getByLabel('Actions for new@example.invalid').last().selectOption('set-active');
+  await visible(page.getByText('Updated Person', { exact: true }).last());
+  await page.getByLabel('Actions for new@example.invalid').last().click();
+  await page.getByRole('menuitem', { name: /^(Disable|Enable) user$/ }).click();
   await page.getByRole('button', { name: 'Confirm', exact: true }).click();
   await visible(page.getByRole('row').filter({ hasText: 'new@example.invalid' }).getByText('Disabled', { exact: true }));
-  await page.getByLabel('Actions for new@example.invalid').last().selectOption('set-active');
+  await page.getByLabel('Actions for new@example.invalid').last().click();
+  await page.getByRole('menuitem', { name: /^(Disable|Enable) user$/ }).click();
   await page.getByRole('button', { name: 'Confirm', exact: true }).click();
   await visible(page.getByRole('row').filter({ hasText: 'new@example.invalid' }).getByText('Active', { exact: true }));
-  await page.getByLabel('Actions for new@example.invalid').last().selectOption('request-password-reset');
+  await page.getByLabel('Actions for new@example.invalid').last().click();
+  await page.getByRole('menuitem', { name: 'Send password reset', exact: true }).click();
   await page.getByRole('button', { name: 'Confirm', exact: true }).click();
   await visible(page.getByText('Password reset email requested.', { exact: true }));
-  await page.getByLabel('Actions for new@example.invalid').last().selectOption('delete');
+  await page.getByLabel('Actions for new@example.invalid').last().click();
+  await page.getByRole('menuitem', { name: 'Delete user', exact: true }).click();
   await page.getByRole('button', { name: 'Cancel', exact: true }).click();
   assert.ok(users.some(user => user.id === 3));
-  await page.getByLabel('Actions for new@example.invalid').last().selectOption('delete');
+  await page.getByLabel('Actions for new@example.invalid').last().click();
+  await page.getByRole('menuitem', { name: 'Delete user', exact: true }).click();
   await page.getByRole('button', { name: 'Confirm', exact: true }).click();
   await visible(page.getByText('User deleted.', { exact: true }));
   assert.equal(users.length, 2);
@@ -708,6 +719,7 @@ try {
   await visible(page.getByRole('alert').filter({ hasText: 'Cloudgate could not complete this request' }));
   usersFail = false;
   console.log('PASS user CRUD, activation, reset, confirmation, protected accounts and failure states');
+  await (await import('./user-management-details.browser.mjs')).checkUserManagementDetails({ page, context, token, go, visible, shot });
   await (await import('./role-management.browser.mjs')).checkRoleManagement({ page, context, token, calls, getUsers: () => users, go, visible, shot });
 
   await go('/appearance');
@@ -757,8 +769,9 @@ try {
   await visible(page.getByText('Theme saved.', { exact: true }));
   await shot('theme-light-desktop');
   const navigation = await page.locator('.app-sidebar').elementHandle();
-  await page.getByRole('link', { name: 'User management', exact: true }).click();
-  await visible(page.getByRole('heading', { name: 'User management', exact: true }));
+  await page.getByRole('button', { name: 'People & access', exact: true }).click();
+  await page.getByRole('link', { name: 'Users', exact: true }).click();
+  await visible(page.getByRole('heading', { name: 'Users', exact: true }));
   assert.equal(await navigation.evaluate(el => el.isConnected), true, 'Navigation stays mounted during lazy route transitions');
   await page.getByRole('link', { name: 'Dashboard', exact: true }).click();
   await visible(page.getByRole('heading', { name: 'Your overview starts here', exact: true }));
@@ -774,9 +787,10 @@ try {
   await shot('orders-desktop');
   await go('/sample-users');
   await page.waitForURL(`${origin}/users`);
-  await visible(page.getByRole('cell', { name: 'ava@example.invalid', exact: true }));
+  await visible(page.getByText('ava@example.invalid', { exact: true }).last());
   console.log('PASS Dashboard and Orders placeholders, removed sample users and native user management redirect');
   console.log('PASS appearance persistence, branding updates and theme switching');
+  await (await import('./branding-image-picker.browser.mjs')).checkBrandingImagePicker({ page, context, token, webAppId, go, visible, shot });
 
   await go('/smtp');
   await page.getByLabel('Use my own SMTP server instead').check();
@@ -849,7 +863,7 @@ try {
   assert.ok((await dialog.getByRole('button', { name: 'Commerce', exact: true }).boundingBox()).height >= 42);
   const mobileSearch = dialog.getByRole('searchbox', { name: 'Search menu' });
   await mobileSearch.fill('theme');
-  await visible(dialog.getByRole('link', { name: 'Theme styling', exact: true }));
+  await visible(dialog.getByRole('link', { name: 'Theme', exact: true }));
   await mobileSearch.press('Escape');
   assert.equal(await mobileSearch.inputValue(), '');
   await visible(dialog);
@@ -900,6 +914,9 @@ try {
   await page.getByRole('button', { name: 'Add user', exact: true }).waitFor();
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   console.log('PASS all pages at 360px, mobile focus trap, Escape and focus restoration');
+
+  await (await import('./notification-activation.browser.mjs')).checkNotificationActivation({ page, context, token, go, visible, shot });
+  await (await import('./email-verification.browser.mjs')).checkEmailVerification({ page, context, token, go, visible, shot });
 
   role = 'User';
   const count = calls.length;
