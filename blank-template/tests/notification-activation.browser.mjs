@@ -36,7 +36,7 @@ export async function checkNotificationActivation({ page, context, token, go, vi
     releaseRead(); releaseRead = null;
     await visible(row('No link').getByText('Read', { exact: true }));
     await visible(page.getByRole('button', { name: 'Notifications, 3 unread' }));
-    assert.equal(new URL(page.url()).pathname, '/', 'Without a link the popup stays on the current page');
+    assert.equal(new URL(page.url()).pathname, '/backoffice', 'Without a link the popup stays on the current page');
     await row('No link').getByRole('button').click();
     assert.equal(attempts, 1, 'Already-read notifications need no extra write');
     await row('Keyboard update').getByRole('button').focus();
@@ -54,7 +54,7 @@ export async function checkNotificationActivation({ page, context, token, go, vi
     await row('Unsafe link').getByRole('button').click();
     await visible(row('Unsafe link').getByText('Read', { exact: true }));
     assert.equal(await popup.getByRole('alert').count(), 0);
-    assert.equal(new URL(page.url()).pathname, '/', 'Unsafe links are not followed');
+    assert.equal(new URL(page.url()).pathname, '/backoffice', 'Unsafe links are not followed');
     await page.getByRole('button', { name: 'Notifications, 1 unread' }).waitFor();
     await shot('notification-click-read');
     await row('Open orders').getByRole('button').click();

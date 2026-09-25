@@ -47,7 +47,7 @@ let smtp = { smtpEnabled: false, smtpHost: '', smtpPort: 587, smtpUserName: '', 
 const pixel = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=', 'base64');
 const log = { id: 'call-1', route: 'orders', op: 'list', outcome: 'success', httpStatusCode: 200, durationMs: 45, creationTime: '2026-09-21T10:00:00Z', sessionId: 'session-1', idpUserId: 2, idpUserEmail: 'ava@example.invalid', country: 'ZA', method: 'POST', body: '{"take":10}', response: '{"items":[]}' };
 const token = `eyJhbGciOiJub25lIn0.${Buffer.from(JSON.stringify({ sub: '1', email: 'admin@example.invalid', name: 'Alex Admin', exp: Math.floor(Date.now() / 1000) + 3600 })).toString('base64url')}.test`;
-await context.addInitScript(value => { if (window === window.top) localStorage.setItem('idp_access_token', value); }, token);
+await context.addInitScript(value => { if (window === window.top && location.pathname !== '/') localStorage.setItem('idp_access_token', value); }, token);
 await context.routeWebSocket('wss://api.example.invalid/ws-idp-notifications?*', socket => {
   const url = new URL(socket.url());
   assert.equal(url.searchParams.get('access_token'), token);
@@ -71,6 +71,12 @@ await context.route('https://api.example.invalid/**', async route => {
   calls.push({ path: url.pathname, body, method: request.method() });
   if (url.pathname.startsWith('/api/idp/qa/admin/')) assert.equal(request.headers().authorization, `Bearer ${token}`, 'All back-office admin requests use the IdP token');
   const reply = (value, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(value) });
+  if (url.pathname === '/api/idp/qa/website') {
+    assert.equal(request.headers().authorization, undefined);
+    assert.equal(url.searchParams.get('webAppId'), webAppId); assert.equal(url.searchParams.get('environment'), 'sbx');
+    if (appearanceUnavailable) return reply({ message: 'Appearance API is unavailable on this server.' }, 404);
+    return reply({ values: settings, revision: appearanceRevision, allowSelfRegistration });
+  }
   if (url.pathname === '/image.png') return route.fulfill({ contentType: 'image/png', body: pixel });
   if (url.pathname.endsWith('/branding/logo')) return route.fulfill({ contentType: 'image/png', body: pixel });
   if (url.pathname.endsWith('/profile')) return reply({ id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role });
@@ -203,7 +209,7 @@ await context.route('https://api.example.invalid/**', async route => {
   errors.push(`Unexpected API call: ${request.method()} ${url.pathname}`);
   return reply({ message: 'Unexpected test request' }, 500);
 });
-const go = async path => { await page.goto(`${origin}${path}`); await page.locator('main').waitFor(); };
+const go = async path => { await page.goto(`${origin}/backoffice${path === '/' ? '' : path}`); await page.locator('main').waitFor(); };
 const visible = async locator => { await locator.first().waitFor({ state: 'visible' }); };
 const shot = async name => {
   if (!process.env.ADMIN_TEST_OUTPUT_DIR) return;
@@ -523,7 +529,7 @@ try {
   await developer.getByRole('button', { name: 'Reconnect', exact: true }).click();
   const devFrame = page.frameLocator('iframe[title="Cloudgate developer workspace"]');
   await visible(devFrame.getByRole('heading', { name: 'Cloudgate developer tools' }));
-  await visible(developer.getByText('Project locked', { exact: true }));
+  await visible(developer.getByText('All controllers', { exact: true }));
   await devFrame.getByRole('textbox', { name: 'Workflow draft' }).fill('Unsaved workflow');
   await shot('developer-workspace-desktop');
   await developer.getByRole('button', { name: 'Minimize developer workspace' }).click();
@@ -548,14 +554,14 @@ try {
   const notificationPopup = page.getByRole('dialog', { name: 'Notifications', exact: true });
   await page.getByRole('button', { name: 'Notifications, 2 unread' }).click();
   await visible(notificationPopup.getByText('Order ready', { exact: true }));
-  assert.equal(new URL(page.url()).pathname, '/', 'The bell opens a popup without changing pages');
+  assert.equal(new URL(page.url()).pathname, '/backoffice', 'The bell opens a popup without changing pages');
   assert.equal(await notificationPopup.getByRole('listitem').count(), 2);
   await visible(notificationPopup.locator('[data-notification-style="success"]').getByRole('img', { name: 'Success', exact: true }));
   await visible(notificationPopup.locator('[data-notification-style="info"]').getByRole('img', { name: 'Info', exact: true }));
   assert.ok(notifications.every(item => !item.isRead), 'Previewing notifications does not mark them read');
   assert.equal(await notificationPopup.getByText('New', { exact: true }).count(), 2);
   assert.equal(await notificationPopup.getByText('Read', { exact: true }).count(), 0);
-  assert.equal(await notificationPopup.getByRole('link', { name: 'View all notifications' }).getAttribute('href'), '/notifications');
+  assert.equal(await notificationPopup.getByRole('link', { name: 'View all notifications' }).getAttribute('href'), '/backoffice/notifications');
   await shot('notification-popup-desktop');
   await page.keyboard.press('Escape');
   await notificationPopup.waitFor({ state: 'detached' });
@@ -568,7 +574,7 @@ try {
   await notificationPopup.getByRole('link', { name: 'View all notifications' }).click();
   await visible(page.getByRole('heading', { name: 'Notifications', exact: true }));
   await notificationPopup.waitFor({ state: 'detached' });
-  assert.equal(new URL(page.url()).pathname, '/notifications');
+  assert.equal(new URL(page.url()).pathname, '/backoffice/notifications');
   console.log('PASS bell popup previews, full inbox link, outside click, Escape and focus restoration');
 
   await go('/notifications');
@@ -786,7 +792,7 @@ try {
   assert.equal(await page.getByRole('button', { name: 'Refresh', exact: true }).count(), 0);
   await shot('orders-desktop');
   await go('/sample-users');
-  await page.waitForURL(`${origin}/users`);
+  await page.waitForURL(`${origin}/backoffice/users`);
   await visible(page.getByText('ava@example.invalid', { exact: true }).last());
   console.log('PASS Dashboard and Orders placeholders, removed sample users and native user management redirect');
   console.log('PASS appearance persistence, branding updates and theme switching');
@@ -854,7 +860,7 @@ try {
   await shot('notification-popup-mobile');
   await notificationPopup.getByRole('link', { name: 'View all notifications' }).click();
   await notificationPopup.waitFor({ state: 'detached' });
-  assert.equal(new URL(page.url()).pathname, '/notifications');
+  assert.equal(new URL(page.url()).pathname, '/backoffice/notifications');
   await go('/users');
   await page.getByRole('button', { name: 'Open menu', exact: true }).click();
   const dialog = page.getByRole('dialog', { name: 'Navigation' });
@@ -872,7 +878,7 @@ try {
   await dialog.waitFor({ state: 'detached' });
   await page.waitForFunction(() => document.activeElement?.getAttribute('aria-label') === 'Open menu');
   assert.equal(await page.getByRole('button', { name: 'Open menu', exact: true }).evaluate(el => el === document.activeElement), true);
-  for (const route of ['/', '/orders', '/notifications', '/app-notifications', '/users', '/registration', '/email-template', '/theme', '/appearance', '/smtp', '/media', '/payments', '/analytics', '/logs', '/about']) {
+  for (const route of ['/', '/orders', '/settings', '/notifications', '/app-notifications', '/users', '/registration', '/email-template', '/theme', '/appearance', '/smtp', '/media', '/payments', '/analytics', '/logs', '/about']) {
     await go(route);
     await page.waitForLoadState('networkidle');
     const width = await page.evaluate(() => ({ doc: document.documentElement.scrollWidth, viewport: innerWidth, main: document.querySelector('main').scrollWidth, mainViewport: document.querySelector('main').clientWidth }));

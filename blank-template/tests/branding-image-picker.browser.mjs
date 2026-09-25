@@ -14,6 +14,11 @@ export async function checkBrandingImagePicker({ page, context, token, webAppId,
     if (route.request().url().endsWith('/update')) { saves++; settings = { ...settings, ...body.values }; }
     return route.fulfill({ json: { values: settings, revision: '11111111-1111-1111-1111-111111111111' } });
   };
+  const website = route => {
+    assert.equal(route.request().headers().authorization, undefined);
+    assert.equal(new URL(route.request().url()).searchParams.get('webAppId'), webAppId);
+    return route.fulfill({ json: { values: settings, revision: '11111111-1111-1111-1111-111111111111', allowSelfRegistration: false } });
+  };
   const list = route => {
     listings++;
     assert.equal(route.request().method(), 'GET');
@@ -28,6 +33,7 @@ export async function checkBrandingImagePicker({ page, context, token, webAppId,
   };
   const image = route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="120" height="90"><rect width="120" height="90" fill="#f2edff"/><rect x="32" y="17" width="56" height="56" rx="16" fill="#7c3aed"/><path d="M48 48l9 9 17-23" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/></svg>' });
   await context.route('**/api/idp/qa/admin/appearance/*', appearance);
+  await context.route('**/api/idp/qa/website?*', website);
   await context.route('**/api/idp/qa/files?*', list);
   await context.route('**/picker/**', image);
   try {
@@ -103,6 +109,7 @@ export async function checkBrandingImagePicker({ page, context, token, webAppId,
     console.log('PASS branding library: lazy loading, app scope, pagination, both image fields, preview/save, cancellation, keyboard, errors, empty state and mobile');
   } finally {
     await context.unroute('**/api/idp/qa/admin/appearance/*', appearance);
+    await context.unroute('**/api/idp/qa/website?*', website);
     await context.unroute('**/api/idp/qa/files?*', list);
     await context.unroute('**/picker/**', image);
   }

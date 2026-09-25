@@ -69,10 +69,11 @@ export async function checkAccountSecurity({ page, context, token, go, visible, 
   await page.getByRole('button', { name: 'Cancel', exact: true }).click(); await page.setViewportSize({ width: 1440, height: 1000 });
   unavailable = true; await go('/account/settings'); await visible(page.getByRole('alert')); assert.equal(await page.getByText('Off', { exact: true }).count(), 0);
   unavailable = false; await page.getByRole('button', { name: 'Try again' }).click(); await visible(page.getByText('Off', { exact: true }));
-  await trigger.click(); await menu.getByRole('menuitem', { name: 'About', exact: true }).click(); assert.equal(new URL(page.url()).pathname, '/about');
+  await trigger.click(); await menu.getByRole('menuitem', { name: 'About', exact: true }).click(); assert.equal(new URL(page.url()).pathname, '/backoffice/about');
   await context.route('https://hub.example.invalid/idp/qa/login**', route => route.fulfill({ contentType: 'text/html', body: '<h1>Hosted sign in</h1>' }));
   await trigger.click(); await menu.getByRole('menuitem', { name: 'Log out', exact: true }).click();
-  await page.waitForURL('https://hub.example.invalid/idp/qa/login**');
+  await page.waitForURL('http://127.0.0.1:3199/');
+  await visible(page.getByRole('button', { name: 'Log in', exact: true }));
   const appStorage = (await context.storageState()).origins.find(value => value.origin === 'http://127.0.0.1:3199');
   assert.equal(appStorage?.localStorage.some(item => item.name === 'idp_access_token' || item.name === 'idp_refresh_token') || false, false);
   assert.equal(calls.filter(call => call.action === 'enable').length, 2);

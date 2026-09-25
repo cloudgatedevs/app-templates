@@ -1,3 +1,24 @@
 @tailwind utilities;
 
 /* Add styles for your own application here. Platform styles come from the SDK. */
+.public-site { width: 100%; min-height: 100dvh; display: flex; flex-direction: column; background: rgb(var(--ink-950)); }
+.public-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem clamp(1.25rem, 6vw, 6rem); border-bottom: 1px solid rgb(var(--ink-700)); background: rgb(var(--ink-850)); }
+.public-brand { display: flex; align-items: center; gap: .75rem; min-width: 0; font-size: 1rem; font-weight: 650; }
+.public-brand img, .public-brand-mark { width: 2.25rem; height: 2.25rem; border-radius: .75rem; object-fit: contain; }
+.public-brand-mark { display: grid; place-items: center; background: rgb(var(--accent)); color: rgb(var(--accent-fg)); }
+.public-account, .public-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
+.public-site main { flex: 1; display: flex; flex-direction: column; }
+.public-notice { margin: 1rem clamp(1.25rem, 6vw, 6rem) 0; }
+.public-hero { position: relative; isolation: isolate; overflow: hidden; flex: 1; display: flex; align-items: center; min-height: 65vh; padding: clamp(4rem, 11vh, 8rem) clamp(1.25rem, 9vw, 10rem); }
+.public-hero-content { max-width: 48rem; position: relative; z-index: 1; }
+.public-eyebrow { color: rgb(var(--accent-text)); font-size: .8rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 1.6rem; }
+.public-hero h1 { font-size: clamp(2.75rem, 6vw, 5.75rem); line-height: 1.08; letter-spacing: -.045em; font-weight: 650; }
+.public-hero h1 span { color: rgb(var(--accent-text)); }
+.public-intro { max-width: 34rem; color: rgb(var(--mist-muted)); font-size: clamp(1rem, 1.8vw, 1.15rem); line-height: 1.7; margin-top: 1.75rem; }
+.public-hero-actions { margin-top: 2rem; }
+.public-welcome { margin-top: 2rem; font-weight: 550; }
+.public-hero-orbit { position: absolute; right: -13rem; top: 50%; transform: translateY(-50%); width: 45rem; height: 45rem; border-radius: 50%; background: radial-gradient(circle, rgb(var(--accent) / .09), transparent 68%); z-index: -1; }
+.public-hero-orbit span { position: absolute; inset: 5%; border: 1px solid rgb(var(--accent) / .12); border-radius: 50%; }
+.public-hero-orbit span:nth-child(2) { inset: 18%; }.public-hero-orbit span:nth-child(3) { inset: 32%; }
+.public-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; padding: 1.5rem clamp(1.25rem, 6vw, 6rem); font-size: .8rem; color: rgb(var(--mist-muted)); border-top: 1px solid rgb(var(--ink-700)); }
+@media (max-width: 640px) { .public-hero-orbit { right: -34rem; }.public-account .btn-primary, .public-account .btn-ghost { padding: .5rem .65rem; font-size: .8rem; }.public-header { gap: .75rem; }.public-brand { max-width: 100%; } }

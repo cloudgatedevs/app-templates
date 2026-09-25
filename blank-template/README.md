@@ -4,6 +4,14 @@ A small React app composed with `@cloudgatedevs/cloudgate-client`. The SDK owns 
 native Cloudgate APIs and the shared back-office UI. Dashboard and Orders remain app-owned
 placeholders for your own logic. No workflow controller is needed for the shared features.
 
+The public home page lives at `/` and does not require authentication. All back-office screens
+live under `/backoffice` and require the IdP `Admin` role. The public header shows Sign up only
+when the tenant allows self-registration, and shows Back office only to signed-in admins.
+In **Administration → Settings**, turn **Enable public website** off to send home-page visitors
+to the protected back office instead. This setting is saved per web app and environment.
+This requires a Cloudgate server with the anonymous `GET /api/idp/{tenant}/website` endpoint;
+the setting is stored in the existing application configuration table (no database migration).
+
 ## Run
 
 ```sh
@@ -44,6 +52,8 @@ so a clean checkout also builds before 0.6 is published. Once released, replace 
 
 - `src/services/cloudgate.js`: your Cloudgate configuration.
 - `src/App.jsx`: your routes and navigation, composed with `CloudgateBackoffice`.
+- `src/pages/Home.jsx`: the public home page and account header. Custom routes and navigation
+  passed to `CloudgateBackoffice` are relative to its `basePath` (`/backoffice` in this template).
 - `src/pages/Dashboard.jsx` and `Orders.jsx`: replace with your domain logic.
 - `template.json`: application metadata supplied to the shared About screen.
 - `src/index.css`: your Tailwind utilities. Shared SDK CSS is imported after utilities so
@@ -167,13 +177,15 @@ same backend as this app. No npm publication is needed for testing: use `npm run
 
 ```sh
 npm run build
-npm run test:ui
+npm test
 ```
 
 Browser checks build the real app and mock APIs; they do not change tenant data. They cover
 account linking, responsive pages, dialogs, permissions, settings, users, media, notifications,
 analytics and payment readiness. Install Playwright Chromium once if needed, or set
-`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to a locally installed Chromium browser. Port 3199 is used.
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to a locally installed Chromium browser. Ports 3199 and 3198 are used.
+The public website checks cover anonymous access, registration visibility, Admin permissions,
+the website switch, login callbacks, legacy links and logout.
 Set `ADMIN_TEST_OUTPUT_DIR` to retain screenshots.
 
 Quick Start uses the `app-templates/templates.json` catalog. App Store uses a separate catalog
