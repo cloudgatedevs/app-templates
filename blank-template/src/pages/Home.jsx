@@ -1,14 +1,14 @@
 import { ArrowRight, LayoutDashboard, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuthContext, useCloudgate, useSettings, EmailVerificationPrompt } from '@cloudgatedevs/cloudgate-client/react';
-import { isAdminRole } from '@cloudgatedevs/cloudgate-client/platform';
+import { canAccessBackoffice } from '@cloudgatedevs/cloudgate-client/platform';
 
 export function Home() {
   const { client, backofficePath } = useCloudgate();
   const { settings, allowSelfRegistration } = useSettings();
   const { auth, currentUser, loading, logout, error } = useAuthContext();
   const signedIn = !!auth?.accessToken;
-  const admin = signedIn && isAdminRole(currentUser?.user?.role);
+  const admin = signedIn && canAccessBackoffice(currentUser?.user);
   const returnUrl = new URL('/', window.location.origin).href;
   const login = () => client.login(returnUrl);
   return <div className="public-site">

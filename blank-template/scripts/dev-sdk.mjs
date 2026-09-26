@@ -22,6 +22,8 @@ const base = (await import('../vite.config.js')).default;
 const config = typeof base === 'function' ? base({ command: 'serve', mode: 'development' }) : base;
 const source = name => path.join(sdk, name).replaceAll('\\', '/');
 const aliases = [
+  { find: /^@cloudgatedevs\/cloudgate-client\/react\/widgets$/, replacement: source('src/react/widgets/index.jsx') },
+  { find: /^@cloudgatedevs\/cloudgate-client\/widgets\/catalog$/, replacement: source('src/widgets/catalog.js') },
   { find: /^@cloudgatedevs\/cloudgate-client\/react\/styles\.css$/, replacement: source('src/react/styles.css') },
   { find: /^@cloudgatedevs\/cloudgate-client\/react$/, replacement: source('src/react/index.jsx') },
   { find: /^@cloudgatedevs\/cloudgate-client\/platform$/, replacement: source('src/platform/index.js') },
@@ -30,7 +32,9 @@ const aliases = [
 const server = await createServer(mergeConfig(mergeConfig(config, {
   configFile: false, root,
   // Source aliases let Vite watch the checkout directly. No npm link, package write, or build required.
-  resolve: { alias: aliases, dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom', 'lucide-react', '@radix-ui/react-dialog'] },
+  // Portaled SDK dropdowns and app dialogs must share their focus/layer contexts,
+  // even though source imports resolve through two separate node_modules trees.
+  resolve: { alias: aliases, dedupe: ['react', 'react-dom', 'react-router', 'react-router-dom', 'lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-dismissable-layer', '@radix-ui/react-focus-scope', '@radix-ui/react-focus-guards'] },
   // Prebundle the lazy photo editor too, so opening it for the first time does not
   // trigger Vite's dependency-discovery reload and discard the open dialog.
   optimizeDeps: { exclude: ['@cloudgatedevs/cloudgate-client'], include: ['@uppy/core', '@uppy/react/lib/Dashboard.js', '@uppy/webcam', 'react-easy-crop'] },

@@ -44,7 +44,7 @@ async function open(role, url = '/', viewport = { width: 1440, height: 1000 }) {
     if (url.pathname.includes('/notifications/')) return reply(url.pathname.endsWith('/unread-count') ? { unreadCount: 0 } : { items: [], totalCount: 0 });
     if (url.pathname.endsWith('/admin/appearance/update')) {
       assert.equal(role, 'Admin'); assert.equal(body.webAppId, appId); assert.equal(body.environment, 'sbx');
-      assert.deepEqual(Object.keys(body.values), ['enable_public_website']);
+      assert.deepEqual(Object.keys(body.values), ['enable_public_website', 'require_public_website_login']);
       assert.equal(body.revision, revision);
       if (saveFailure) return reply({ message: 'Settings could not be saved.' }, saveFailure);
       settings = { ...settings, ...body.values }; revision = randomUUID();
