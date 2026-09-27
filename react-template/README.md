@@ -57,6 +57,9 @@ layout. It serves SDK source directly with Vite updates for JS, JSX and CSS, wit
 pushing, rebuilding the SDK, changing your package dependency or using a global npm link.
 React and other UI peers resolve from this app to avoid duplicate React installations.
 
+The server starts at port 3000 and tries the next available port if it is occupied.
+Open the **Local** URL printed in the terminal. `--port` changes the starting port.
+
 ```sh
 npm run dev:sdk -- --sdk "D:/repos/GitHub/client-react" --port 3000
 ```

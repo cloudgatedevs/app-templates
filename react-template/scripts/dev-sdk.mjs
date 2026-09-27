@@ -39,7 +39,8 @@ const server = await createServer(mergeConfig(mergeConfig(config, {
   // trigger Vite's dependency-discovery reload and discard the open dialog.
   optimizeDeps: { exclude: ['@cloudgatedevs/cloudgate-client-react'], include: ['@uppy/core', '@uppy/react/lib/Dashboard.js', '@uppy/webcam', 'react-easy-crop'] },
   css: { postcss: { plugins: [tailwind({ ...preset, content: [root.replaceAll('\\', '/') + '/src/**/*.{js,jsx}', source('src/**/*.{js,jsx}')] }), autoprefixer()] } },
-  server: { host: option('--host') || '127.0.0.1', port: Number(option('--port') || 3000), strictPort: true, fs: { allow: [root, sdk] } },
+  // Match Vite's normal dev command: try the requested port, then the next free one.
+  server: { host: option('--host') || '127.0.0.1', port: Number(option('--port') || 3000), strictPort: false, fs: { allow: [root, sdk] } },
 }), extraConfig));
 console.log(`Using local Cloudgate SDK source: ${sdk}`);
 await server.listen();
