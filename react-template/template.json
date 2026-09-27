@@ -1,0 +1,46 @@
+{
+  "id": "react-template",
+  "name": "React Template",
+  "description": "Blank React app foundation powered by the Cloudgate npm SDK. Shared authentication, profile/account linking, users, notifications, analytics, appearance, SMTP, media and payments are managed by the package. Generic placeholder pages guide you to the Developers tools to start building.",
+  "folder": "react-template",
+  "framework": "React",
+  "devCommand": "npm install && npm run dev",
+  "devPort": 3000,
+  "thumbnail": "https://raw.githubusercontent.com/cloudgatedevs/app-templates/main/react-template/banner.svg",
+  "demoUrl": "https://admin.app.cloudgate.dev/",
+  "tags": [
+    "react",
+    "vite",
+    "tailwind",
+    "admin",
+    "back-office",
+    "analytics",
+    "idp",
+    "notifications",
+    "wallet",
+    "theming",
+    "responsive",
+    "skeleton"
+  ],
+  "configSetup": {
+    "kind": "vite-env",
+    "targets": [
+      ".env"
+    ],
+    "example": ".env.example"
+  },
+  "version": "1.1.0",
+  "adminPath": "/",
+  "features": [
+    "One Example page placeholder with guidance to the Developers tools",
+    "Persistent, verified Cloudgate account linking and detach from Profile",
+    "Tenant IdP user management",
+    "Live IdP notifications, read receipts and link actions over native WebSocket",
+    "Website analytics and scoped workflow logs",
+    "Saved branding and light/dark themes",
+    "Shared tenant SMTP settings",
+    "Media upload and library",
+    "Cloudgate Wallet readiness and setup",
+    "Administrator-only back office"
+  ]
+}
