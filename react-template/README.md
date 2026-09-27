@@ -5,13 +5,31 @@ native Cloudgate APIs and the shared back-office UI. Example page is the single 
 placeholder, with guidance to the **Developers** tools in the bottom bar. No workflow controller
 is needed for the shared features. The public home page is also a placeholder for your own content.
 
-The public home page lives at `/` and does not require authentication. All back-office screens
+The optional public home page lives at `/`. New Launcher deployments start with it disabled;
+enable it during setup or in the SDK website settings when your public content is ready.
+When enabled, it allows guests unless visitor sign-in is required. All back-office screens
 live under `/backoffice` and require the IdP `Admin` role. The public header shows Sign up only
 when the tenant allows self-registration, and shows Back office only to signed-in admins.
 In **Administration → Settings**, turn **Enable public website** off to send home-page visitors
 to the protected back office instead. This setting is saved per web app and environment.
 This requires a Cloudgate server with the anonymous `GET /api/idp/{tenant}/website` endpoint;
 the setting is stored in the existing application configuration table (no database migration).
+
+## Sandbox and production builds
+
+Both rollout commands are included:
+
+| Target | Command | Vite mode | Output |
+| --- | --- | --- | --- |
+| Sandbox | `npm run build:dev` | `development` | `dist/`, unminified with source maps |
+| Production | `npm run build` | `production` | `dist/`, minified without source maps |
+
+Vite reads `.env.development` / `.env.development.local` for sandbox builds and
+`.env.production` / `.env.production.local` for production builds, in addition to shared `.env`
+values. Launcher writes the selected mode's `.local` file with the web app ID and `sbx` / `prod`
+API scope, then uses the matching build command. This requires the updated Cloudgate backend.
+When building manually, configure the corresponding environment file before running the command.
+Both commands produce a static release; `npm run dev` starts the development server instead.
 
 ## Run
 

@@ -54,6 +54,25 @@ Keep the React Template entry in `templates.json` aligned with `react-template/t
 
 Keep generated files such as `node_modules/` and `dist/` out of Git. After changes are merged and pushed to `main`, the gallery uses the updated metadata when it refreshes.
 
+## SDK rollout settings
+
+Both `templates.json` and the app's `template.json` can declare `appSettings`: a map of native
+SDK appearance keys to string values. This template starts with a light Indigo theme, content
+layout, `enable_public_website: "false"` and `require_public_website_login: "false"`.
+The Launcher loads these defaults for an unconfigured app, lets the owner choose their theme and
+website access, and saves those choices before publishing. Saved settings always take precedence
+on retries and later updates. Each tenant, web app and environment has its own settings.
+
+Supported keys include app name/tagline/description, logo/icon URLs, support email, footer note,
+display mode, layout, all seven SDK palette colours, custom palette and the two public-website
+switches. Values use the same validation as the SDK appearance editor. Omit `app_name` to use
+the owner's reserved web app name. Do not store credentials or tenant-wide registration settings here.
+
+This requires a Cloudgate backend and Launcher with `appSettings` support. Quick Start's copy-only
+flow has no web app to configure yet; configure its SDK settings after assigning a web app ID,
+or use Launcher for a configured hosted release. See the [App Store manifest contract](https://github.com/cloudgatedevs/apps#native-sdk-defaults)
+for the shared field format and deployment semantics.
+
 ## Checks
 
 ```sh

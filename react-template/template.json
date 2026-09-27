@@ -42,5 +42,19 @@
     "Media upload and library",
     "Cloudgate Wallet readiness and setup",
     "Administrator-only back office"
-  ]
+  ],
+  "appSettings": {
+    "app_tagline": "Back office",
+    "theme_mode": "light",
+    "theme_density": "content",
+    "theme_primary": "#4f46e5",
+    "theme_secondary": "#7c3aed",
+    "theme_neutral": "#64748b",
+    "theme_success": "#15803d",
+    "theme_warning": "#a16207",
+    "theme_danger": "#be123c",
+    "theme_info": "#0369a1",
+    "enable_public_website": "false",
+    "require_public_website_login": "false"
+  }
 }
