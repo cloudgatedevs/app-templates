@@ -31,6 +31,7 @@ const aliases = [
 ];
 const server = await createServer(mergeConfig(mergeConfig(config, {
   configFile: false, root,
+  define: { 'import.meta.env.VITE_CLOUDGATE_SDK_SOURCE': JSON.stringify('local') },
   // Source aliases let Vite watch the checkout directly. No npm link, package write, or build required.
   // Portaled SDK dropdowns and app dialogs must share their focus/layer contexts,
   // even though source imports resolve through two separate node_modules trees.
