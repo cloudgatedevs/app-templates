@@ -1,3 +1,4 @@
+import { BACKOFFICE_PERMISSION_KEYS } from '@cloudgatedevs/cloudgate-client-react/platform';
 import assert from 'node:assert/strict';
 
 export async function checkEmailVerification({ page, context, token, go, visible, shot }) {
@@ -22,13 +23,13 @@ export async function checkEmailVerification({ page, context, token, go, visible
       if (throttled) return route.fulfill({ status: 429, json: { message: 'Wait a minute before resending.', retryAfterSeconds: 60 } });
       return route.fulfill({ json: { sent: !confirmed, isEmailConfirmed: confirmed, retryAfterSeconds: confirmed ? 0 : 60 } });
     }
-    return route.fulfill({ json: { id: 1, name: 'Alex', surname: 'Admin', email, role: 'Admin', isEmailConfirmed: confirmed, promptForEmailVerification: enabled } });
+    return route.fulfill({ json: { id: 1, name: 'Alex', surname: 'Admin', email, role: 'Admin', rolePermissions: BACKOFFICE_PERMISSION_KEYS.map(key => ({ key, value: 'true' })), isEmailConfirmed: confirmed, promptForEmailVerification: enabled } });
   };
   for (const url of urls) await context.route(url, handler);
   try {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await go('/registration');
-    const banner = page.getByRole('region', { name: 'Email verification reminder', exact: true });
+    const banner = page.locator('.app-content > [aria-label="Email verification reminder"]');
     const toggle = page.getByRole('switch', { name: 'Prompt for email verification', exact: true });
     await visible(toggle); assert.equal(await toggle.isChecked(), false); assert.equal(await banner.count(), 0);
     await toggle.check(); await page.getByRole('button', { name: 'Save changes', exact: true }).click();

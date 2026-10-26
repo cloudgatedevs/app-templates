@@ -1,9 +1,10 @@
+import { BACKOFFICE_PERMISSION_KEYS } from '@cloudgatedevs/cloudgate-client-react/platform';
 import assert from 'node:assert/strict';
 
 export async function checkUserManagementDetails({ page, context, token, go, visible, shot }) {
   const currentPhotoUrl = 'https://api.example.invalid/api/idp/qa/profile/pictures/current-user';
   let currentPhoto = currentPhotoUrl;
-  const profile = route => route.fulfill({ json: { id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role: 'Admin', photoUrl: currentPhoto } });
+  const profile = route => route.fulfill({ json: { id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role: 'Admin', rolePermissions: BACKOFFICE_PERMISSION_KEYS.map(key => ({ key, value: 'true' })), photoUrl: currentPhoto } });
   const image = route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><rect width="80" height="80" fill="#dbeafe"/><circle cx="40" cy="27" r="14" fill="#375c92"/><path d="M14 80v-13a26 26 0 0 1 52 0v13" fill="#375c92"/></svg>' });
   const people = [
     { id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role: 'Admin', isActive: true, isEmailConfirmed: true, creationTime: '2026-01-04T09:00:00', lastLoginTimeUtc: '2026-09-25T08:00:00' },

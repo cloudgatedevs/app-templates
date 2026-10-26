@@ -13,7 +13,7 @@ export async function checkRoleManagement({ page, context, token, calls, getUser
     const reply = (value, status = 200) => route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(value) });
     const count = name => getUsers().filter(u => u.role === name).length;
     if (unavailable) return reply({ message: 'Role management is not available on this server.' }, 404);
-    if (action === 'list') return reply({ items: roles.map(r => ({ ...r, userCount: count(r.name) })) });
+    if (action === 'list' || action === 'role-options') return reply({ items: roles.map(r => ({ ...r, userCount: count(r.name) })) });
     writes++;
     if (saveFailure) return reply({ message: 'Unable to save roles right now.' }, 503);
     if (action === 'set-role') {
@@ -35,6 +35,7 @@ export async function checkRoleManagement({ page, context, token, calls, getUser
     Object.assign(role, body, { id: role.id ?? nextId++ }); return reply(role);
   };
   await context.route('**/api/idp/qa/admin/roles/*', handler);
+  await context.route('**/api/idp/qa/admin/users/role-options', handler);
   await context.route('**/api/idp/qa/admin/users/set-role', handler);
   await go('/roles');
   await visible(page.getByRole('heading', { name: 'Roles', exact: true }));
@@ -43,14 +44,15 @@ export async function checkRoleManagement({ page, context, token, calls, getUser
   assert.equal(await page.getByRole('link', { name: 'Roles', exact: true }).getAttribute('aria-current'), 'page');
   await page.getByRole('button', { name: 'Create role', exact: true }).click();
   await page.getByLabel('Role name', { exact: true }).fill('Support');
+  await page.getByText('Custom application permissions', { exact: true }).click();
   await page.getByRole('button', { name: 'Add permission', exact: true }).click();
-  await page.getByLabel('Permission key 1').fill('orders.view'); await page.getByLabel('Permission value 1').fill('true');
+  await page.getByLabel(/^Permission key /).first().fill('orders.view'); await page.getByLabel(/^Permission value /).first().fill('true');
   await page.getByRole('button', { name: 'Add permission', exact: true }).click();
-  await page.getByLabel('Permission key 2').fill('ORDERS.VIEW');
+  await page.getByLabel(/^Permission key /).nth(1).fill('ORDERS.VIEW');
   const before = writes;
   await page.getByRole('button', { name: 'Save role', exact: true }).click();
   await visible(page.getByRole('alert').filter({ hasText: 'Permission keys must be unique' })); assert.equal(writes, before);
-  await page.getByRole('button', { name: 'Remove permission 2', exact: true }).click();
+  await page.getByRole('button', { name: /^Remove permission / }).nth(1).click();
   await shot('role-editor-desktop');
   await page.getByRole('button', { name: 'Save role', exact: true }).click();
   await visible(page.getByRole('button', { name: 'Edit Support', exact: true }).last());
@@ -85,11 +87,12 @@ export async function checkRoleManagement({ page, context, token, calls, getUser
   assert.equal(getUsers().find(u => u.id === 2).role, 'Support team');
   await page.getByRole('button', { name: 'Edit User', exact: true }).last().click();
   assert.equal(await page.getByLabel('Role name', { exact: true }).isDisabled(), true);
+  await page.getByText('Custom application permissions', { exact: true }).click();
   await page.getByRole('button', { name: 'Add permission', exact: true }).click();
-  await page.getByLabel('Permission key 1').fill('reports.view'); await page.getByLabel('Permission value 1').fill('false');
+  await page.getByLabel(/^Permission key /).first().fill('reports.view'); await page.getByLabel(/^Permission value /).first().fill('false');
   await page.getByRole('button', { name: 'Save role', exact: true }).click();
   await visible(page.getByRole('button', { name: 'Edit User', exact: true }).last());
-  assert.equal(roles.find(r => r.name === 'User').permissions[0].value, 'false');
+  assert.equal(roles.find(r => r.name === 'User').permissions.find(p => p.key === 'reports.view').value, 'false');
   await shot('roles-desktop');
   const theme = await page.evaluate(() => document.documentElement.dataset.theme);
   await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; }); await shot('roles-dark');

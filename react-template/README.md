@@ -1,6 +1,6 @@
 # Cloudgate React Template
 
-A blank React app foundation composed with `@cloudgatedevs/cloudgate-client-react`. The SDK owns authentication,
+A blank React app foundation composed with `@cloudgatedevs/cloudgate-client-react` 0.1.20. The SDK owns authentication,
 native Cloudgate APIs and the shared back-office UI. Example page is the single workspace
 placeholder, with guidance to the **Developers** tools in the bottom bar. No workflow controller
 is needed for the shared features. The public home page is also a placeholder for your own content.
@@ -8,8 +8,8 @@ is needed for the shared features. The public home page is also a placeholder fo
 The optional public home page lives at `/`. New Launcher deployments start with it disabled;
 enable it during setup or in the SDK website settings when your public content is ready.
 When enabled, it allows guests unless visitor sign-in is required. All back-office screens
-live under `/backoffice` and require the IdP `Admin` role. The public header shows Sign up only
-when the tenant allows self-registration, and shows Back office only to signed-in admins.
+live under `/backoffice` and require `backoffice.access` plus the relevant page permissions. The public header shows Sign up only
+when the tenant allows self-registration, and shows Back office only to signed-in users with access.
 In **Administration → Settings**, turn **Enable public website** off to send home-page visitors
 to the protected back office instead. This setting is saved per web app and environment.
 This requires a Cloudgate server with the anonymous `GET /api/idp/{tenant}/website` endpoint;
@@ -44,7 +44,7 @@ and `preview`. Restart an existing dev server after updating `vite.config.js`.
 Cloudgate Quick Start fills `.env.example` placeholders into `.env`. For manual setup, supply
 the hub URL, API URL, tenant and local web app ID. Published site metadata overrides the local
 web app/environment defaults. Allow the app origin in the tenant's IdP return URLs. Sign in as
-an IdP `Admin`. Native features send an IdP bearer token; do not put signing secrets in `VITE_` values.
+an IdP user with the required back-office permissions. Native features send an IdP bearer token; do not put signing secrets in `VITE_` values.
 
 ## Develop the SDK locally
 
@@ -84,6 +84,7 @@ Cloudgate workspace tools. The starter pages contain no sample business data or 
 - `src/App.jsx`: your routes and navigation, composed with `CloudgateBackoffice`.
 - `src/pages/Home.jsx`: the public home page and account header. Custom routes and navigation
   passed to `CloudgateBackoffice` are relative to its `basePath` (`/backoffice` in this template).
+
 - `src/pages/ExamplePage.jsx`: replace with your app's own features. The back office opens here by default.
 - `src/components/StarterPage.jsx`: shared placeholder and guidance to the build tools.
 - `template.json`: application metadata supplied to the shared About screen.
@@ -94,6 +95,11 @@ Use `useCloudgate()` to access native clients from your own components. Domain w
 belong in your app; privileged signing should live on your server. The optional project setting
 focuses Logs and the developer workspace on one controller. Leave it blank to view all
 accessible controllers in the current tenant and environment; no `admin` controller is required.
+
+Signed-in visitors can open Wallet from the public header's SDK `UserMenu` to activate their eZAR wallet. This uses mobile verification and a six-digit PIN, then displays the linked account
+number and live balance. It works for normal IdP users as well as admins. The SDK profile page
+also includes the same card. While testing unreleased SDK changes, use `npm run dev:sdk` and
+the Cloudgate backend with the `AddIdpUserWallets` migration applied.
 Logs uses the native API's all-controllers scope and requires `backoffice.logs.view`. A fresh
 template with no workflow calls shows an empty log view. Existing deployments need the updated
 SDK and a rebuild to adopt this behavior; no environment value or database migration is needed.
@@ -232,3 +238,7 @@ Quick Start uses the `app-templates/templates.json` catalog. App Store uses a se
 or applications already copied by customers. Release the SDK, update the template dependency and
 catalog entry, and explicitly update any App Store listing that should offer this template.
 Existing apps adopt shared features by updating their npm dependency and rebuilding.
+
+### Public account menu
+
+The public header uses the SDK `UserMenu` for signed-in visitors. It opens an animated profile menu with the current photo, connected eZAR wallet balance, and logout. The SDK provides `/account/profile` for editing details and photos and `/account/wallet` for wallet activation and balance. These pages work for ordinary app users; the menu only offers the back office to users with the appropriate access.

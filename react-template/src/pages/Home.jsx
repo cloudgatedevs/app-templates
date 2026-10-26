@@ -1,12 +1,12 @@
-import { ArrowRight, LayoutDashboard, LogOut } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuthContext, useCloudgate, useSettings, EmailVerificationPrompt } from '@cloudgatedevs/cloudgate-client-react/react';
+import { useAuthContext, useCloudgate, useSettings, EmailVerificationPrompt, UserMenu } from '@cloudgatedevs/cloudgate-client-react/react';
 import { canAccessBackoffice } from '@cloudgatedevs/cloudgate-client-react/platform';
 
 export function Home() {
   const { client, backofficePath } = useCloudgate();
   const { settings, allowSelfRegistration } = useSettings();
-  const { auth, currentUser, loading, logout, error } = useAuthContext();
+  const { auth, currentUser, loading, error } = useAuthContext();
   const signedIn = !!auth?.accessToken;
   const admin = signedIn && canAccessBackoffice(currentUser?.user);
   const returnUrl = new URL('/', window.location.origin).href;
@@ -19,10 +19,7 @@ export function Home() {
         <span>{settings.app_name}</span>
       </Link>
       <nav aria-label="Account" className="public-account">
-        {loading ? <span className="text-xs text-mist-muted" role="status">Checking session…</span> : signedIn ? <>
-          {admin && <Link className="btn-primary" to={backofficePath('/')}><LayoutDashboard size={16} />Back office</Link>}
-          <button className="btn-ghost" onClick={() => logout(false)}><LogOut size={16} />Log out</button>
-        </> : <>
+        {loading || signedIn ? <UserMenu /> : <>
           <button className="btn-ghost" onClick={login}>Log in</button>
           {allowSelfRegistration && <a className="btn-primary" href={client.signupUrl(returnUrl)}>Sign up<ArrowRight size={15} /></a>}
         </>}

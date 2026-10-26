@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { chromium } from 'playwright';
 import { build, preview } from 'vite';
 import viteConfig from '../vite.config.js';
-import { DEFAULT_SETTINGS } from '@cloudgatedevs/cloudgate-client-react/platform';
+import { DEFAULT_SETTINGS, BACKOFFICE_PERMISSION_KEYS } from '@cloudgatedevs/cloudgate-client-react/platform';
 
 const appId = '12345678-1234-1234-1234-123456789abc', origin = 'http://127.0.0.1:3198';
 const env = { VITE_IDP_BASE_URL: 'https://hub.example.invalid', VITE_IDP_API_URL: 'https://api.example.invalid',
@@ -40,7 +40,10 @@ async function open(role, url = '/', viewport = { width: 1440, height: 1000 }) {
       return unavailable ? reply({ message: 'Temporarily unavailable' }, 503) : reply({ values: settings, revision, allowSelfRegistration });
     }
     assert.equal(request.headers().authorization, `Bearer ${token}`);
-    if (url.pathname.endsWith('/profile')) return reply({ id: 1, name: 'Alex', surname: 'Member', email: 'alex@example.invalid', role: role || 'Admin', isEmailConfirmed: true });
+    if (url.pathname.endsWith('/agents/overview')) return reply({ code: 'agents-permission-required', message: 'Agents are not enabled for this test account.' }, 403);
+    if (url.pathname.endsWith('/developer-workspace/sdk-status')) return reply({ updateAvailable: false });
+    if (url.pathname.endsWith('/profile')) return reply({ id: 1, name: 'Alex', surname: 'Member', email: 'alex@example.invalid', role: role || 'Admin', rolePermissions: (role || 'Admin') === 'Admin' ? BACKOFFICE_PERMISSION_KEYS.map(key => ({ key, value: 'true' })) : [], isEmailConfirmed: true });
+    if (url.pathname.endsWith('/wallet/status')) return reply({ linked: false, production: false });
     if (url.pathname.includes('/notifications/')) return reply(url.pathname.endsWith('/unread-count') ? { unreadCount: 0 } : { items: [], totalCount: 0 });
     if (url.pathname.endsWith('/admin/appearance/update')) {
       assert.equal(role, 'Admin'); assert.equal(body.webAppId, appId); assert.equal(body.environment, 'sbx');
@@ -87,15 +90,17 @@ try {
   console.log('PASS anonymous home, registration policy, tenant login and responsive header');
 
   const member = await open('User');
-  await visible(member.getByRole('button', { name: 'Log out', exact: true }));
-  assert.equal(await member.getByRole('link', { name: 'Back office', exact: true }).count(), 0);
+  await member.getByRole('button', { name: /^My account:/ }).click();
+  await visible(member.getByRole('menuitem', { name: 'Log out', exact: true }));
+  assert.equal(await member.getByRole('menuitem', { name: 'Back office', exact: true }).count(), 0);
   const before = calls.length;
   await member.goto(`${origin}/backoffice/users`);
   await visible(member.getByRole('heading', { name: 'Back office access required' }));
   assert.equal(calls.slice(before).some(call => call.path.includes('/admin/')), false);
 
   const admin = await open('Admin');
-  await admin.getByRole('link', { name: 'Back office', exact: true }).click();
+  await admin.getByRole('button', { name: /^My account:/ }).click();
+  await admin.getByRole('menuitem', { name: 'Back office', exact: true }).click();
   await visible(admin.getByRole('heading', { name: 'Example page', exact: true }));
   assert.equal(new URL(admin.url()).pathname, '/backoffice/example');
   const sidebar = admin.getByRole('complementary', { name: 'Sidebar' });
@@ -107,7 +112,7 @@ try {
   const toggle = admin.getByRole('checkbox', { name: 'Enable public website' }), save = admin.getByRole('button', { name: 'Save changes' });
   await toggle.uncheck(); await save.click(); await visible(admin.getByText('Website settings saved.'));
   assert.equal(settings.enable_public_website, 'false'); assert.equal(new URL(admin.url()).pathname, '/backoffice/settings');
-  assert.equal(await admin.getByRole('link', { name: 'View website' }).count(), 0);
+  assert.equal(await admin.getByRole('link', { name: 'View website' }).getAttribute('href'), '/');
   await admin.reload(); await visible(toggle); assert.equal(await toggle.isChecked(), false);
   await admin.goto(`${origin}/`); await visible(admin.getByRole('heading', { name: 'Example page', exact: true }));
   assert.equal(new URL(admin.url()).pathname, '/backoffice/example');
@@ -130,7 +135,7 @@ try {
   await visible(admin.getByRole('alert')); assert.equal(settings.enable_public_website, 'false');
   saveFailure = 0; await save.click(); await visible(admin.getByText('Website settings saved.'));
   await admin.getByRole('link', { name: 'View website' }).click();
-  await visible(admin.getByRole('link', { name: 'Back office', exact: true }));
+  await visible(admin.getByRole('button', { name: /^My account:/ }));
   await admin.goto(`${origin}/example?status=open#latest`);
   await admin.waitForURL(`${origin}/backoffice/example?status=open#latest`);
   await visible(admin.getByRole('heading', { name: 'Example page', exact: true }));
@@ -139,7 +144,8 @@ try {
   await admin.getByRole('button', { name: 'Save changes' }).click();
   await visible(admin.getByText('Self-registration enabled for this tenant.'));
   await admin.getByRole('link', { name: 'View website' }).click();
-  await admin.getByRole('button', { name: 'Log out', exact: true }).click();
+  await admin.getByRole('button', { name: /^My account:/ }).click();
+  await admin.getByRole('menuitem', { name: 'Log out', exact: true }).click();
   await visible(admin.getByRole('link', { name: 'Sign up', exact: true }));
   assert.equal(new URL(admin.url()).pathname, '/');
   // Logging out inside the protected shell must also stay on the public home.

@@ -1,9 +1,10 @@
+import { BACKOFFICE_PERMISSION_KEYS } from '@cloudgatedevs/cloudgate-client-react/platform';
 import assert from 'node:assert/strict';
 
 export async function checkProfilePicture({ page, context, token, go, visible, shot }) {
   let photoUrl = null, uploaded = null, failUpload = false, failRemoval = false, uploads = 0, removals = 0;
   const pictureUrl = 'https://api.example.invalid/api/idp/qa/profile/pictures/photo-fixture';
-  const profileHandler = route => route.fulfill({ json: { id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role: 'Admin', photoUrl } });
+  const profileHandler = route => route.fulfill({ json: { id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role: 'Admin', rolePermissions: BACKOFFICE_PERMISSION_KEYS.map(key => ({ key, value: 'true' })), photoUrl } });
   const imageHandler = route => route.fulfill({ contentType: 'image/jpeg', body: uploaded });
   const uploadHandler = async route => {
     const request = route.request();
@@ -75,7 +76,7 @@ export async function checkProfilePicture({ page, context, token, go, visible, s
     await dialog.getByRole('button', { name: 'Save photo', exact: true }).click();
     await dialog.waitFor({ state: 'hidden' });
     assert.equal(uploads, 2);
-    const profilePhoto = page.locator('.profile-picture-preview img');
+    const profilePhoto = photoButton.locator('img');
     await visible(profilePhoto);
     await profilePhoto.evaluate(image => image.decode());
     assert.deepEqual(await profilePhoto.evaluate(image => [image.naturalWidth, image.naturalHeight]), [512, 512]);
@@ -109,7 +110,7 @@ export async function checkProfilePicture({ page, context, token, go, visible, s
     await dialog.getByRole('button', { name: 'Remove photo', exact: true }).click();
     await dialog.waitFor({ state: 'hidden' });
     assert.equal(photoUrl, null);
-    assert.equal(await page.locator('.profile-picture-preview img').count(), 0);
+    assert.equal(await profilePhoto.count(), 0);
     assert.equal(await page.locator('.app-bar .account-trigger img').count(), 0);
     await page.evaluate(() => document.documentElement.classList.remove('dark'));
     await page.setViewportSize({ width: 1440, height: 1000 });

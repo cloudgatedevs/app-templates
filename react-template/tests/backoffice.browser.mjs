@@ -6,7 +6,7 @@ import { randomUUID } from 'node:crypto';
 import { chromium } from 'playwright';
 import { build, preview } from 'vite';
 import viteConfig from '../vite.config.js';
-import { DEFAULT_SETTINGS } from '@cloudgatedevs/cloudgate-client-react/platform';
+import { DEFAULT_SETTINGS, BACKOFFICE_PERMISSION_KEYS } from '@cloudgatedevs/cloudgate-client-react/platform';
 
 const webAppId = '12345678-1234-1234-1234-123456789abc';
 const origin = 'http://127.0.0.1:3199';
@@ -58,9 +58,10 @@ await context.routeWebSocket('wss://api.example.invalid/ws-idp-notifications?*',
 });
 await context.route('https://fonts.googleapis.com/**', route => route.fulfill({ body: '', contentType: 'text/css' }));
 await context.route('https://hub.example.invalid/account-link**', route => route.fulfill({ contentType: 'text/html', body: '<h1>Cloudgate approval</h1>' }));
-await context.route('https://hub.example.invalid/developer**', route => route.fulfill({ contentType: 'text/html', body: `<h1>Cloudgate developer tools</h1><input aria-label="Workflow draft"/><script>
+await context.route('https://hub.example.invalid/developer**', route => route.fulfill({ contentType: 'text/html', body: `<h1>Cloudgate developer tools</h1><input aria-label="Workflow draft"/><button id="end-session">End developer session</button><script>
   const parentOrigin = ${JSON.stringify(origin)};
   parent.postMessage({source:'cloudgate-developer',type:'ready'},parentOrigin);
+  document.getElementById('end-session').onclick=()=>parent.postMessage({source:'cloudgate-developer',type:'ended'},parentOrigin);
   addEventListener('message',e=>{if(e.origin===parentOrigin&&e.source===parent&&e.data?.type==='end')parent.postMessage({source:'cloudgate-developer',type:'ended'},parentOrigin)});
 </script>` }));
 await context.route('**/cg-analytics.json', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({ webAppId, isProduction: false }) }));
@@ -79,13 +80,17 @@ await context.route('https://api.example.invalid/**', async route => {
   }
   if (url.pathname === '/image.png') return route.fulfill({ contentType: 'image/png', body: pixel });
   if (url.pathname.endsWith('/branding/logo')) return route.fulfill({ contentType: 'image/png', body: pixel });
-  if (url.pathname.endsWith('/profile')) return reply({ id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role });
+  if (url.pathname.endsWith('/agents/overview')) return reply({ code: 'agents-permission-required', message: 'Agents are not enabled for this test account.' }, 403);
+  if (url.pathname.endsWith('/developer-workspace/sdk-status')) return reply({ updateAvailable: false });
+  if (url.pathname.endsWith('/wallet/status')) return reply({ linked: false, production: false });
+  if (url.pathname.endsWith('/profile')) return reply({ id: 1, name: 'Alex', surname: 'Admin', email: 'admin@example.invalid', role, rolePermissions: role === 'Admin' ? BACKOFFICE_PERMISSION_KEYS.map(key => ({ key, value: 'true' })) : [] });
   if (url.pathname === '/api/idp/qa/developer-workspace') {
     assert.equal(request.headers().authorization, `Bearer ${token}`);
     assert.equal(body.webAppId, webAppId); assert.equal(body.environment, 'sbx');
+    assert.equal(body.projectPath, '*');
     assert.equal(new URL(body.returnUrl).origin, origin);
     if (!accountLinked) return reply({ message: 'Link your Cloudgate account in your profile.' }, 403);
-    return reply({ frameUrl: `https://hub.example.invalid/developer#code=${linkCode}&parent=${encodeURIComponent(origin)}`, projectName: 'qa', appName: 'Blank app', environment: 'sbx' });
+    return reply({ frameUrl: `https://hub.example.invalid/developer#code=${linkCode}&parent=${encodeURIComponent(origin)}`, projectName: 'qa', appName: 'Blank app', environment: 'sbx', controllerPath: '*' });
   }
   if (url.pathname === '/api/idp/qa/admin/email-template') {
     assert.equal(request.headers().authorization, `Bearer ${token}`);
@@ -521,7 +526,7 @@ try {
   await visible(developer.getByRole('alert').filter({ hasText: 'Link your Cloudgate account' }));
   assert.equal(await page.locator('iframe[title="Cloudgate developer workspace"]').count(), 0);
   accountLinked = true;
-  await developer.getByRole('button', { name: 'Reconnect', exact: true }).click();
+  await developer.getByRole('button', { name: 'Try again', exact: true }).click();
   const devFrame = page.frameLocator('iframe[title="Cloudgate developer workspace"]');
   await visible(devFrame.getByRole('heading', { name: 'Cloudgate developer tools' }));
   await visible(developer.getByText('All controllers', { exact: true }));
@@ -538,7 +543,7 @@ try {
   await page.setViewportSize({ width: 360, height: 800 });
   await shot('developer-workspace-mobile');
   assert.ok(await developer.evaluate(el => el.getBoundingClientRect().width <= innerWidth));
-  await developer.getByRole('button', { name: 'End developer session' }).click();
+  await devFrame.getByRole('button', { name: 'End developer session' }).click();
   await developer.waitFor({ state: 'hidden' });
   assert.equal(await page.locator('iframe[title="Cloudgate developer workspace"]').count(), 0);
   assert.equal(calls.filter(c => c.path.endsWith('/developer-workspace')).length, frameCount);
@@ -749,12 +754,12 @@ try {
   await page.getByLabel('Application name', { exact: true }).waitFor();
   await page.waitForFunction(() => document.querySelector('#app_name')?.value === 'Atlas Admin');
   await go('/theme');
-  await page.getByRole('button', { name: 'Forest', exact: true }).click();
+  await page.getByRole('button', { name: 'Sage & Clay palette', exact: true }).click();
   await page.getByLabel('Display mode', { exact: true }).selectOption('dark');
   await page.getByRole('button', { name: 'Save changes', exact: true }).click();
   await visible(page.getByText('Theme saved.', { exact: true }));
   assert.equal(await page.locator('html').getAttribute('data-theme'), 'dark');
-  assert.equal(settings.theme_primary, '#047857');
+  assert.equal(settings.theme_primary, '#4d7161');
   await shot('theme-dark-desktop');
   await go('/');
   await visible(page.getByRole('heading', { name: 'Make room for your next idea', exact: true }));
@@ -762,7 +767,7 @@ try {
   await go('/theme');
   await visible(page.getByLabel('Display mode', { exact: true }));
   await page.getByLabel('Display mode', { exact: true }).selectOption('light');
-  await page.getByRole('button', { name: 'Indigo', exact: true }).click();
+  await page.getByRole('button', { name: 'Iris & Linen palette', exact: true }).click();
   await page.getByRole('button', { name: 'Save changes', exact: true }).click();
   await visible(page.getByText('Theme saved.', { exact: true }));
   await shot('theme-light-desktop');

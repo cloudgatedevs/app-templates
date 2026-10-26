@@ -39,7 +39,7 @@ export async function checkPayments({ page, context, token, go, visible, shot })
   assert.equal(await page.getByLabel('Amount', { exact: true }).inputValue(), '0.29');
   failCheckout = false;
   await page.locator('form').evaluate(form => { form.requestSubmit(); form.requestSubmit(); });
-  await visible(page.getByRole('heading', { name: 'Test checkout created' }));
+  await visible(page.getByRole('heading', { name: 'Test invoice created' }));
   assert.equal(checkoutCalls.length, 2, 'One failed call and one retry, without duplicate submissions');
   assert.equal(checkoutCalls[0].idempotencyKey, checkoutCalls[1].idempotencyKey);
   assert.equal(await page.getByRole('link', { name: 'Open sandbox checkout' }).getAttribute('href'), 'https://checkout.stripe.com/c/pay/test_fixture');

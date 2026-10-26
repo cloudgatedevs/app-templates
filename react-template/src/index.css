@@ -12,7 +12,7 @@
 .starter-build-arrow { flex-shrink: 0; margin-left: auto; color: rgb(var(--accent-text)); }
 @media (max-width: 640px) { .starter-build-guide { align-items: flex-start; padding: 1rem; gap: .75rem; }.starter-build-arrow { display: none; } }
 .public-site { width: 100%; min-height: 100dvh; display: flex; flex-direction: column; background: rgb(var(--ink-950)); }
-.public-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.25rem clamp(1.25rem, 6vw, 6rem); border-bottom: 1px solid rgb(var(--ink-700)); background: rgb(var(--ink-850)); }
+.public-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; min-height: 64px; gap: 1rem; padding: .5rem clamp(1.25rem, 6vw, 6rem); border-bottom: 1px solid rgb(var(--ink-700)); background: rgb(var(--ink-850)); }
 .public-brand { display: flex; align-items: center; gap: .75rem; min-width: 0; font-size: 1rem; font-weight: 650; }
 .public-brand img, .public-brand-mark { width: 2.25rem; height: 2.25rem; border-radius: .75rem; object-fit: contain; }
 .public-brand-mark { display: grid; place-items: center; background: rgb(var(--accent)); color: rgb(var(--accent-fg)); }
