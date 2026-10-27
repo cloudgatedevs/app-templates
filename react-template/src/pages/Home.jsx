@@ -6,11 +6,16 @@ import { canAccessBackoffice } from '@cloudgatedevs/cloudgate-client-react/platf
 export function Home() {
   const { client, backofficePath } = useCloudgate();
   const { settings, allowSelfRegistration } = useSettings();
-  const { auth, currentUser, loading, error } = useAuthContext();
-  const signedIn = !!auth?.accessToken;
+  const { auth, currentUser, loading, error, logout } = useAuthContext();
+  const hasSession = !!auth?.accessToken;
+  const signedIn = hasSession && !!currentUser?.user?.id;
+  const needsRecovery = !loading && hasSession && !signedIn;
   const admin = signedIn && canAccessBackoffice(currentUser?.user);
   const returnUrl = new URL('/', window.location.origin).href;
-  const login = () => client.login(returnUrl);
+  const login = () => {
+    if (needsRecovery) logout(false);
+    client.login(returnUrl);
+  };
   return <div className="public-site">
     <a className="skip-link" href="#public-main">Skip to content</a>
     <header className="public-header">
@@ -20,8 +25,9 @@ export function Home() {
       </Link>
       <nav aria-label="Account" className="public-account">
         {loading || signedIn ? <UserMenu /> : <>
-          <button className="btn-ghost" onClick={login}>Log in</button>
-          {allowSelfRegistration && <a className="btn-primary" href={client.signupUrl(returnUrl)}>Sign up<ArrowRight size={15} /></a>}
+          <button className="btn-ghost" onClick={login}>{needsRecovery ? 'Log in again' : 'Log in'}</button>
+          {needsRecovery ? <button className="btn-ghost" onClick={() => logout(false)}>Sign out</button>
+            : allowSelfRegistration && <a className="btn-primary" href={client.signupUrl(returnUrl)}>Sign up<ArrowRight size={15} /></a>}
         </>}
       </nav>
     </header>
@@ -34,11 +40,11 @@ export function Home() {
           <h1>Your public page<br /><span>starts here.</span></h1>
           <p className="public-intro">A blank page for your app's public website. Add your own content and make it yours.</p>
           {!loading && admin && <p className="public-welcome"><Link className="btn-primary" to={backofficePath('/')}>Start building<ArrowRight size={17} /></Link></p>}
-          {!loading && !signedIn && <div className="public-hero-actions">
+          {!loading && !hasSession && <div className="public-hero-actions">
             {allowSelfRegistration ? <a className="btn-primary" href={client.signupUrl(returnUrl)}>Create your account<ArrowRight size={17} /></a> : <button className="btn-primary" onClick={login}>Log in to your account<ArrowRight size={17} /></button>}
           </div>}
           {!loading && signedIn && <p className="public-welcome">Welcome back{currentUser?.user?.name ? `, ${currentUser.user.name}` : ''}.</p>}
-          {error && <p className="mt-4 text-sm text-mist-muted">Your account details are temporarily unavailable. You can still browse this website.</p>}
+          {(error || needsRecovery) && <p role="status" className="mt-4 text-sm text-mist-muted">Your account details are temporarily unavailable. {needsRecovery && 'Log in again, or sign out to clear this session. '}You can still browse this website.</p>}
         </div>
       </section>
     </main>

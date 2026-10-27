@@ -1,6 +1,6 @@
 # Cloudgate React Template
 
-A blank React app foundation composed with `@cloudgatedevs/cloudgate-client-react` 0.1.20. The SDK owns authentication,
+A blank React app foundation composed with `@cloudgatedevs/cloudgate-client-react` 0.1.21. The SDK owns authentication,
 native Cloudgate APIs and the shared back-office UI. Example page is the single workspace
 placeholder, with guidance to the **Developers** tools in the bottom bar. No workflow controller
 is needed for the shared features. The public home page is also a placeholder for your own content.
